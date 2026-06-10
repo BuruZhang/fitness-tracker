@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#101116" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="训练打卡" />
+    <title>训练打卡</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="app-header">
+        <button id="profileButton" class="avatar-button" type="button" aria-label="打开个人信息">
+          <span id="avatarInitial">羊</span>
+        </button>
+        <div class="app-title">
+          <p id="todayLabel">今天</p>
+          <h1>训练打卡</h1>
+        </div>
+        <div class="header-actions">
+          <button id="exportBtn" class="icon-button" type="button" title="导出记录" aria-label="导出记录">↓</button>
+          <button id="resetDayBtn" class="icon-button" type="button" title="清空当天" aria-label="清空当天">↺</button>
+        </div>
+      </header>
+
+      <main class="app-main">
+        <section class="hero-card glass">
+          <div>
+            <p class="eyebrow">本周完成</p>
+            <strong id="weekCompletion">0%</strong>
+            <span id="completionCount">0/7 天</span>
+          </div>
+          <div class="ring" id="completionRing" style="--progress: 0%">
+            <span id="ringText">0%</span>
+          </div>
+        </section>
+
+        <section class="week-strip glass" aria-label="周日期选择">
+          <button id="prevWeek" class="icon-button" type="button" aria-label="上一周">‹</button>
+          <div id="weekDays" class="week-days"></div>
+          <button id="nextWeek" class="icon-button" type="button" aria-label="下一周">›</button>
+        </section>
+
+        <nav class="tab-switch glass" aria-label="页面切换">
+          <button class="view-tab active" type="button" data-view="today">今日</button>
+          <button class="view-tab" type="button" data-view="special">专项</button>
+          <button class="view-tab" type="button" data-view="overview">总览</button>
+        </nav>
+
+        <section id="todayView" class="view-panel active">
+          <article class="training-card glass">
+            <div class="card-head">
+              <div>
+                <p id="selectedDate" class="eyebrow">日期</p>
+                <h2 id="dayTitle">训练日</h2>
+              </div>
+              <label class="complete-toggle">
+                <input id="dayComplete" type="checkbox" />
+                <span>完成</span>
+              </label>
+            </div>
+            <div class="media-frame">
+              <img id="dayImage" alt="当天动作示范图" />
+            </div>
+            <div class="section-heading">
+              <h3>正式训练</h3>
+              <span id="actionCount">0 项</span>
+            </div>
+            <div id="actionList" class="action-list"></div>
+          </article>
+
+          <article class="quick-log glass">
+            <div class="section-heading">
+              <h3>今日状态</h3>
+              <span id="readinessText">正常</span>
+            </div>
+            <form id="logForm" class="log-form">
+              <label class="field">
+                <span>精神状态</span>
+                <div class="segmented" data-field="energy">
+                  <button type="button" data-value="低">低</button>
+                  <button type="button" data-value="正常">正常</button>
+                  <button type="button" data-value="好">好</button>
+                </div>
+              </label>
+
+              <div class="form-grid">
+                <label class="field">
+                  <span>睡眠</span>
+                  <div class="input-row">
+                    <input id="sleep" type="number" min="0" max="14" step="0.5" inputmode="decimal" />
+                    <span>小时</span>
+                  </div>
+                </label>
+                <label class="field">
+                  <span>酸痛 <b id="sorenessValue">0</b>/10</span>
+                  <input id="soreness" type="range" min="0" max="10" step="1" />
+                </label>
+              </div>
+
+              <div class="form-grid">
+                <label class="field">
+                  <span>蛋白质</span>
+                  <div class="input-row">
+                    <input id="protein" type="number" min="0" max="180" step="1" inputmode="numeric" />
+                    <span>g</span>
+                  </div>
+                </label>
+                <label class="field">
+                  <span>饮水</span>
+                  <div class="input-row">
+                    <input id="water" type="number" min="0" max="5" step="0.1" inputmode="decimal" />
+                    <span>L</span>
+                  </div>
+                </label>
+              </div>
+
+              <div class="check-grid">
+                <label class="checkline">
+                  <input id="breakfast" type="checkbox" />
+                  <span>早餐吃够</span>
+                </label>
+                <label class="checkline">
+                  <input id="vegetables" type="checkbox" />
+                  <span>蔬菜 2 拳</span>
+                </label>
+                <label class="checkline">
+                  <input id="snacks" type="checkbox" />
+                  <span>零食已控</span>
+                </label>
+              </div>
+
+              <div class="form-grid">
+                <label class="field">
+                  <span>体重</span>
+                  <div class="input-row">
+                    <input id="weight" type="number" min="35" max="90" step="0.1" inputmode="decimal" />
+                    <span>kg</span>
+                  </div>
+                </label>
+                <label class="field">
+                  <span>腰围</span>
+                  <div class="input-row">
+                    <input id="waist" type="number" min="45" max="110" step="0.1" inputmode="decimal" />
+                    <span>cm</span>
+                  </div>
+                </label>
+              </div>
+
+              <div class="form-grid">
+                <label class="field">
+                  <span>标准俯卧撑</span>
+                  <div class="input-row">
+                    <input id="pushups" type="number" min="0" max="30" step="1" inputmode="numeric" />
+                    <span>个</span>
+                  </div>
+                </label>
+                <label class="field">
+                  <span>平板支撑</span>
+                  <div class="input-row">
+                    <input id="plank" type="number" min="0" max="300" step="5" inputmode="numeric" />
+                    <span>秒</span>
+                  </div>
+                </label>
+              </div>
+
+              <label class="field">
+                <span>训练感受</span>
+                <textarea id="notes" rows="4" placeholder="记录今天哪里更有力、哪里需要降低难度"></textarea>
+              </label>
+            </form>
+          </article>
+        </section>
+
+        <section id="specialView" class="view-panel">
+          <article class="special-hero glass">
+            <div>
+              <p class="eyebrow">专项训练</p>
+              <h2>8-12 分钟补强</h2>
+              <p>用于更快达成 10 个标准俯卧撑，同时补核心、腰腹稳定和上肢推拉。</p>
+            </div>
+            <button id="completeRecommended" class="primary-button" type="button">完成今日建议</button>
+          </article>
+          <div id="specialList" class="special-list"></div>
+        </section>
+
+        <section id="overviewView" class="view-panel">
+          <section class="summary-grid">
+            <article class="summary-card glass">
+              <span>正式训练</span>
+              <strong id="trainingDays">0</strong>
+              <p>本周完成天数</p>
+            </article>
+            <article class="summary-card glass">
+              <span>专项训练</span>
+              <strong id="specialDays">0</strong>
+              <p>本周完成天数</p>
+            </article>
+            <article class="summary-card glass">
+              <span>蛋白达标</span>
+              <strong id="proteinDays">0</strong>
+              <p>70 g 以上</p>
+            </article>
+            <article class="summary-card glass">
+              <span>睡眠风险</span>
+              <strong id="sleepRisk">0</strong>
+              <p>低于 7 小时</p>
+            </article>
+          </section>
+
+          <article class="overview-card glass">
+            <div class="section-heading">
+              <h3>本周完成矩阵</h3>
+              <span id="weekLabel">本周</span>
+            </div>
+            <div id="statusMatrix" class="status-matrix"></div>
+          </article>
+
+          <article class="overview-card glass">
+            <div class="section-heading">
+              <h3>俯卧撑进度</h3>
+              <span><span id="pushupBest">0</span>/10</span>
+            </div>
+            <div class="progress-track">
+              <div id="pushupBar" class="progress-fill"></div>
+            </div>
+            <ul id="pushupGuide" class="compact-list"></ul>
+          </article>
+
+          <article class="overview-card glass">
+            <div class="section-heading">
+              <h3>最近 4 周趋势</h3>
+              <span>训练完成率</span>
+            </div>
+            <div id="trendBars" class="trend-bars"></div>
+          </article>
+        </section>
+      </main>
+    </div>
+
+    <div id="drawerBackdrop" class="drawer-backdrop" hidden></div>
+    <aside id="profileDrawer" class="profile-drawer" aria-label="个人信息侧边栏" aria-hidden="true">
+      <div class="drawer-head">
+        <div class="avatar-large"><span id="drawerInitial">羊</span></div>
+        <div>
+          <p class="eyebrow">个人信息</p>
+          <h2 id="drawerName">羊咩咩</h2>
+        </div>
+        <button id="closeDrawer" class="icon-button" type="button" aria-label="关闭">×</button>
+      </div>
+
+      <form id="profileForm" class="profile-form">
+        <label class="field">
+          <span>昵称</span>
+          <input id="profileName" class="plain-input" type="text" />
+        </label>
+        <div class="form-grid">
+          <label class="field">
+            <span>年龄</span>
+            <input id="profileAge" class="plain-input" type="number" min="10" max="80" />
+          </label>
+          <label class="field">
+            <span>性别</span>
+            <input id="profileGender" class="plain-input" type="text" />
+          </label>
+        </div>
+        <div class="form-grid">
+          <label class="field">
+            <span>身高 cm</span>
+            <input id="profileHeight" class="plain-input" type="number" min="120" max="220" />
+          </label>
+          <label class="field">
+            <span>体重 kg</span>
+            <input id="profileWeight" class="plain-input" type="number" min="35" max="120" step="0.1" />
+          </label>
+        </div>
+        <label class="field">
+          <span>器械</span>
+          <input id="profileEquipment" class="plain-input" type="text" />
+        </label>
+        <label class="field">
+          <span>目标</span>
+          <textarea id="profileGoals" rows="3"></textarea>
+        </label>
+        <label class="field">
+          <span>注意事项</span>
+          <textarea id="profileNotes" rows="3"></textarea>
+        </label>
+      </form>
+    </aside>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
