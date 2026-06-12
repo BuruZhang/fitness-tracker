@@ -1,6 +1,6 @@
 {
-  "name": "元气训练打卡",
-  "short_name": "训练打卡",
+  "name": "元气小练",
+  "short_name": "元气小练",
   "description": "居家训练、专项进阶和状态记录的个人打卡 App。",
   "start_url": "./index.html",
   "scope": "./",

@@ -1,4 +1,4 @@
-:root {
+﻿:root {
   color-scheme: dark;
   --page: #101116;
   --page-2: #171920;
@@ -20,8 +20,10 @@
   --mascot-avatar: url("./assets/cat-mascot-v1.png");
   --shadow: 0 24px 70px rgba(0, 0, 0, 0.38);
   --soft-shadow: 0 14px 34px rgba(0, 0, 0, 0.22);
-  --radius: 18px;
-  --radius-sm: 12px;
+  --radius: 20px;
+  --radius-sm: 14px;
+  --radius-xs: 10px;
+  --radius-pill: 999px;
   --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC",
     "Helvetica Neue", "Hiragino Sans GB", "Microsoft YaHei", "Segoe UI",
     sans-serif;
@@ -120,7 +122,7 @@ p {
   top: 0;
   z-index: 50;
   display: grid;
-  grid-template-columns: 48px 1fr auto;
+  grid-template-columns: 48px minmax(0, 1fr);
   align-items: center;
   gap: 12px;
   padding: calc(14px + env(safe-area-inset-top)) 16px 12px;
@@ -193,12 +195,12 @@ p {
 .save-status {
   display: inline-flex;
   width: fit-content;
-  margin-top: 6px;
-  padding: 4px 8px;
-  border: 1px solid rgba(183, 205, 187, 0.22);
-  border-radius: 999px;
-  background: rgba(183, 205, 187, 0.09);
-  color: rgba(213, 234, 214, 0.9);
+  margin-top: 4px;
+  padding: 2px 7px;
+  border: 1px solid rgba(183, 205, 187, 0.13);
+  border-radius: var(--radius-pill);
+  background: rgba(183, 205, 187, 0.045);
+  color: rgba(213, 234, 214, 0.68);
   font-size: 11px;
   font-weight: 680;
 }
@@ -210,19 +212,19 @@ p {
 }
 
 .save-status[data-state="saved"] {
-  border-color: rgba(183, 205, 187, 0.3);
-  background: rgba(183, 205, 187, 0.14);
+  border-color: rgba(183, 205, 187, 0.16);
+  background: rgba(183, 205, 187, 0.06);
 }
 
 .header-actions {
-  display: flex;
+  display: none;
   gap: 8px;
 }
 
 .icon-button,
 .primary-button {
   border: 1px solid var(--line);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: rgba(255, 255, 255, 0.08);
   color: var(--ink);
   font-weight: 720;
@@ -361,7 +363,7 @@ p {
   width: fit-content;
   padding: 6px 10px;
   border: 1px solid rgba(244, 241, 234, 0.12);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: rgba(255, 255, 255, 0.06);
   color: rgba(244, 241, 234, 0.72);
   font-size: 12px;
@@ -461,7 +463,7 @@ p {
   min-height: 66px;
   padding: 9px 8px;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: rgba(255, 255, 255, 0.055);
   color: var(--ink);
   text-align: center;
@@ -538,7 +540,7 @@ p {
 .view-tab {
   min-height: 40px;
   border: 0;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: transparent;
   color: var(--muted);
   font-size: 14px;
@@ -605,7 +607,7 @@ h3 {
   min-height: 38px;
   padding: 0 13px;
   border: 1px solid var(--line);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: rgba(255, 255, 255, 0.08);
   color: var(--ink);
   font-size: 13px;
@@ -722,7 +724,7 @@ input[type="checkbox"] {
 
 .log-section summary b {
   padding: 5px 9px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: rgba(216, 137, 167, 0.12);
   color: #e6b2c4;
   font-size: 12px;
@@ -768,14 +770,14 @@ input[type="checkbox"] {
   gap: 4px;
   padding: 4px;
   border: 1px solid rgba(255, 255, 255, 0.11);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: rgba(255, 255, 255, 0.055);
 }
 
 .segmented button {
   min-height: 38px;
   border: 0;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: transparent;
   color: var(--muted);
   font-weight: 700;
@@ -873,7 +875,7 @@ input[type="range"] {
 
 .special-tag {
   padding: 5px 9px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: rgba(183, 205, 187, 0.13);
   color: #c8dcc9;
   font-size: 12px;
@@ -1029,7 +1031,7 @@ input[type="range"] {
   min-height: 34px;
   display: grid;
   place-items: center;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: rgba(255, 255, 255, 0.065);
   color: var(--faint);
   font-size: 12px;
@@ -1049,7 +1051,7 @@ input[type="range"] {
 .progress-track {
   height: 10px;
   overflow: hidden;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: rgba(255, 255, 255, 0.075);
 }
 
@@ -1092,7 +1094,7 @@ input[type="range"] {
 .trend-track {
   height: 10px;
   overflow: hidden;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: rgba(255, 255, 255, 0.075);
 }
 
@@ -1218,9 +1220,8 @@ body.modal-open {
 .storage-card,
 .avatar-upload-card {
   display: grid;
-  grid-template-columns: 1fr auto;
   gap: 12px;
-  align-items: center;
+  align-items: stretch;
   padding: 13px;
   border: 1px solid rgba(183, 205, 187, 0.18);
   border-radius: var(--radius-sm);
@@ -1251,11 +1252,48 @@ body.modal-open {
   gap: 8px;
 }
 
+.drawer-tools {
+  display: grid;
+  gap: 8px;
+}
+
+.tool-button {
+  width: 100%;
+  min-height: 54px;
+  display: grid;
+  gap: 2px;
+  justify-items: start;
+  padding: 9px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--ink);
+  text-align: left;
+}
+
+.tool-button span {
+  margin: 0;
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 720;
+}
+
+.tool-button small {
+  color: var(--faint);
+  font-size: 12px;
+  line-height: 1.3;
+}
+
+.tool-button.danger {
+  border-color: rgba(212, 126, 122, 0.18);
+  background: rgba(212, 126, 122, 0.075);
+}
+
 .mini-button {
   min-height: 34px;
   padding: 0 12px;
   border: 1px solid rgba(255, 255, 255, 0.13);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: rgba(255, 255, 255, 0.08);
   color: var(--ink);
   font-size: 12px;
@@ -1300,7 +1338,7 @@ body.modal-open {
   }
 
   .app-header {
-    grid-template-columns: 42px 1fr auto;
+    grid-template-columns: 42px minmax(0, 1fr);
     padding-left: 12px;
     padding-right: 12px;
   }
@@ -1423,3 +1461,4 @@ body.modal-open {
     flex: 1;
   }
 }
+

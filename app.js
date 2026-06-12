@@ -154,6 +154,7 @@ let currentWeekStart = getMonday(selectedDate);
 
 const els = {
   profileButton: document.querySelector("#profileButton"),
+  headerName: document.querySelector("#headerName"),
   saveStatus: document.querySelector("#saveStatus"),
   storageNotice: document.querySelector("#storageNotice"),
   drawerExportBtn: document.querySelector("#drawerExportBtn"),
@@ -582,6 +583,7 @@ function renderProfile() {
   const initial = (profile.name || "我").trim().slice(0, 1);
   els.avatarInitial.textContent = initial;
   els.drawerInitial.textContent = initial;
+  if (els.headerName) els.headerName.textContent = profile.name || "我";
   els.drawerName.textContent = profile.name || "我";
   [els.profileButton, document.querySelector(".avatar-large")].forEach((avatar) => {
     if (!avatar) return;
@@ -1061,10 +1063,6 @@ document.querySelector("#resetDayBtn").addEventListener("click", () => {
   records[dateKey(selectedDate)] = defaultRecord(selectedDate);
   saveRecords();
   renderAll();
-});
-
-document.querySelector("#exportBtn").addEventListener("click", () => {
-  exportBackup();
 });
 
 function exportBackup() {
