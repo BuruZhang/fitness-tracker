@@ -23,7 +23,12 @@
   --radius: 18px;
   --radius-sm: 12px;
   --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC",
-    "Hiragino Sans GB", "Microsoft YaHei", "Segoe UI", sans-serif;
+    "Helvetica Neue", "Hiragino Sans GB", "Microsoft YaHei", "Segoe UI",
+    sans-serif;
+  --font-display: "SF Pro Rounded", "SF Pro Display", -apple-system,
+    BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", sans-serif;
+  --font-number: "SF Pro Rounded", "SF Pro Display", -apple-system,
+    BlinkMacSystemFont, "Helvetica Neue", sans-serif;
 }
 
 * {
@@ -45,7 +50,12 @@ body {
   margin: 0;
   color: var(--ink);
   font-family: var(--font);
+  font-size: 15px;
+  line-height: 1.5;
   letter-spacing: 0;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body::before {
@@ -80,6 +90,14 @@ textarea {
 
 button {
   cursor: pointer;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: 760;
+  letter-spacing: 0;
 }
 
 h1,
@@ -120,7 +138,7 @@ p {
     radial-gradient(circle at 35% 28%, rgba(255, 255, 255, 0.82), rgba(255, 255, 255, 0.14) 34%, transparent 58%),
     linear-gradient(145deg, rgba(183, 205, 187, 0.9), rgba(216, 137, 167, 0.58));
   color: #14161b;
-  font-weight: 900;
+  font-weight: 760;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2), 0 12px 24px rgba(0, 0, 0, 0.24);
   background-size: cover;
   background-position: center;
@@ -162,13 +180,14 @@ p {
   margin-bottom: 4px;
   color: var(--faint);
   font-size: 12px;
-  font-weight: 760;
+  font-weight: 650;
 }
 
 .app-title h1 {
   margin-bottom: 0;
-  font-size: 25px;
-  line-height: 1.05;
+  font-size: 24px;
+  line-height: 1.08;
+  font-weight: 780;
 }
 
 .save-status {
@@ -181,7 +200,7 @@ p {
   background: rgba(183, 205, 187, 0.09);
   color: rgba(213, 234, 214, 0.9);
   font-size: 11px;
-  font-weight: 820;
+  font-weight: 680;
 }
 
 .save-status[data-state="error"] {
@@ -206,7 +225,7 @@ p {
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.08);
   color: var(--ink);
-  font-weight: 850;
+  font-weight: 720;
   transition: transform 160ms ease, background 160ms ease, border-color 160ms ease;
 }
 
@@ -324,8 +343,9 @@ p {
 
 .hero-copy h2 {
   margin-bottom: 8px;
-  font-size: 28px;
-  line-height: 1.08;
+  font-size: 27px;
+  line-height: 1.12;
+  font-weight: 780;
 }
 
 .coach-line {
@@ -345,20 +365,21 @@ p {
   background: rgba(255, 255, 255, 0.06);
   color: rgba(244, 241, 234, 0.72);
   font-size: 12px;
-  font-weight: 820;
+  font-weight: 700;
 }
 
 .summary-card strong,
 .recent-strip strong {
   display: block;
-  font-weight: 900;
+  font-family: var(--font-number);
+  font-weight: 760;
 }
 
 .hero-card span,
 .hero-card small {
   color: var(--muted);
   font-size: 13px;
-  font-weight: 760;
+  font-weight: 650;
 }
 
 .ring {
@@ -376,7 +397,8 @@ p {
     conic-gradient(var(--rose) var(--progress), rgba(255, 255, 255, 0.09) 0);
   color: #fff9f2;
   font-size: 14px;
-  font-weight: 900;
+  font-family: var(--font-number);
+  font-weight: 760;
   box-shadow: inset 0 0 24px rgba(255, 255, 255, 0.08), 0 12px 28px rgba(0, 0, 0, 0.24);
 }
 
@@ -459,14 +481,16 @@ p {
 .day-pill strong {
   display: block;
   margin: 3px 0;
+  font-family: var(--font-number);
   font-size: 18px;
+  font-weight: 760;
 }
 
 .day-pill span {
   display: block;
   color: currentColor;
   font-size: 11px;
-  font-weight: 800;
+  font-weight: 650;
   opacity: 0.68;
 }
 
@@ -518,7 +542,7 @@ p {
   background: transparent;
   color: var(--muted);
   font-size: 14px;
-  font-weight: 850;
+  font-weight: 720;
 }
 
 .view-tab.active {
@@ -565,11 +589,13 @@ h2 {
   margin-bottom: 0;
   font-size: 23px;
   line-height: 1.15;
+  font-weight: 760;
 }
 
 h3 {
   margin-bottom: 0;
   font-size: 16px;
+  font-weight: 720;
 }
 
 .complete-toggle {
@@ -583,7 +609,7 @@ h3 {
   background: rgba(255, 255, 255, 0.08);
   color: var(--ink);
   font-size: 13px;
-  font-weight: 850;
+  font-weight: 700;
 }
 
 input[type="checkbox"] {
@@ -645,7 +671,7 @@ input[type="checkbox"] {
 .special-title {
   display: block;
   color: var(--ink);
-  font-weight: 880;
+  font-weight: 760;
 }
 
 .action-detail,
@@ -691,7 +717,7 @@ input[type="checkbox"] {
 .log-section summary span {
   color: var(--ink);
   font-size: 14px;
-  font-weight: 880;
+  font-weight: 720;
 }
 
 .log-section summary b {
@@ -700,7 +726,7 @@ input[type="checkbox"] {
   background: rgba(216, 137, 167, 0.12);
   color: #e6b2c4;
   font-size: 12px;
-  font-weight: 850;
+  font-weight: 680;
 }
 
 .log-section-body {
@@ -733,7 +759,7 @@ input[type="checkbox"] {
 .checkline span {
   color: rgba(244, 241, 234, 0.78);
   font-size: 13px;
-  font-weight: 820;
+  font-weight: 680;
 }
 
 .segmented {
@@ -752,7 +778,7 @@ input[type="checkbox"] {
   border-radius: 999px;
   background: transparent;
   color: var(--muted);
-  font-weight: 850;
+  font-weight: 700;
 }
 
 .segmented button.active {
@@ -851,7 +877,7 @@ input[type="range"] {
   background: rgba(183, 205, 187, 0.13);
   color: #c8dcc9;
   font-size: 12px;
-  font-weight: 880;
+  font-weight: 700;
   white-space: nowrap;
 }
 
@@ -890,8 +916,9 @@ input[type="range"] {
 
 .focus-copy h2 {
   margin-bottom: 9px;
-  font-size: 27px;
+  font-size: 26px;
   line-height: 1.12;
+  font-weight: 780;
 }
 
 .focus-copy p:last-child {
@@ -915,15 +942,17 @@ input[type="range"] {
 }
 
 .focus-score strong {
+  font-family: var(--font-number);
   font-size: 24px;
   line-height: 1;
+  font-weight: 760;
 }
 
 .focus-score span {
   margin-top: 4px;
   color: var(--faint);
   font-size: 11px;
-  font-weight: 820;
+  font-weight: 680;
 }
 
 .focus-stats {
@@ -946,12 +975,14 @@ input[type="range"] {
   margin-bottom: 6px;
   color: var(--faint);
   font-size: 12px;
-  font-weight: 820;
+  font-weight: 680;
 }
 
 .focus-stats strong {
   color: var(--ink);
+  font-family: var(--font-number);
   font-size: 17px;
+  font-weight: 760;
 }
 
 .summary-card {
@@ -964,7 +995,7 @@ input[type="range"] {
 .summary-card span {
   color: var(--muted);
   font-size: 12px;
-  font-weight: 850;
+  font-weight: 680;
 }
 
 .summary-card strong {
@@ -1002,7 +1033,7 @@ input[type="range"] {
   background: rgba(255, 255, 255, 0.065);
   color: var(--faint);
   font-size: 12px;
-  font-weight: 880;
+  font-weight: 700;
 }
 
 .matrix-cell.done {
@@ -1055,7 +1086,7 @@ input[type="range"] {
   align-items: center;
   color: rgba(244, 241, 234, 0.78);
   font-size: 12px;
-  font-weight: 850;
+  font-weight: 680;
 }
 
 .trend-track {
@@ -1204,7 +1235,7 @@ body.modal-open {
   margin-bottom: 4px;
   color: var(--faint);
   font-size: 12px;
-  font-weight: 820;
+  font-weight: 680;
 }
 
 .storage-card strong,
@@ -1228,7 +1259,7 @@ body.modal-open {
   background: rgba(255, 255, 255, 0.08);
   color: var(--ink);
   font-size: 12px;
-  font-weight: 850;
+  font-weight: 700;
 }
 
 .mini-button:hover {
