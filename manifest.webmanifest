@@ -1,0 +1,25 @@
+{
+  "name": "元气训练打卡",
+  "short_name": "训练打卡",
+  "description": "居家训练、专项进阶和状态记录的个人打卡 App。",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#101116",
+  "theme_color": "#101116",
+  "icons": [
+    {
+      "src": "./assets/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

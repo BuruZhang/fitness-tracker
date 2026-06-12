@@ -1,6 +1,9 @@
 const recordKey = "fitness-tracker-v2-records";
 const legacyRecordKey = "fitness-tracker-v1";
 const profileKey = "fitness-tracker-profile";
+const lastSaveKey = "fitness-tracker-last-save";
+const dbName = "fitness-tracker-db";
+const dbStore = "kv";
 const imageBase = "./assets/";
 
 const plans = [
@@ -133,13 +136,29 @@ const pushupGuides = [
 ];
 
 const weekdayNames = ["周一", "周二", "周三", "周四", "周五", "周六", "周日"];
+const beijingFormatter = new Intl.DateTimeFormat("en-CA", {
+  timeZone: "Asia/Shanghai",
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit",
+});
+let storageOK = isStorageAvailable();
+let durableStorageOK = false;
+let hydrationDone = false;
+let userInteracted = false;
+let lastSavedAt = "";
 let records = loadRecords();
 let profile = loadProfile();
-let selectedDate = startOfDay(new Date());
+let selectedDate = getBeijingToday();
 let currentWeekStart = getMonday(selectedDate);
 
 const els = {
   profileButton: document.querySelector("#profileButton"),
+  saveStatus: document.querySelector("#saveStatus"),
+  storageNotice: document.querySelector("#storageNotice"),
+  drawerExportBtn: document.querySelector("#drawerExportBtn"),
+  importBtn: document.querySelector("#importBtn"),
+  importFile: document.querySelector("#importFile"),
   avatarInitial: document.querySelector("#avatarInitial"),
   drawerInitial: document.querySelector("#drawerInitial"),
   drawerName: document.querySelector("#drawerName"),
@@ -147,18 +166,28 @@ const els = {
   drawerBackdrop: document.querySelector("#drawerBackdrop"),
   closeDrawer: document.querySelector("#closeDrawer"),
   todayLabel: document.querySelector("#todayLabel"),
+  storageWarning: document.querySelector("#storageWarning"),
+  toggleImageBtn: document.querySelector("#toggleImageBtn"),
+  imagePreview: document.querySelector("#imagePreview"),
+  imageModal: document.querySelector("#imageModal"),
+  closeImageModal: document.querySelector("#closeImageModal"),
+  modalImage: document.querySelector("#modalImage"),
+  heroDate: document.querySelector("#heroDate"),
+  heroTitle: document.querySelector("#heroTitle"),
+  encouragementText: document.querySelector("#encouragementText"),
+  todayProgressText: document.querySelector("#todayProgressText"),
   weekDays: document.querySelector("#weekDays"),
   weekLabel: document.querySelector("#weekLabel"),
-  selectedDate: document.querySelector("#selectedDate"),
-  dayTitle: document.querySelector("#dayTitle"),
   dayImage: document.querySelector("#dayImage"),
   actionList: document.querySelector("#actionList"),
   actionCount: document.querySelector("#actionCount"),
   dayComplete: document.querySelector("#dayComplete"),
-  weekCompletion: document.querySelector("#weekCompletion"),
-  completionRing: document.querySelector("#completionRing"),
-  completionCount: document.querySelector("#completionCount"),
+  todayRing: document.querySelector("#todayRing"),
   ringText: document.querySelector("#ringText"),
+  recentDone: document.querySelector("#recentDone"),
+  streakDays: document.querySelector("#streakDays"),
+  lastTraining: document.querySelector("#lastTraining"),
+  heroPushupBest: document.querySelector("#heroPushupBest"),
   readinessText: document.querySelector("#readinessText"),
   sleep: document.querySelector("#sleep"),
   soreness: document.querySelector("#soreness"),
@@ -170,19 +199,31 @@ const els = {
   vegetables: document.querySelector("#vegetables"),
   snacks: document.querySelector("#snacks"),
   weight: document.querySelector("#weight"),
-  waist: document.querySelector("#waist"),
   pushups: document.querySelector("#pushups"),
   plank: document.querySelector("#plank"),
+  dietSummary: document.querySelector("#dietSummary"),
   specialList: document.querySelector("#specialList"),
   trainingDays: document.querySelector("#trainingDays"),
   specialDays: document.querySelector("#specialDays"),
   proteinDays: document.querySelector("#proteinDays"),
+  dietOverviewText: document.querySelector("#dietOverviewText"),
   sleepRisk: document.querySelector("#sleepRisk"),
+  weekScore: document.querySelector("#weekScore"),
+  focusScoreRing: document.querySelector("#focusScoreRing"),
+  overviewFocusTitle: document.querySelector("#overviewFocusTitle"),
+  overviewFocusText: document.querySelector("#overviewFocusText"),
+  overviewFocusStats: document.querySelector("#overviewFocusStats"),
+  weeklyReview: document.querySelector("#weeklyReview"),
   statusMatrix: document.querySelector("#statusMatrix"),
   pushupBest: document.querySelector("#pushupBest"),
   pushupBar: document.querySelector("#pushupBar"),
   pushupGuide: document.querySelector("#pushupGuide"),
   trendBars: document.querySelector("#trendBars"),
+  specialHeroTitle: document.querySelector("#specialHeroTitle"),
+  specialHeroCopy: document.querySelector("#specialHeroCopy"),
+  avatarUploadBtn: document.querySelector("#avatarUploadBtn"),
+  avatarRemoveBtn: document.querySelector("#avatarRemoveBtn"),
+  avatarFile: document.querySelector("#avatarFile"),
 };
 
 const profileFields = {
@@ -198,6 +239,13 @@ const profileFields = {
 
 function pad(num) {
   return String(num).padStart(2, "0");
+}
+
+function getBeijingToday() {
+  const parts = Object.fromEntries(
+    beijingFormatter.formatToParts(new Date()).map((part) => [part.type, part.value]),
+  );
+  return new Date(Number(parts.year), Number(parts.month) - 1, Number(parts.day));
 }
 
 function dateKey(date) {
@@ -227,6 +275,153 @@ function formatDate(date) {
   return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`;
 }
 
+function isStorageAvailable() {
+  try {
+    const testKey = "__fitness_storage_test__";
+    localStorage.setItem(testKey, "1");
+    localStorage.removeItem(testKey);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function openDB() {
+  return new Promise((resolve, reject) => {
+    if (!("indexedDB" in window)) {
+      reject(new Error("IndexedDB unavailable"));
+      return;
+    }
+    const request = indexedDB.open(dbName, 1);
+    request.addEventListener("upgradeneeded", () => {
+      request.result.createObjectStore(dbStore);
+    });
+    request.addEventListener("success", () => resolve(request.result));
+    request.addEventListener("error", () => reject(request.error));
+  });
+}
+
+async function durableGet(key) {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(dbStore, "readonly");
+    const store = tx.objectStore(dbStore);
+    const request = store.get(key);
+    request.addEventListener("success", () => resolve(request.result));
+    request.addEventListener("error", () => reject(request.error));
+    tx.addEventListener("complete", () => db.close());
+  });
+}
+
+async function durableSet(key, value) {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(dbStore, "readwrite");
+    tx.objectStore(dbStore).put(value, key);
+    tx.addEventListener("complete", () => {
+      db.close();
+      durableStorageOK = true;
+      resolve(true);
+    });
+    tx.addEventListener("error", () => {
+      db.close();
+      reject(tx.error);
+    });
+  });
+}
+
+function durableSetQuiet(key, value) {
+  durableSet(key, value)
+    .then(() => {
+      lastSavedAt = new Date().toISOString();
+      updateSaveStatus("saved");
+    })
+    .catch(() => {
+      durableStorageOK = false;
+      if (!storageOK) updateSaveStatus("error", "保存受限，请导出备份");
+    });
+}
+
+async function hydrateFromDurableStorage() {
+  try {
+    const [durableRecords, durableProfile] = await Promise.all([
+      durableGet(recordKey),
+      durableGet(profileKey),
+    ]);
+    durableStorageOK = true;
+    if (!userInteracted) {
+      if (durableRecords && typeof durableRecords === "object" && Object.keys(durableRecords).length) {
+        records = mergeRecords(records, durableRecords);
+      }
+      if (durableProfile && typeof durableProfile === "object") {
+        profile = { ...profile, ...durableProfile };
+      }
+      hydrationDone = true;
+      renderAll();
+      updateSaveStatus("idle", getLastSaveText());
+    }
+  } catch {
+    durableStorageOK = false;
+    hydrationDone = true;
+    updateSaveStatus(storageOK ? "idle" : "error");
+  }
+}
+
+function mergeRecords(localRecords, durableRecords) {
+  const merged = { ...durableRecords, ...localRecords };
+  Object.keys(durableRecords).forEach((key) => {
+    const localUpdated = Date.parse(localRecords[key]?.updatedAt || "");
+    const durableUpdated = Date.parse(durableRecords[key]?.updatedAt || "");
+    if (durableUpdated > localUpdated) merged[key] = durableRecords[key];
+  });
+  return merged;
+}
+
+function getLastSaveText() {
+  if (!storageOK && !durableStorageOK) return "无法自动保存";
+  let savedAt = lastSavedAt;
+  if (!savedAt && storageOK) {
+    try {
+      savedAt = localStorage.getItem(lastSaveKey) || "";
+    } catch {
+      savedAt = "";
+    }
+  }
+  if (!savedAt) return "本机自动保存";
+  const date = new Date(savedAt);
+  if (Number.isNaN(date.getTime())) return "本机自动保存";
+  return `已保存 ${pad(date.getHours())}:${pad(date.getMinutes())}`;
+}
+
+function updateSaveStatus(type = "idle", text = getLastSaveText()) {
+  if (!els?.saveStatus) return;
+  els.saveStatus.textContent = text;
+  els.saveStatus.dataset.state = type;
+  if (els.storageNotice) {
+    const mode = durableStorageOK ? "双层保存已启用" : storageOK ? "本机保存已启用" : "当前浏览器限制自动保存";
+    els.storageNotice.textContent =
+      storageOK || durableStorageOK ? `${mode}，建议每周导出备份一次` : "请使用导出备份保存记录";
+  }
+}
+
+function persistJSON(key, value) {
+  if (!storageOK) {
+    updateSaveStatus("error", "无法自动保存");
+    return false;
+  }
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+    lastSavedAt = new Date().toISOString();
+    localStorage.setItem(lastSaveKey, lastSavedAt);
+    updateSaveStatus("saved");
+    return true;
+  } catch {
+    storageOK = false;
+    updateSaveStatus("error", "保存失败，请导出备份");
+    return false;
+  }
+}
+
 function loadRecords() {
   try {
     const current = localStorage.getItem(recordKey);
@@ -238,29 +433,37 @@ function loadRecords() {
 }
 
 function saveRecords() {
-  localStorage.setItem(recordKey, JSON.stringify(records));
+  persistJSON(recordKey, records);
+  durableSetQuiet(recordKey, records);
 }
 
 function loadProfile() {
   const defaults = {
-    name: "羊咩咩",
-    age: "23",
-    gender: "女",
-    height: "160",
-    weight: "54",
+    name: "元气训练生",
+    age: "",
+    gender: "",
+    height: "",
+    weight: "",
     equipment: "一对 1.5 kg 哑铃，居家训练",
     goals: "增肌、提升体能、塑形；加强核心、上肢力量和腰腹稳定。",
-    notes: "无伤病；目前标准俯卧撑基础较弱，平板支撑尚可。",
+    notes: "如有伤病或明显疼痛，优先降低强度或暂停训练。",
+    avatar: "",
   };
   try {
-    return { ...defaults, ...(JSON.parse(localStorage.getItem(profileKey)) || {}) };
+    const savedProfile = JSON.parse(localStorage.getItem(profileKey)) || {};
+    const mergedProfile = { ...defaults, ...savedProfile };
+    if (mergedProfile.name === "训练者") {
+      mergedProfile.name = "元气训练生";
+    }
+    return mergedProfile;
   } catch {
     return defaults;
   }
 }
 
 function saveProfile() {
-  localStorage.setItem(profileKey, JSON.stringify(profile));
+  persistJSON(profileKey, profile);
+  durableSetQuiet(profileKey, profile);
 }
 
 function defaultRecord(date) {
@@ -279,7 +482,6 @@ function defaultRecord(date) {
     vegetables: false,
     snacks: false,
     weight: "",
-    waist: "",
     pushups: "",
     plank: "",
   };
@@ -303,7 +505,8 @@ function getRecord(date) {
 
 function setRecord(date, patch) {
   const key = dateKey(date);
-  records[key] = { ...getRecord(date), ...patch };
+  userInteracted = true;
+  records[key] = { ...getRecord(date), ...patch, updatedAt: new Date().toISOString() };
   saveRecords();
 }
 
@@ -321,14 +524,83 @@ function recommendedSpecials(date) {
   return specialModules.filter((module) => module.recommendedDays.includes(index));
 }
 
+function effectiveRecommendedSpecials(date) {
+  const record = getRecord(date);
+  if (getReadiness(record) === "建议降强度") {
+    return specialModules.filter((module) => module.id === "recovery");
+  }
+  return recommendedSpecials(date);
+}
+
+function getActionProgress(date) {
+  const record = getRecord(date);
+  const total = plans[getPlanIndex(date)].actions.length;
+  const done = (record.actions || []).filter(Boolean).length;
+  return { done, total, percent: total ? Math.round((done / total) * 100) : 0 };
+}
+
+function getBestPushups() {
+  return Object.values(records).reduce((max, record) => Math.max(max, Number(record.pushups) || 0), 0);
+}
+
+function getRecentStats() {
+  const today = getBeijingToday();
+  const recentDates = Array.from({ length: 7 }, (_, index) => addDays(today, index - 6));
+  const recentRecords = recentDates.map(getRecord);
+  const recentDone = recentRecords.filter((record) => record.complete).length;
+  let streak = 0;
+  const streakStart = getRecord(today).complete ? today : addDays(today, -1);
+  for (let date = streakStart; ; date = addDays(date, -1)) {
+    const record = records[dateKey(date)];
+    if (!record?.complete) break;
+    streak += 1;
+  }
+  const completedKeys = Object.keys(records)
+    .filter((key) => records[key]?.complete)
+    .sort();
+  const lastKey = completedKeys.at(-1);
+  const lastTraining = lastKey
+    ? `${Number(lastKey.slice(5, 7))}/${Number(lastKey.slice(8, 10))}`
+    : "暂无";
+  return { recentDone, streak, lastTraining, bestPushups: getBestPushups() };
+}
+
+function getEncouragement(date) {
+  const record = getRecord(date);
+  const readiness = getReadiness(record);
+  const progress = getActionProgress(date);
+  const { streak, bestPushups } = getRecentStats();
+  if (record.complete) return "今天的训练已完成，拉伸收尾后好好恢复。";
+  if (readiness === "建议降强度") return "今天适合放轻一点，做恢复和核心稳定就很好。";
+  if (progress.done > 0) return `已经完成 ${progress.done} 项，剩下的按动作质量来。`;
+  if (streak >= 3) return `连续 ${streak} 天保持节奏了，今天继续稳稳推进。`;
+  if (bestPushups > 0 && bestPushups < 10) return "上肢力量正在积累，先把每一次动作做稳。";
+  return "先从热身开始，进入状态后再完成今天的训练。";
+}
+
 function renderProfile() {
   const initial = (profile.name || "我").trim().slice(0, 1);
   els.avatarInitial.textContent = initial;
   els.drawerInitial.textContent = initial;
   els.drawerName.textContent = profile.name || "我";
+  [els.profileButton, document.querySelector(".avatar-large")].forEach((avatar) => {
+    if (!avatar) return;
+    if (profile.avatar) {
+      avatar.classList.add("has-image");
+      avatar.style.backgroundImage = `url("${profile.avatar}")`;
+    } else {
+      avatar.classList.remove("has-image");
+      avatar.style.backgroundImage = "";
+    }
+  });
   Object.entries(profileFields).forEach(([key, field]) => {
     field.value = profile[key] || "";
   });
+}
+
+function renderEnvironmentWarning() {
+  if (!els.storageWarning) return;
+  els.storageWarning.hidden = window.location.protocol !== "file:";
 }
 
 function openDrawer() {
@@ -376,13 +648,29 @@ function renderWeek() {
   });
 }
 
+function renderHero() {
+  const planIndex = getPlanIndex(selectedDate);
+  const plan = plans[planIndex];
+  const progress = getActionProgress(selectedDate);
+  const stats = getRecentStats();
+  els.heroDate.textContent = `北京时间 · ${weekdayNames[planIndex]} · ${formatDate(selectedDate)}`;
+  els.heroTitle.textContent = plan.title;
+  els.encouragementText.textContent = getEncouragement(selectedDate);
+  els.todayProgressText.textContent = `今日 ${progress.done}/${progress.total} 项 · ${getReadiness(getRecord(selectedDate))}`;
+  els.ringText.textContent = `${progress.percent}%`;
+  els.todayRing.style.setProperty("--progress", `${progress.percent}%`);
+  els.recentDone.textContent = `${stats.recentDone}/7`;
+  els.streakDays.textContent = `${stats.streak} 天`;
+  els.lastTraining.textContent = stats.lastTraining;
+  els.heroPushupBest.textContent = stats.bestPushups;
+}
+
 function renderDay() {
   const record = getRecord(selectedDate);
   const planIndex = getPlanIndex(selectedDate);
   const plan = plans[planIndex];
-  els.selectedDate.textContent = `${weekdayNames[planIndex]} · ${formatDate(selectedDate)}`;
-  els.dayTitle.textContent = plan.title;
   els.dayImage.src = imageBase + plan.image;
+  els.modalImage.src = imageBase + plan.image;
   els.actionCount.textContent = `${plan.actions.length} 项`;
   els.dayComplete.checked = Boolean(record.complete);
   els.actionList.innerHTML = "";
@@ -397,7 +685,6 @@ function renderDay() {
         <span class="action-name">${name}</span>
         <span class="action-detail">${detail}</span>
       </span>
-      <span class="action-badge">${weekdayNames[planIndex]}</span>
     `;
     item.querySelector("input").addEventListener("change", (event) => {
       const actions = [...getRecord(selectedDate).actions];
@@ -409,6 +696,41 @@ function renderDay() {
   });
 
   setForm(record);
+}
+
+function openImageModal() {
+  els.imageModal.hidden = false;
+  document.body.classList.add("modal-open");
+}
+
+function closeImageModal() {
+  els.imageModal.hidden = true;
+  document.body.classList.remove("modal-open");
+}
+
+function resizeAvatar(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.addEventListener("error", () => reject(reader.error));
+    reader.addEventListener("load", () => {
+      const img = new Image();
+      img.addEventListener("error", () => reject(new Error("image load failed")));
+      img.addEventListener("load", () => {
+        const max = 512;
+        const scale = Math.min(1, max / Math.max(img.width, img.height));
+        const width = Math.max(1, Math.round(img.width * scale));
+        const height = Math.max(1, Math.round(img.height * scale));
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, width, height);
+        resolve(canvas.toDataURL("image/jpeg", 0.86));
+      });
+      img.src = String(reader.result || "");
+    });
+    reader.readAsDataURL(file);
+  });
 }
 
 function setForm(record) {
@@ -425,10 +747,10 @@ function setForm(record) {
   els.vegetables.checked = Boolean(record.vegetables);
   els.snacks.checked = Boolean(record.snacks);
   els.weight.value = record.weight ?? "";
-  els.waist.value = record.waist ?? "";
   els.pushups.value = record.pushups ?? "";
   els.plank.value = record.plank ?? "";
   els.readinessText.textContent = getReadiness(record);
+  els.dietSummary.textContent = getDietSummary(record);
 }
 
 function getReadiness(record) {
@@ -439,12 +761,37 @@ function getReadiness(record) {
   return "正常训练";
 }
 
+function hasDietRecord(record) {
+  return (
+    Number(record.protein) > 0 ||
+    Number(record.water) > 0 ||
+    Boolean(record.breakfast) ||
+    Boolean(record.vegetables) ||
+    Boolean(record.snacks)
+  );
+}
+
+function getDietSummary(record) {
+  if (!hasDietRecord(record)) return "可选";
+  const parts = [];
+  if (Number(record.protein) > 0) parts.push(`${record.protein}g`);
+  if (Number(record.water) > 0) parts.push(`${record.water}L`);
+  return parts.length ? parts.join(" · ") : "已记录";
+}
+
 function renderSpecials() {
   const record = getRecord(selectedDate);
-  const recommended = new Set(recommendedSpecials(selectedDate).map((item) => item.id));
+  const recommendedList = effectiveRecommendedSpecials(selectedDate);
+  const recommended = new Set(recommendedList.map((item) => item.id));
+  const readiness = getReadiness(record);
+  els.specialHeroTitle.textContent = readiness === "建议降强度" ? "今日恢复优先" : "今日建议专项";
+  els.specialHeroCopy.textContent =
+    readiness === "建议降强度"
+      ? "睡眠、酸痛或精神状态提示你今天适合降强度。做恢复专项即可，不需要硬冲。"
+      : "根据当天训练自动推荐，优先做标记为“今日建议”的项目。";
   els.specialList.innerHTML = "";
 
-  specialModules.forEach((module) => {
+  [...specialModules].sort((a, b) => Number(recommended.has(b.id)) - Number(recommended.has(a.id))).forEach((module) => {
     const done = Boolean(record.specials[module.id]);
     const card = document.createElement("article");
     card.className = "special-card";
@@ -475,26 +822,98 @@ function renderStats() {
   const days = weekDates();
   const weekRecords = days.map(getRecord);
   const completed = weekRecords.filter((record) => record.complete).length;
-  const completion = Math.round((completed / 7) * 100);
-  els.weekCompletion.textContent = `${completion}%`;
-  els.completionCount.textContent = `${completed}/7 天`;
-  els.ringText.textContent = `${completion}%`;
-  els.completionRing.style.setProperty("--progress", `${completion}%`);
-
   const specialDays = weekRecords.filter(isSpecialDone).length;
-  const proteinDays = weekRecords.filter((record) => Number(record.protein) >= 70).length;
+  const dietRecords = weekRecords.filter(hasDietRecord);
+  const proteinDays = dietRecords.filter((record) => Number(record.protein) >= 70).length;
   const sleepRisk = weekRecords.filter((record) => Number(record.sleep) > 0 && Number(record.sleep) < 7).length;
-  els.trainingDays.textContent = completed;
-  els.specialDays.textContent = specialDays;
-  els.proteinDays.textContent = proteinDays;
-  els.sleepRisk.textContent = sleepRisk;
+  if (els.trainingDays) els.trainingDays.textContent = completed;
+  if (els.specialDays) els.specialDays.textContent = specialDays;
+  if (els.proteinDays) els.proteinDays.textContent = dietRecords.length;
+  if (els.dietOverviewText) els.dietOverviewText.textContent = dietRecords.length ? `蛋白达标 ${proteinDays} 天` : "可选记录";
+  if (els.sleepRisk) els.sleepRisk.textContent = sleepRisk;
 
-  const best = Object.values(records).reduce((max, record) => Math.max(max, Number(record.pushups) || 0), 0);
+  const best = getBestPushups();
   els.pushupBest.textContent = best;
   els.pushupBar.style.width = `${Math.min(best / 10, 1) * 100}%`;
   renderPushupGuide(best);
+  renderWeeklyReview(days, weekRecords, { completed, specialDays, proteinDays, sleepRisk, best, dietRecordDays: dietRecords.length });
   renderMatrix(days);
   renderTrends();
+}
+
+function renderWeeklyReview(days, weekRecords, stats) {
+  const dietRecords = weekRecords.filter(hasDietRecord);
+  const waterDays = dietRecords.filter((record) => Number(record.water) >= 1.5).length;
+  const sorenessRisk = weekRecords.filter((record) => Number(record.soreness) >= 7).length;
+  const recoveryGoodDays = Math.max(0, 7 - stats.sleepRisk - sorenessRisk);
+  const score = Math.min(
+    100,
+    Math.round(
+      Math.min(stats.completed, 6) * 7 +
+        Math.min(stats.specialDays, 4) * 5 +
+        Math.min(stats.proteinDays, 5) * 4 +
+        Math.min(recoveryGoodDays, 5) * 4,
+    ),
+  );
+  els.weekScore.textContent = score;
+  els.focusScoreRing.style.setProperty("--score", `${score}%`);
+
+  const trainingText =
+    stats.completed >= 5
+      ? "训练频率已经够用，接下来守住动作质量。"
+      : stats.completed >= 3
+        ? "训练有基础了，再补 1-2 天会更稳。"
+        : "先把每周 3 天做稳，不急着追求完美。";
+  const recoveryText =
+    stats.sleepRisk + sorenessRisk === 0
+      ? "恢复状态不错，可以按计划推进。"
+      : `本周有 ${stats.sleepRisk} 天睡眠不足、${sorenessRisk} 天酸痛偏高，建议把恢复专项放前面。`;
+  const dietText =
+    dietRecords.length === 0
+      ? "本周未记录饮食，不影响训练完成；想看恢复质量时再补记即可。"
+      : stats.proteinDays >= Math.min(4, dietRecords.length) && waterDays >= Math.min(4, dietRecords.length)
+        ? `已记录 ${dietRecords.length} 天，蛋白和饮水对训练支持不错。`
+        : `已记录 ${dietRecords.length} 天，其中蛋白达标 ${stats.proteinDays} 天、饮水达标 ${waterDays} 天。`;
+  const pushupText =
+    stats.best >= 10
+      ? "标准俯卧撑目标已达成，可以进入动作质量和组数巩固。"
+      : `标准俯卧撑最好 ${stats.best} 个，距离 10 个还差 ${10 - stats.best} 个。`;
+
+  let focusTitle = "先把训练频率做稳";
+  let focusText = trainingText;
+  if (stats.completed >= 5 && stats.sleepRisk + sorenessRisk > 1) {
+    focusTitle = "本周重点：恢复质量";
+    focusText = recoveryText;
+  } else if (stats.completed >= 4 && stats.best < 10) {
+    focusTitle = "本周重点：俯卧撑进阶";
+    focusText = pushupText;
+  } else if (stats.completed >= 5) {
+    focusTitle = "本周节奏不错";
+    focusText = "训练频率已经到位，下一步关注动作质量和恢复。";
+  } else if (dietRecords.length > 0 && stats.proteinDays === 0) {
+    focusTitle = "本周重点：蛋白支持";
+    focusText = dietText;
+  }
+
+  els.overviewFocusTitle.textContent = focusTitle;
+  els.overviewFocusText.textContent = focusText;
+  els.overviewFocusStats.innerHTML = [
+    ["训练", `${stats.completed}/7`],
+    ["专项", `${stats.specialDays}/7`],
+    ["饮食", dietRecords.length ? `${stats.proteinDays}/${dietRecords.length}` : "可选"],
+    ["恢复风险", `${stats.sleepRisk + sorenessRisk}天`],
+  ]
+    .map(([label, value]) => `<div><span>${label}</span><strong>${value}</strong></div>`)
+    .join("");
+
+  els.weeklyReview.innerHTML = [
+    ["训练", trainingText],
+    ["恢复", recoveryText],
+    ["饮食", dietText],
+    ["俯卧撑", pushupText],
+  ]
+    .map(([title, text]) => `<div class="review-item"><strong>${title}</strong><span>${text}</span></div>`)
+    .join("");
 }
 
 function renderPushupGuide(best) {
@@ -520,8 +939,8 @@ function renderMatrix(days) {
     const hasValues = [
       true,
       true,
-      Number(record.protein) > 0,
-      Number(record.water) > 0,
+      hasDietRecord(record),
+      hasDietRecord(record),
       Number(record.sleep) > 0,
     ];
     const row = document.createElement("div");
@@ -530,7 +949,7 @@ function renderMatrix(days) {
       .map((label, labelIndex) => {
         const hasValue = hasValues[labelIndex];
         const cls = statuses[labelIndex] ? "done" : hasValue ? "" : "warn";
-        const symbol = statuses[labelIndex] ? "✓" : hasValue ? "·" : "待";
+        const symbol = statuses[labelIndex] ? "✓" : hasValue ? "·" : label === "蛋白" || label === "饮水" ? "选" : "待";
         return `<span class="matrix-cell ${cls}" title="${label}">${symbol}</span>`;
       })
       .join("")}`;
@@ -556,8 +975,10 @@ function renderTrends() {
 }
 
 function renderAll() {
+  renderEnvironmentWarning();
   renderProfile();
   renderWeek();
+  renderHero();
   renderDay();
   renderSpecials();
   renderStats();
@@ -568,6 +989,8 @@ function updateCurrentRecordFromInput(input) {
   const value = input.type === "checkbox" ? input.checked : input.value;
   setRecord(selectedDate, { [input.id]: value });
   if (input.id === "soreness") els.sorenessValue.textContent = input.value;
+  renderHero();
+  renderSpecials();
   renderStats();
   els.readinessText.textContent = getReadiness(getRecord(selectedDate));
 }
@@ -607,6 +1030,8 @@ document.querySelectorAll(".segmented button").forEach((button) => {
   button.addEventListener("click", () => {
     setRecord(selectedDate, { energy: button.dataset.value });
     renderDay();
+    renderHero();
+    renderSpecials();
     renderStats();
   });
 });
@@ -618,11 +1043,18 @@ document.querySelectorAll("#logForm input, #logForm textarea").forEach((input) =
 
 document.querySelector("#completeRecommended").addEventListener("click", () => {
   const specials = { ...getRecord(selectedDate).specials };
-  recommendedSpecials(selectedDate).forEach((module) => {
+  effectiveRecommendedSpecials(selectedDate).forEach((module) => {
     specials[module.id] = true;
   });
   setRecord(selectedDate, { specials });
   renderAll();
+});
+
+els.toggleImageBtn.addEventListener("click", openImageModal);
+els.imagePreview.addEventListener("click", openImageModal);
+els.closeImageModal.addEventListener("click", closeImageModal);
+els.imageModal.addEventListener("click", (event) => {
+  if (event.target === els.imageModal) closeImageModal();
 });
 
 document.querySelector("#resetDayBtn").addEventListener("click", () => {
@@ -632,25 +1064,99 @@ document.querySelector("#resetDayBtn").addEventListener("click", () => {
 });
 
 document.querySelector("#exportBtn").addEventListener("click", () => {
+  exportBackup();
+});
+
+function exportBackup() {
   const payload = { profile, records };
   const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
   const link = document.createElement("a");
   link.href = URL.createObjectURL(blob);
-  link.download = `fitness-records-${dateKey(new Date())}.json`;
+  link.download = `fitness-records-${dateKey(getBeijingToday())}.json`;
   link.click();
   URL.revokeObjectURL(link.href);
-});
+}
+
+function importBackup(file) {
+  const reader = new FileReader();
+  reader.addEventListener("load", () => {
+    try {
+      const payload = JSON.parse(String(reader.result || "{}"));
+      if (!payload || typeof payload !== "object") throw new Error("invalid");
+      if (!payload.records || typeof payload.records !== "object") throw new Error("records");
+      userInteracted = true;
+      records = payload.records;
+      if (payload.profile && typeof payload.profile === "object") {
+        profile = { ...profile, ...payload.profile };
+      }
+      saveRecords();
+      saveProfile();
+      renderAll();
+      updateSaveStatus("saved", "已导入并保存");
+    } catch {
+      updateSaveStatus("error", "导入失败，文件格式不对");
+    }
+  });
+  reader.readAsText(file);
+}
 
 els.profileButton.addEventListener("click", openDrawer);
 els.closeDrawer.addEventListener("click", closeDrawer);
 els.drawerBackdrop.addEventListener("click", closeDrawer);
+els.drawerExportBtn.addEventListener("click", exportBackup);
+els.importBtn.addEventListener("click", () => els.importFile.click());
+els.importFile.addEventListener("change", (event) => {
+  const [file] = event.target.files || [];
+  if (file) importBackup(file);
+  event.target.value = "";
+});
+
+els.avatarUploadBtn.addEventListener("click", () => els.avatarFile.click());
+els.avatarRemoveBtn.addEventListener("click", () => {
+  userInteracted = true;
+  profile = { ...profile, avatar: "" };
+  saveProfile();
+  renderProfile();
+});
+els.avatarFile.addEventListener("change", (event) => {
+  const [file] = event.target.files || [];
+  if (!file) return;
+  resizeAvatar(file)
+    .then((avatar) => {
+      userInteracted = true;
+      profile = { ...profile, avatar };
+      saveProfile();
+      renderProfile();
+    })
+    .catch(() => updateSaveStatus("error", "头像读取失败"));
+  event.target.value = "";
+});
 
 Object.entries(profileFields).forEach(([key, field]) => {
   field.addEventListener("input", () => {
+    userInteracted = true;
     profile = { ...profile, [key]: field.value };
     saveProfile();
     renderProfile();
   });
 });
 
+window.addEventListener("beforeunload", () => {
+  if (storageOK) {
+    localStorage.setItem(recordKey, JSON.stringify(records));
+    localStorage.setItem(profileKey, JSON.stringify(profile));
+    localStorage.setItem(lastSaveKey, new Date().toISOString());
+  }
+});
+
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "hidden" && storageOK) {
+    localStorage.setItem(recordKey, JSON.stringify(records));
+    localStorage.setItem(profileKey, JSON.stringify(profile));
+    localStorage.setItem(lastSaveKey, new Date().toISOString());
+  }
+});
+
 renderAll();
+updateSaveStatus(storageOK ? "idle" : "error");
+hydrateFromDurableStorage();
