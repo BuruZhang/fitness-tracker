@@ -12,7 +12,7 @@
     <title>元气小练</title>
     <link rel="manifest" href="./manifest.webmanifest" />
     <link rel="apple-touch-icon" sizes="180x180" href="./assets/apple-touch-icon.png" />
-    <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="./styles.css?v=20260706-linefix-v1" />
   </head>
   <body>
     <div class="app-shell">
@@ -21,9 +21,18 @@
           <span id="avatarInitial">羊</span>
         </button>
         <div class="app-title">
-          <p id="todayLabel">今天</p>
-          <h1 id="headerName">元气训练生</h1>
-          <span id="saveStatus" class="save-status">本机自动保存</span>
+          <p id="todayLabel">你的专属健身习惯追踪伙伴</p>
+          <h1 id="headerName">元气小练</h1>
+          <span id="saveStatus" class="save-status">已保存</span>
+        </div>
+        <div class="header-focus" aria-label="今日训练进度">
+          <div>
+            <span id="headerFocusLabel">今日训练</span>
+            <strong id="headerFocusTitle">上肢加强</strong>
+          </div>
+          <div class="header-ring" id="headerRing" style="--progress: 0%">
+            <span id="headerRingText">0</span>
+          </div>
         </div>
       </header>
 
@@ -35,10 +44,13 @@
 
         <section class="hero-card glass">
           <div class="hero-copy">
-            <p id="heroDate" class="eyebrow">北京时间 · 今天</p>
+            <p id="heroDate" class="eyebrow">今日陪练台 · 北京时间</p>
             <h2 id="heroTitle">今日训练</h2>
-            <p id="encouragementText" class="coach-line">先完成热身，后面就顺了。</p>
-            <span id="todayProgressText" class="hero-meta">今日 0/0 项</span>
+            <p id="encouragementText" class="coach-line">先看状态，再开始今天的训练。</p>
+            <div class="hero-actions">
+              <button id="startTrainingBtn" class="primary-cta" type="button">开始今日训练</button>
+              <span id="todayProgressText" class="hero-meta">今日 0/0 项</span>
+            </div>
           </div>
           <div class="ring" id="todayRing" style="--progress: 0%">
             <span id="ringText">0%</span>
@@ -64,6 +76,29 @@
           </div>
         </section>
 
+        <article class="daily-dashboard glass">
+          <div class="section-heading training-heading">
+            <div>
+              <p class="eyebrow">今日状态</p>
+              <h3 id="dailyReadinessTitle">状态良好</h3>
+            </div>
+            <span id="dailyReadinessScore">82 综合评分</span>
+          </div>
+          <div class="today-control-row">
+            <button id="statusButton" class="visual-control" type="button">
+              <span>训练状态</span>
+              <strong id="statusButtonText">正常训练</strong>
+            </button>
+            <button id="stageButton" class="visual-control" type="button">
+              <span>训练阶段 · 可自定义</span>
+              <strong id="stageButtonText">适应入门</strong>
+            </button>
+          </div>
+          <div class="mini-insight">
+            <span>每次完成一点点，都在帮明天更轻松。</span>
+          </div>
+        </article>
+
         <section class="week-strip glass" aria-label="周日期选择">
           <button id="prevWeek" class="icon-button" type="button" aria-label="上一周">‹</button>
           <div id="weekDays" class="week-days"></div>
@@ -71,35 +106,34 @@
         </section>
 
         <nav class="tab-switch glass" aria-label="页面切换">
-          <button class="view-tab active" type="button" data-view="today">今日</button>
-          <button class="view-tab" type="button" data-view="special">专项</button>
-          <button class="view-tab" type="button" data-view="overview">总览</button>
+          <button class="view-tab active" type="button" data-view="today">
+            <img class="nav-icon" src="./assets/step-icon-warmup.png" alt="" loading="lazy" decoding="async" />
+            <span>今日</span>
+          </button>
+          <button class="view-tab" type="button" data-view="special">
+            <img class="nav-icon" src="./assets/step-icon-train.png" alt="" loading="lazy" decoding="async" />
+            <span>训练</span>
+          </button>
+          <button class="view-tab" type="button" data-view="overview">
+            <img class="nav-icon" src="./assets/step-icon-special.png" alt="" loading="lazy" decoding="async" />
+            <span>概述</span>
+          </button>
         </nav>
 
         <section id="todayView" class="view-panel active">
-          <article class="training-card glass">
-            <div class="training-toolbar">
-              <label class="complete-toggle">
-                <input id="dayComplete" type="checkbox" />
-                <span>完成正式训练</span>
-              </label>
-              <button id="toggleImageBtn" class="mini-button" type="button">查看动作图</button>
+          <section class="screen-title">
+            <div>
+              <h2>今天</h2>
+              <p id="todayScreenDate">6月10日 周三</p>
             </div>
-            <button id="imagePreview" class="media-frame" type="button" aria-label="放大当天动作图">
-              <img id="dayImage" alt="当天动作示范图" />
-            </button>
-            <div class="section-heading">
-              <h3>正式训练</h3>
-              <span id="actionCount">0 项</span>
-            </div>
-            <div id="actionList" class="action-list"></div>
-          </article>
+            <button class="screen-tool" type="button" aria-label="日历" hidden>⌗</button>
+          </section>
 
-          <article class="quick-log glass compact-log">
+          <article id="quickLog" class="quick-log glass compact-log">
             <form id="logForm" class="log-form">
-              <details class="log-section" open>
+              <details class="log-section">
                 <summary>
-                  <span>状态记录</span>
+                  <span>详细状态</span>
                   <b id="readinessText">正常</b>
                 </summary>
                 <div class="log-section-body">
@@ -205,10 +239,56 @@
               </details>
             </form>
           </article>
+
         </section>
 
         <section id="specialView" class="view-panel">
-          <article class="special-hero glass">
+          <section class="screen-title">
+            <div>
+              <h2>训练</h2>
+              <p id="trainingScreenStage">阶段三 · 第 3/4 周</p>
+            </div>
+            <button class="screen-tool" type="button" aria-label="日历" hidden>⌗</button>
+          </section>
+
+          <article class="coach-insight glass">
+            <div>
+              <p class="eyebrow">陪练建议</p>
+              <h3 id="trainingInsightTitle">先热身，再进入今天的节奏</h3>
+              <span id="trainingInsightText">根据今天的状态，先把动作做稳，完成后再考虑专项。</span>
+            </div>
+          </article>
+
+          <article id="todayHub" class="today-hub glass">
+            <div class="section-heading training-heading">
+              <div>
+                <p class="eyebrow">今日训练流程</p>
+                <h3 id="trainingFlowTitle">确认状态后，按顺序完成今天</h3>
+              </div>
+              <span id="actionCount">0 项</span>
+            </div>
+            <div id="trainingFlow" class="today-flow"></div>
+          </article>
+
+          <article id="trainingCard" class="training-card glass">
+            <div class="training-toolbar">
+              <label class="complete-toggle">
+                <input id="dayComplete" type="checkbox" />
+                <span>完成正式训练</span>
+              </label>
+              <button id="toggleImageBtn" class="mini-button" type="button">查看动作图</button>
+            </div>
+            <button id="imagePreview" class="media-frame" type="button" aria-label="放大当天动作图">
+              <img id="dayImage" alt="当天动作示范图" loading="lazy" decoding="async" />
+            </button>
+            <div class="section-heading compact-heading">
+              <h3>动作清单</h3>
+              <span>逐项勾选</span>
+            </div>
+            <div id="actionList" class="action-list"></div>
+          </article>
+
+          <article id="specialHero" class="special-hero glass">
             <div>
               <p class="eyebrow">专项训练</p>
               <h2 id="specialHeroTitle">今日建议专项</h2>
@@ -220,6 +300,14 @@
         </section>
 
         <section id="overviewView" class="view-panel">
+          <section class="screen-title">
+            <div>
+              <h2>概述</h2>
+              <p>进度总览 · 目标追踪 · 成长洞察</p>
+            </div>
+            <button class="screen-tool" type="button">本周</button>
+          </section>
+
           <article class="overview-focus glass">
             <div class="focus-copy">
               <p class="eyebrow">本周重点</p>
@@ -233,7 +321,7 @@
             <div id="overviewFocusStats" class="focus-stats"></div>
           </article>
 
-          <article class="overview-card glass">
+          <article class="overview-card pushup-overview glass">
             <div class="section-heading">
               <h3>本周完成矩阵</h3>
               <span id="weekLabel">本周</span>
@@ -276,21 +364,32 @@
       <button id="closeImageModal" class="icon-button" type="button" aria-label="关闭动作图">×</button>
       <img id="modalImage" alt="放大的动作示范图" />
     </div>
-    <aside id="profileDrawer" class="profile-drawer" aria-label="个人信息侧边栏" aria-hidden="true">
+    <div id="sheetBackdrop" class="sheet-backdrop" hidden></div>
+    <section id="statusSheet" class="choice-sheet" aria-label="选择身体状态" hidden></section>
+    <section id="stageSheet" class="choice-sheet" aria-label="选择训练阶段" hidden></section>
+    <aside id="profileDrawer" class="profile-drawer" aria-label="我的侧边栏" aria-hidden="true">
       <div class="drawer-head">
         <div class="avatar-large"><span id="drawerInitial">羊</span></div>
         <div>
-          <p class="eyebrow">个人信息</p>
+          <p class="eyebrow">我的档案</p>
           <h2 id="drawerName">羊咩咩</h2>
         </div>
         <button id="closeDrawer" class="icon-button" type="button" aria-label="关闭">×</button>
       </div>
 
       <form id="profileForm" class="profile-form">
+        <section class="drawer-stage-card">
+          <div>
+            <span>当前阶段</span>
+            <strong id="drawerStageText">阶段 3 · 力量进阶</strong>
+            <small>可根据当前能力调整训练难度</small>
+          </div>
+          <button id="drawerStageButton" class="mini-button" type="button">调整</button>
+        </section>
         <section class="storage-card">
           <div>
             <span>记录管理</span>
-            <strong id="storageNotice">本机自动保存，建议定期备份</strong>
+            <strong id="storageNotice">本机自动保存</strong>
           </div>
           <div class="drawer-tools" aria-label="记录管理工具">
             <button id="drawerExportBtn" class="tool-button" type="button">
@@ -358,6 +457,6 @@
       </form>
     </aside>
 
-    <script src="./app.js"></script>
+    <script src="./app.js?v=20260706-linefix-v1"></script>
   </body>
 </html>
