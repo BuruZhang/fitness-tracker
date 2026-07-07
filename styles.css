@@ -6103,26 +6103,26 @@ body[data-view="special"] .coach-insight {
 }
 
 body[data-view="special"] .coach-insight::before {
-  content: "";
+  display: none;
+}
+
+.insight-glyph {
   width: 48px;
   height: 48px;
+  padding: 11px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: var(--yq-radius-icon);
   background:
-    var(--yq-glow),
-    rgba(18, 18, 22, 0.96);
-  -webkit-mask:
-    radial-gradient(circle at 50% 18%, #000 0 12%, transparent 13%),
-    radial-gradient(circle at 50% 63%, #000 0 28%, transparent 29%),
-    linear-gradient(#000 0 0) 45% 36% / 10% 34% no-repeat,
-    linear-gradient(#000 0 0) 30% 51% / 28% 9% no-repeat,
-    linear-gradient(#000 0 0) 55% 51% / 30% 9% no-repeat;
-  mask:
-    radial-gradient(circle at 50% 18%, #000 0 12%, transparent 13%),
-    radial-gradient(circle at 50% 63%, #000 0 28%, transparent 29%),
-    linear-gradient(#000 0 0) 45% 36% / 10% 34% no-repeat,
-    linear-gradient(#000 0 0) 30% 51% / 28% 9% no-repeat,
-    linear-gradient(#000 0 0) 55% 51% / 30% 9% no-repeat;
-  box-shadow: none;
+    radial-gradient(circle at 35% 15%, rgba(255, 255, 255, 0.18), transparent 38%),
+    var(--yq-glow);
+  fill: none;
+  stroke: #fff;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  box-shadow:
+    0 14px 30px rgba(98, 72, 255, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16);
 }
 
 body[data-view="special"] .coach-insight > div {
@@ -6209,15 +6209,17 @@ body[data-view="special"] .coach-insight span:not(.insight-mark) {
 @media (max-width: 430px) {
   body[data-view="special"] .coach-insight {
     min-height: 98px;
-    grid-template-columns: 44px minmax(0, 1fr);
+    grid-template-columns: 42px minmax(0, 1fr);
     gap: 12px;
     padding: 14px;
     border-radius: var(--yq-radius-card);
   }
 
-  body[data-view="special"] .coach-insight::before {
-    width: 44px;
-    height: 44px;
+  .insight-glyph {
+    width: 42px;
+    height: 42px;
+    padding: 9px;
+    border-radius: 14px;
   }
 
   body[data-view="special"] .coach-insight .eyebrow {
@@ -6226,8 +6228,8 @@ body[data-view="special"] .coach-insight span:not(.insight-mark) {
 
   body[data-view="special"] .coach-insight h3 {
     display: block;
-    font-size: 20px;
-    line-height: 1.12;
+    font-size: clamp(18px, 5vw, 20px);
+    line-height: 1.15;
   }
 
   body[data-view="special"] .coach-insight span:not(.insight-mark) {
