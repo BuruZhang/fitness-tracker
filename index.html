@@ -12,7 +12,8 @@
     <title>元气小练</title>
     <link rel="manifest" href="./manifest.webmanifest" />
     <link rel="apple-touch-icon" sizes="180x180" href="./assets/apple-touch-icon.png" />
-    <link rel="stylesheet" href="./styles.css?v=20260707-cb-v1" />
+    <link rel="stylesheet" href="./styles.css?v=20260707-clean-v1" />
+    <link rel="stylesheet" href="./remix-fixes.css?v=20260707-clean-v1" />
   </head>
   <body>
     <div class="app-shell">
@@ -107,24 +108,15 @@
 
         <nav class="tab-switch glass" aria-label="页面切换">
           <button class="view-tab active" type="button" data-view="today">
-            <svg class="nav-glyph" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M7 3v3M17 3v3M4.5 9h15M6.5 5h11A2.5 2.5 0 0 1 20 7.5v10A2.5 2.5 0 0 1 17.5 20h-11A2.5 2.5 0 0 1 4 17.5v-10A2.5 2.5 0 0 1 6.5 5Z" />
-              <path d="M8 13h2M14 13h2M8 16h2M14 16h2" />
-            </svg>
+            <img class="nav-glyph" src="./assets/ri-nav-today.svg" alt="" aria-hidden="true" />
             <span>今日</span>
           </button>
           <button class="view-tab" type="button" data-view="special">
-            <svg class="nav-glyph" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M4 10v4M7 8v8M17 8v8M20 10v4M7 12h10" />
-              <path d="M10 9v6M14 9v6" />
-            </svg>
+            <img class="nav-glyph" src="./assets/ri-nav-train.svg" alt="" aria-hidden="true" />
             <span>训练</span>
           </button>
           <button class="view-tab" type="button" data-view="overview">
-            <svg class="nav-glyph" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M5 19V9M12 19V5M19 19v-7" />
-              <path d="M4 19h16" />
-            </svg>
+            <img class="nav-glyph" src="./assets/ri-nav-overview.svg" alt="" aria-hidden="true" />
             <span>概述</span>
           </button>
         </nav>
@@ -470,6 +462,6 @@
       </form>
     </aside>
 
-    <script src="./app.js?v=20260707-cb-v1"></script>
+    <script src="./app.js?v=20260707-clean-v1"></script>
   </body>
 </html>

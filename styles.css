@@ -34,6 +34,658 @@
     BlinkMacSystemFont, "Helvetica Neue", sans-serif;
 }
 
+/* 20260707 fit pass: phones and narrow in-app browsers should use the full viewport. */
+@media (max-width: 560px) {
+  html,
+  body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+    background-color: #08090c;
+  }
+
+  body::before,
+  body::after {
+    width: 100vw;
+  }
+
+  .app-shell {
+    width: 100vw !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding-inline: 0 !important;
+    overflow-x: clip;
+  }
+
+  .app-header {
+    width: 100%;
+    max-width: none;
+    grid-template-columns: 48px minmax(0, 1fr) minmax(106px, 132px);
+    gap: 10px;
+    padding-inline: max(14px, env(safe-area-inset-left)) max(14px, env(safe-area-inset-right));
+  }
+
+  .app-main {
+    width: 100%;
+    max-width: none;
+    padding-inline: 14px;
+  }
+
+  .view-panel,
+  .hero-card,
+  .daily-dashboard,
+  .today-hub,
+  .training-card,
+  .special-hero,
+  .overview-focus,
+  .overview-card,
+  .storage-warning {
+    width: 100%;
+    max-width: none;
+  }
+
+  .screen-title {
+    width: 100%;
+    padding-inline: 0;
+  }
+
+  .tab-switch {
+    width: calc(100vw - 28px) !important;
+    max-width: none !important;
+    left: 14px !important;
+    right: 14px !important;
+    transform: none !important;
+  }
+
+  .profile-drawer {
+    width: calc(100vw - 20px);
+    max-width: none;
+    right: 10px;
+    left: 10px;
+  }
+}
+
+@media (min-width: 431px) and (max-width: 560px) {
+  .app-main {
+    gap: 14px;
+    padding-bottom: calc(108px + env(safe-area-inset-bottom));
+  }
+
+  .screen-title h2 {
+    font-size: 30px;
+    line-height: 1.05;
+  }
+
+  .overview-focus {
+    min-height: 220px;
+    grid-template-columns: minmax(0, 1fr) 108px;
+    gap: 14px;
+    padding: 17px;
+    border-radius: 26px;
+  }
+
+  .overview-focus .focus-copy h2 {
+    font-size: 26px;
+    line-height: 1.12;
+  }
+
+  .overview-focus .focus-copy p:not(.eyebrow) {
+    font-size: 13px;
+    line-height: 1.45;
+  }
+
+  .focus-score {
+    width: 108px;
+    height: 108px;
+  }
+
+  .focus-stats {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 7px;
+  }
+
+  .focus-stats div {
+    min-width: 0;
+    padding: 12px 10px;
+  }
+
+  .overview-card {
+    border-radius: 24px;
+  }
+}
+
+@media (max-width: 390px) {
+  .app-header {
+    grid-template-columns: 44px minmax(0, 1fr) minmax(96px, 116px);
+    padding-inline: 12px;
+  }
+
+  .app-main {
+    padding-inline: 12px;
+  }
+
+  .tab-switch {
+    width: calc(100vw - 24px) !important;
+    left: 12px !important;
+    right: 12px !important;
+  }
+
+  .overview-focus {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .focus-score {
+    justify-self: start;
+  }
+}
+
+/* 20260707 last-mile icon override: keep training icons consistent after all density rules. */
+.flow-step-pill img,
+.flow-focus-icon,
+.flow-preview-row img {
+  object-fit: contain !important;
+  background: transparent !important;
+  border: 0 !important;
+  filter: none !important;
+  box-shadow: none !important;
+}
+
+.flow-step-pill img {
+  width: 32px !important;
+  height: 32px !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+}
+
+.flow-step-pill.active img {
+  width: 34px !important;
+  height: 34px !important;
+}
+
+.flow-focus-icon {
+  width: 44px !important;
+  height: 44px !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+}
+
+.flow-preview-row img {
+  width: 30px !important;
+  height: 30px !important;
+  padding: 0 !important;
+}
+
+body[data-view="special"] .coach-insight::before {
+  display: none !important;
+  content: none !important;
+}
+
+.action-thumb {
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+    0 8px 18px rgba(0, 0, 0, 0.18);
+}
+
+/* 20260707 final remix override: one icon language and a filled action visual slot. */
+.nav-glyph {
+  width: 31px !important;
+  height: 31px !important;
+  display: block !important;
+  object-fit: contain !important;
+  stroke: none !important;
+  fill: none !important;
+  opacity: 0.66;
+  filter: grayscale(0.18) saturate(0.85) brightness(1.05) drop-shadow(0 8px 14px rgba(0, 0, 0, 0.24)) !important;
+  transition: transform 180ms ease, opacity 180ms ease, filter 180ms ease;
+}
+
+.view-tab.active .nav-glyph {
+  opacity: 1;
+  transform: translateY(-1px) scale(1.07) !important;
+  filter: saturate(1.1) brightness(1.12) drop-shadow(0 10px 20px rgba(98, 72, 255, 0.32)) !important;
+}
+
+.flow-step-pill img,
+.flow-focus-icon,
+.flow-preview-row img {
+  object-fit: contain !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.22)) !important;
+}
+
+.flow-step-pill img {
+  width: 32px !important;
+  height: 32px !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+}
+
+.flow-step-pill.active img {
+  width: 34px !important;
+  height: 34px !important;
+}
+
+.flow-focus-icon {
+  width: 44px !important;
+  height: 44px !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+}
+
+.flow-focus-actions {
+  justify-content: space-between !important;
+}
+
+.flow-action-visual {
+  width: 74px;
+  height: 74px;
+  align-self: center;
+  display: grid;
+  place-items: center;
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 35% 18%, rgba(255, 116, 72, 0.22), transparent 45%),
+    radial-gradient(circle at 72% 76%, rgba(98, 72, 255, 0.26), transparent 54%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.024)),
+    rgba(16, 16, 22, 0.72);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.055),
+    0 18px 28px rgba(0, 0, 0, 0.24);
+}
+
+.flow-action-visual img {
+  width: 52px;
+  height: 52px;
+  object-fit: contain;
+  filter: drop-shadow(0 10px 18px rgba(98, 72, 255, 0.28));
+}
+
+@media (max-width: 390px) {
+  .flow-focus-card {
+    grid-template-columns: minmax(0, 1fr) 76px !important;
+  }
+
+  .flow-focus-actions {
+    padding-left: 8px;
+  }
+
+  .flow-action-visual {
+    width: 60px;
+    height: 60px;
+    border-radius: 20px;
+  }
+
+  .flow-action-visual img {
+    width: 42px;
+    height: 42px;
+  }
+
+  .primary-flow-button,
+  .flow-focus-actions .text-button {
+    min-height: 36px;
+    padding-inline: 10px;
+    font-size: 11px;
+  }
+}
+
+/* 20260707 remix icon pass: one icon language, no blank action slot. */
+.nav-glyph {
+  width: 31px !important;
+  height: 31px !important;
+  display: block !important;
+  object-fit: contain !important;
+  stroke: none !important;
+  fill: none !important;
+  opacity: 0.66;
+  filter: grayscale(0.18) saturate(0.85) brightness(1.05) drop-shadow(0 8px 14px rgba(0, 0, 0, 0.24)) !important;
+  transition: transform 180ms ease, opacity 180ms ease, filter 180ms ease;
+}
+
+.view-tab.active .nav-glyph {
+  opacity: 1;
+  transform: translateY(-1px) scale(1.07) !important;
+  filter: saturate(1.1) brightness(1.12) drop-shadow(0 10px 20px rgba(98, 72, 255, 0.32)) !important;
+}
+
+.flow-step-pill img,
+.flow-focus-icon,
+.flow-preview-row img {
+  object-fit: contain !important;
+  filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.22)) !important;
+}
+
+.flow-step-pill img {
+  width: 32px !important;
+  height: 32px !important;
+}
+
+.flow-focus-icon {
+  width: 44px !important;
+  height: 44px !important;
+}
+
+.flow-focus-actions {
+  justify-content: space-between !important;
+}
+
+.flow-action-visual {
+  width: 74px;
+  height: 74px;
+  align-self: center;
+  display: grid;
+  place-items: center;
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 35% 18%, rgba(255, 116, 72, 0.22), transparent 45%),
+    radial-gradient(circle at 72% 76%, rgba(98, 72, 255, 0.26), transparent 54%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.024)),
+    rgba(16, 16, 22, 0.72);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.055),
+    0 18px 28px rgba(0, 0, 0, 0.24);
+}
+
+.flow-action-visual img {
+  width: 52px;
+  height: 52px;
+  object-fit: contain;
+  filter: drop-shadow(0 10px 18px rgba(98, 72, 255, 0.28));
+}
+
+@media (max-width: 390px) {
+  .flow-focus-card {
+    grid-template-columns: minmax(0, 1fr) 76px !important;
+  }
+
+  .flow-focus-actions {
+    padding-left: 8px;
+  }
+
+  .flow-action-visual {
+    width: 60px;
+    height: 60px;
+    border-radius: 20px;
+  }
+
+  .flow-action-visual img {
+    width: 42px;
+    height: 42px;
+  }
+
+  .primary-flow-button,
+  .flow-focus-actions .text-button {
+    min-height: 36px;
+    padding-inline: 10px;
+    font-size: 11px;
+  }
+}
+
+/* 20260707 final icon override: one visible SVG system for training flow. */
+.flow-step-pill img,
+.flow-focus-icon,
+.flow-preview-row img {
+  object-fit: contain !important;
+  background: transparent !important;
+  border: 0 !important;
+  filter: none !important;
+  box-shadow: none !important;
+}
+
+.flow-step-pill img {
+  width: 32px !important;
+  height: 32px !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+}
+
+.flow-step-pill.active img {
+  width: 34px !important;
+  height: 34px !important;
+}
+
+.flow-focus-icon {
+  width: 44px !important;
+  height: 44px !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+}
+
+.flow-preview-row img {
+  width: 30px !important;
+  height: 30px !important;
+  padding: 0 !important;
+}
+
+body[data-view="special"] .coach-insight::before {
+  display: none !important;
+  content: none !important;
+}
+
+.action-thumb {
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+    0 8px 18px rgba(0, 0, 0, 0.18);
+}
+
+/* 20260707 detail polish: keep the existing frame, tighten small-screen rhythm. */
+@media (max-width: 560px) {
+  .app-header {
+    border-bottom-color: rgba(255, 255, 255, 0.065);
+  }
+
+  .screen-title {
+    min-height: auto;
+    margin-bottom: 12px;
+  }
+
+  .screen-title h2 {
+    letter-spacing: 0;
+  }
+
+  .screen-tool,
+  .mini-button,
+  .complete-toggle {
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  }
+
+  .view-tab span,
+  .flow-step-pill strong,
+  .cue-chip {
+    letter-spacing: 0;
+  }
+}
+
+@media (max-width: 430px) {
+  .hero-card {
+    min-height: 300px;
+    padding: 18px;
+  }
+
+  .hero-card .ring,
+  .ring {
+    width: 82px;
+    height: 82px;
+  }
+
+  .recent-strip {
+    gap: 8px;
+  }
+
+  .recent-strip div {
+    min-height: 68px;
+    padding: 10px;
+  }
+
+  .overview-focus {
+    min-height: 0 !important;
+    grid-template-columns: minmax(0, 1fr) 92px !important;
+    gap: 12px !important;
+    padding: 16px !important;
+    border-radius: 26px;
+  }
+
+  .overview-focus .focus-copy h2 {
+    font-size: 24px !important;
+    line-height: 1.12;
+  }
+
+  .overview-focus .focus-copy p:not(.eyebrow) {
+    display: -webkit-box;
+    overflow: hidden;
+    font-size: 12px;
+    line-height: 1.4;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+
+  .focus-score {
+    width: 92px !important;
+    height: 92px !important;
+    justify-self: end !important;
+  }
+
+  .focus-score strong {
+    font-size: 26px;
+  }
+
+  .focus-stats {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 6px !important;
+  }
+
+  .focus-stats div {
+    min-height: 58px;
+    padding: 9px 6px !important;
+  }
+
+  .focus-stats span {
+    font-size: 10px;
+    line-height: 1.1;
+  }
+
+  .focus-stats strong {
+    font-size: 17px;
+    line-height: 1.1;
+  }
+
+  .overview-card {
+    padding: 15px;
+  }
+
+  .status-matrix {
+    gap: 7px;
+  }
+
+  .tab-switch {
+    bottom: calc(8px + env(safe-area-inset-bottom));
+  }
+}
+
+@media (max-width: 380px) {
+  .overview-focus {
+    grid-template-columns: minmax(0, 1fr) 82px !important;
+    padding: 15px !important;
+  }
+
+  .overview-focus .focus-copy h2 {
+    font-size: 22px !important;
+  }
+
+  .focus-score {
+    width: 82px !important;
+    height: 82px !important;
+  }
+
+  .focus-stats strong {
+    font-size: 15px;
+  }
+}
+
+/* 20260707 control polish: replace browser focus rings with product-native states. */
+button:focus,
+input:focus,
+textarea:focus {
+  outline: none;
+}
+
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid rgba(255, 116, 72, 0.42);
+  outline-offset: 2px;
+}
+
+.view-tab:focus,
+.view-tab:focus-visible {
+  outline: none !important;
+}
+
+.view-tab.active {
+  border-color: transparent !important;
+}
+
+.view-tab.active:focus-visible {
+  box-shadow:
+    0 0 0 1px rgba(255, 116, 72, 0.28),
+    0 12px 24px rgba(98, 72, 255, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+}
+
+.screen-tool:focus-visible,
+.mini-button:focus-visible,
+.complete-toggle:focus-within,
+.avatar-button:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 1px rgba(255, 116, 72, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.09);
+}
+
+/* 20260707 icon system: flow icons now use one SVG language. */
+.flow-step-pill img,
+.flow-focus-icon,
+.flow-preview-row img {
+  object-fit: contain !important;
+  background: transparent !important;
+  border: 0 !important;
+  filter: none !important;
+  box-shadow: none !important;
+}
+
+.flow-step-pill img {
+  width: 31px !important;
+  height: 31px !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+}
+
+.flow-step-pill.active img {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.flow-focus-icon {
+  width: 42px !important;
+  height: 42px !important;
+  padding: 0 !important;
+}
+
+.flow-preview-row img {
+  width: 30px !important;
+  height: 30px !important;
+  padding: 0 !important;
+}
+
+.action-thumb {
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+    0 8px 18px rgba(0, 0, 0, 0.18);
+}
+
 * {
   box-sizing: border-box;
 }
@@ -2058,7 +2710,7 @@ body {
   background:
     linear-gradient(180deg, rgba(35, 31, 34, 0.5), rgba(12, 15, 15, 0.86)),
     radial-gradient(circle at 72% 20%, rgba(226, 109, 157, 0.18), transparent 38%),
-    url("./assets/app-icon-dachshund-pink-v1.png") center 58% / 78% auto no-repeat,
+    url("./assets/mascot-dachshund-q-brown.png") center 58% / 78% auto no-repeat,
     rgba(14, 17, 17, 0.9);
 }
 
@@ -2365,7 +3017,7 @@ body::before {
     linear-gradient(180deg, rgba(17, 17, 17, 0.5), rgba(0, 0, 0, 0.92)),
     radial-gradient(circle at 76% 16%, rgba(255, 72, 72, 0.18), transparent 32%),
     radial-gradient(circle at 20% 88%, rgba(72, 91, 255, 0.18), transparent 34%),
-    url("./assets/app-icon-dachshund-pink-v1.png") center 58% / 78% auto no-repeat,
+    url("./assets/mascot-dachshund-q-brown.png") center 58% / 78% auto no-repeat,
     #000;
 }
 
@@ -5316,7 +5968,7 @@ body[data-view="special"] .coach-insight::before {
   height: 36px;
   display: block;
   border-radius: 14px;
-  background: url("./assets/step-icon-warmup.png") center / cover no-repeat;
+  background: url("./assets/ri-stage-warmup.svg") center / cover no-repeat;
 }
 
 body[data-view="special"] .coach-insight h3 {
@@ -5702,7 +6354,7 @@ body[data-view="special"] .coach-insight::before {
   border-radius: 17px;
   background:
     linear-gradient(145deg, rgba(255, 116, 72, 0.2), rgba(98, 72, 255, 0.2)),
-    url("./assets/step-icon-warmup.png") center / 74% auto no-repeat,
+    url("./assets/ri-stage-warmup.svg") center / 74% auto no-repeat,
     rgba(18, 18, 22, 0.9);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.12),
@@ -6492,5 +7144,1026 @@ body[data-view="special"] .today-hub {
     height: 76px;
     padding: 8px 12px;
   }
+}
+
+/* 20260707 stable training shell: restore a compact, tool-like training page. */
+:root {
+  --stable-page-pad: 16px;
+  --stable-shell: 30px;
+  --stable-card: 24px;
+  --stable-control: 18px;
+  --stable-icon: 14px;
+  --stable-line: rgba(255, 255, 255, 0.1);
+  --stable-muted: rgba(255, 255, 255, 0.62);
+  --stable-faint: rgba(255, 255, 255, 0.42);
+  --stable-grad: linear-gradient(135deg, #ff7448 0%, #ff486f 44%, #6248ff 100%);
+  --stable-surface: linear-gradient(145deg, rgba(255, 255, 255, 0.078), rgba(255, 255, 255, 0.025));
+}
+
+body[data-view="special"] .app-shell {
+  background:
+    radial-gradient(circle at 88% 3%, rgba(98, 72, 255, 0.22), transparent 30%),
+    radial-gradient(circle at 8% 20%, rgba(255, 72, 111, 0.13), transparent 30%),
+    #08090c;
+}
+
+body[data-view="special"] .app-main {
+  gap: 14px;
+  padding: 8px var(--stable-page-pad) 116px;
+}
+
+body[data-view="special"] .app-header {
+  min-height: 78px;
+  padding: 12px 16px 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.055);
+}
+
+body[data-view="special"] .avatar-button {
+  width: 48px;
+  height: 48px;
+  border-radius: 16px;
+}
+
+body[data-view="special"] .app-title h1 {
+  font-size: clamp(26px, 7vw, 31px);
+  line-height: 0.98;
+}
+
+body[data-view="special"] .app-title p {
+  font-size: 12px;
+  line-height: 1.1;
+}
+
+body[data-view="special"] .save-status {
+  min-height: 19px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 10px;
+}
+
+body[data-view="special"] .header-focus {
+  width: 118px;
+  min-height: 54px;
+  padding: 8px 9px 8px 12px;
+  border-radius: 22px;
+  background:
+    linear-gradient(#17171b, #17171b) padding-box,
+    var(--stable-grad) border-box;
+  border: 1px solid transparent;
+}
+
+body[data-view="special"] .header-focus span {
+  font-size: 9px;
+}
+
+body[data-view="special"] .header-focus strong {
+  max-width: 62px;
+  font-size: 12px;
+  line-height: 1.15;
+}
+
+body[data-view="special"] .header-ring {
+  width: 34px;
+  height: 34px;
+}
+
+body[data-view="special"] .screen-title {
+  display: none !important;
+}
+
+body[data-view="special"] .coach-insight {
+  min-height: 92px !important;
+  display: grid !important;
+  grid-template-columns: 46px minmax(0, 1fr) !important;
+  align-items: center;
+  gap: 13px;
+  padding: 14px 15px !important;
+  border: 1px solid rgba(255, 116, 72, 0.2);
+  border-radius: var(--stable-card) !important;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 92% 6%, rgba(98, 72, 255, 0.21), transparent 42%),
+    radial-gradient(circle at 0% 100%, rgba(255, 116, 72, 0.16), transparent 38%),
+    var(--stable-surface),
+    rgba(18, 18, 22, 0.96) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 18px 42px rgba(0, 0, 0, 0.34);
+}
+
+body[data-view="special"] .coach-insight::before,
+body[data-view="special"] .coach-insight::after {
+  display: none !important;
+  content: none !important;
+}
+
+body[data-view="special"] .coach-insight > div {
+  min-width: 0;
+  max-width: none !important;
+  width: 100%;
+}
+
+body[data-view="special"] .insight-glyph {
+  width: 46px;
+  height: 46px;
+  padding: 11px;
+  border-radius: var(--stable-icon);
+  background:
+    radial-gradient(circle at 32% 18%, rgba(255, 255, 255, 0.2), transparent 38%),
+    var(--stable-grad);
+  box-shadow:
+    0 16px 30px rgba(98, 72, 255, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+body[data-view="special"] .coach-insight .eyebrow {
+  margin: 0 0 5px;
+  color: #ff8f72;
+  font-size: 11px;
+  font-weight: 860;
+  line-height: 1;
+  letter-spacing: 0;
+}
+
+body[data-view="special"] .coach-insight h3 {
+  width: 100%;
+  max-width: none !important;
+  margin: 0 0 5px;
+  color: #fff;
+  font-size: 20px !important;
+  font-weight: 900;
+  line-height: 1.12 !important;
+  white-space: normal !important;
+  word-break: keep-all !important;
+  overflow-wrap: normal !important;
+}
+
+body[data-view="special"] .coach-insight span:not(.insight-mark) {
+  display: -webkit-box !important;
+  max-width: none !important;
+  overflow: hidden;
+  color: var(--stable-muted);
+  font-size: 12px !important;
+  line-height: 1.42 !important;
+  white-space: normal !important;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+body[data-view="special"] .today-hub {
+  padding: 13px !important;
+  border-radius: var(--stable-shell) !important;
+  background:
+    radial-gradient(circle at 94% 4%, rgba(98, 72, 255, 0.16), transparent 36%),
+    var(--stable-surface),
+    rgba(14, 14, 18, 0.96);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 20px 46px rgba(0, 0, 0, 0.34);
+}
+
+body[data-view="special"] .today-hub > .section-heading {
+  display: none !important;
+}
+
+.flow-stage-strip {
+  min-height: 34px !important;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 0 0 8px !important;
+  padding: 0 3px !important;
+  color: var(--stable-faint);
+}
+
+.flow-stage-strip span,
+.flow-stage-strip strong {
+  min-width: 0;
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.055);
+  font-size: 11px;
+  line-height: 1;
+}
+
+.flow-stage-strip strong {
+  color: #fff;
+  background: rgba(98, 72, 255, 0.14);
+}
+
+.flow-step-tabs {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px !important;
+  margin: 0 0 10px;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+}
+
+.flow-step-tabs::before {
+  display: none !important;
+  content: none !important;
+}
+
+.flow-step-pill {
+  min-width: 0;
+  min-height: 62px !important;
+  display: grid !important;
+  grid-template-rows: 30px 12px 14px !important;
+  place-items: center;
+  gap: 1px !important;
+  padding: 7px 4px 6px !important;
+  border: 1px solid rgba(255, 255, 255, 0.075) !important;
+  border-radius: var(--stable-control) !important;
+  color: rgba(255, 255, 255, 0.58);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.024)),
+    rgba(255, 255, 255, 0.025) !important;
+  box-shadow: none !important;
+}
+
+.flow-step-pill img {
+  width: 28px !important;
+  height: 28px !important;
+  padding: 6px !important;
+  border-radius: 10px !important;
+  object-fit: contain;
+  background: rgba(255, 255, 255, 0.055);
+  box-shadow: none !important;
+}
+
+.flow-step-pill span {
+  width: auto !important;
+  height: auto !important;
+  min-width: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  color: var(--stable-faint) !important;
+  background: transparent !important;
+  font-size: 9px !important;
+  line-height: 1 !important;
+}
+
+.flow-step-pill strong {
+  max-width: 100%;
+  color: rgba(255, 255, 255, 0.68);
+  font-size: 11px !important;
+  font-weight: 850;
+  line-height: 1.05;
+  white-space: nowrap;
+}
+
+.flow-step-pill.active {
+  transform: translateY(-1px);
+  border-color: transparent !important;
+  background:
+    linear-gradient(#242329, #242329) padding-box,
+    var(--stable-grad) border-box !important;
+  box-shadow:
+    0 14px 26px rgba(98, 72, 255, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+}
+
+.flow-step-pill.active img {
+  background:
+    radial-gradient(circle at 35% 18%, rgba(255, 255, 255, 0.15), transparent 42%),
+    rgba(98, 72, 255, 0.16) !important;
+}
+
+.flow-step-pill.active::after {
+  display: none !important;
+}
+
+.flow-step-pill.active strong {
+  color: #fff;
+}
+
+.flow-focus-card {
+  min-height: 176px;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) 102px !important;
+  gap: 12px !important;
+  padding: 15px !important;
+  border: 1px solid rgba(255, 255, 255, 0.095);
+  border-radius: var(--stable-card) !important;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 100% 7%, rgba(98, 72, 255, 0.18), transparent 36%),
+    radial-gradient(circle at 0% 100%, rgba(255, 116, 72, 0.12), transparent 35%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.024)),
+    rgba(28, 28, 32, 0.86) !important;
+}
+
+.flow-focus-card::after {
+  display: none !important;
+  content: none !important;
+}
+
+.flow-focus-main {
+  min-width: 0;
+  display: block;
+}
+
+.flow-focus-icon {
+  width: 42px !important;
+  height: 42px !important;
+  float: left;
+  margin: 0 10px 8px 0;
+  padding: 8px;
+  border-radius: var(--stable-icon);
+  object-fit: contain;
+  background:
+    linear-gradient(#17171b, #17171b) padding-box,
+    var(--stable-grad) border-box;
+  border: 1px solid transparent;
+}
+
+.flow-card-head {
+  display: flex !important;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin: 0 0 5px;
+}
+
+.step-index,
+.completion-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 22px;
+  padding: 0 9px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.075);
+  color: rgba(255, 255, 255, 0.68);
+  font-size: 10px;
+  font-weight: 850;
+  line-height: 1;
+}
+
+.completion-badge {
+  color: #fff;
+  background: rgba(98, 72, 255, 0.18);
+}
+
+.flow-focus-main h4 {
+  clear: none;
+  margin: 0 0 7px !important;
+  color: #fff;
+  font-size: 22px !important;
+  font-weight: 900;
+  line-height: 1.05;
+}
+
+.flow-focus-main p {
+  clear: both;
+  margin: 0 0 9px;
+  color: var(--stable-muted);
+  font-size: 12px;
+  line-height: 1.42;
+}
+
+.flow-cue-list {
+  display: flex !important;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin: 0 0 9px;
+}
+
+.flow-cue-list span {
+  min-height: 22px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 8px;
+  border-radius: 999px;
+  color: rgba(255, 255, 255, 0.68);
+  background: rgba(255, 255, 255, 0.07);
+  font-size: 10px;
+  line-height: 1;
+}
+
+.flow-focus-main small {
+  display: block;
+  color: var(--stable-faint);
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+.flow-focus-actions {
+  display: flex !important;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: stretch;
+  gap: 8px;
+  padding-left: 12px;
+  border-left: 1px solid rgba(255, 255, 255, 0.075);
+}
+
+.flow-focus-actions > strong {
+  display: none !important;
+}
+
+.primary-flow-button,
+.flow-focus-actions .text-button {
+  min-height: 42px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 880;
+}
+
+.primary-flow-button {
+  background: var(--stable-grad);
+  color: #fff;
+  box-shadow: 0 12px 22px rgba(98, 72, 255, 0.24);
+}
+
+.flow-focus-actions .text-button {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.075);
+}
+
+.flow-preview-list {
+  display: grid;
+  gap: 7px;
+  margin-top: 9px;
+}
+
+.flow-preview-row {
+  min-height: 42px !important;
+  display: grid !important;
+  grid-template-columns: 30px 28px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.065);
+  border-radius: 16px !important;
+  color: rgba(255, 255, 255, 0.72);
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.flow-preview-row img {
+  width: 28px;
+  height: 28px;
+  padding: 6px;
+  border-radius: 9px;
+  object-fit: contain;
+  background: rgba(255, 255, 255, 0.055);
+}
+
+.flow-preview-row span {
+  color: var(--stable-faint);
+  font-size: 10px;
+  font-weight: 850;
+}
+
+.flow-preview-row strong {
+  overflow: hidden;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 12px;
+  font-weight: 850;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.flow-preview-row em {
+  color: var(--stable-faint);
+  font-size: 11px;
+  font-style: normal;
+}
+
+body[data-view="special"] .training-card {
+  padding: 13px !important;
+  border-radius: var(--stable-shell) !important;
+}
+
+body[data-view="special"] .training-toolbar {
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+}
+
+body[data-view="special"] .media-frame {
+  max-height: none !important;
+  aspect-ratio: 1.28;
+  border-radius: 20px !important;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+body[data-view="special"] .media-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain !important;
+}
+
+body[data-view="special"] .action-list {
+  gap: 8px !important;
+}
+
+body[data-view="special"] .action-item {
+  min-height: 82px !important;
+  display: grid !important;
+  grid-template-columns: 24px 72px minmax(0, 1fr) !important;
+  gap: 10px !important;
+  align-items: center;
+  padding: 9px 10px !important;
+  border-radius: 19px !important;
+}
+
+body[data-view="special"] .action-thumb,
+.action-thumb {
+  width: 72px !important;
+  height: 54px !important;
+  border-radius: 14px !important;
+  object-fit: contain !important;
+  background:
+    radial-gradient(circle at 50% 48%, rgba(98, 72, 255, 0.16), transparent 58%),
+    rgba(8, 9, 12, 0.78);
+}
+
+body[data-view="special"] .action-line {
+  grid-template-columns: 1fr !important;
+}
+
+body[data-view="special"] .action-name {
+  font-size: 15px !important;
+  line-height: 1.18;
+}
+
+body[data-view="special"] .action-detail {
+  font-size: 12px !important;
+  line-height: 1.25;
+}
+
+body[data-view="special"] .action-guidance b {
+  display: none !important;
+}
+
+body[data-view="special"] .cue-row {
+  gap: 4px !important;
+}
+
+body[data-view="special"] .cue-chip {
+  min-height: 21px;
+  padding: 0 7px;
+  border-radius: 999px;
+  font-size: 10px;
+}
+
+.tab-switch {
+  width: min(352px, calc(100% - 30px)) !important;
+  height: 76px !important;
+  padding: 8px 12px !important;
+  border-radius: var(--stable-shell) !important;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(98, 72, 255, 0.13), transparent 48%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.086), rgba(255, 255, 255, 0.026)),
+    rgba(13, 13, 16, 0.94) !important;
+}
+
+.view-tab {
+  min-height: 58px !important;
+  display: grid !important;
+  grid-template-rows: 31px auto !important;
+  place-items: center;
+  gap: 3px;
+  padding: 6px 4px !important;
+  border: 1px solid transparent !important;
+  border-radius: 23px !important;
+}
+
+.view-tab .nav-icon,
+.view-tab::before {
+  display: none !important;
+}
+
+.nav-glyph {
+  width: 30px !important;
+  height: 30px !important;
+  stroke-width: 1.85 !important;
+  stroke: rgba(255, 255, 255, 0.62);
+  filter: none !important;
+}
+
+.view-tab span {
+  font-size: 11px !important;
+  font-weight: 850;
+}
+
+.view-tab.active {
+  transform: translateY(-1px);
+  background:
+    radial-gradient(circle at 50% 16%, rgba(255, 72, 111, 0.2), transparent 54%),
+    radial-gradient(circle at 78% 78%, rgba(98, 72, 255, 0.2), transparent 60%),
+    rgba(255, 255, 255, 0.062) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 12px 24px rgba(98, 72, 255, 0.18) !important;
+}
+
+.view-tab.active .nav-glyph {
+  transform: translateY(-1px) scale(1.06) !important;
+}
+
+@media (max-width: 390px) {
+  body[data-view="special"] .app-main {
+    padding-inline: 12px;
+  }
+
+  body[data-view="special"] .app-header {
+    padding-inline: 12px;
+  }
+
+  body[data-view="special"] .header-focus {
+    width: 110px;
+  }
+
+  body[data-view="special"] .app-title h1 {
+    font-size: 26px;
+  }
+
+  .flow-focus-card {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .flow-focus-actions {
+    display: grid !important;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    padding-left: 0;
+    padding-top: 10px;
+    border-left: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.075);
+  }
+
+  .flow-focus-actions .text-button {
+    display: none;
+  }
+
+  body[data-view="special"] .action-item {
+    grid-template-columns: 22px 64px minmax(0, 1fr) !important;
+  }
+
+  body[data-view="special"] .action-thumb,
+  .action-thumb {
+    width: 64px !important;
+    height: 50px !important;
+  }
+}
+
+/* 20260707 stable density pass: bring the action list back into the first training flow. */
+body[data-view="special"] .app-main {
+  gap: 12px;
+}
+
+body[data-view="special"] .coach-insight {
+  min-height: 86px !important;
+  padding: 12px 14px !important;
+}
+
+body[data-view="special"] .insight-glyph {
+  width: 42px;
+  height: 42px;
+  padding: 10px;
+}
+
+body[data-view="special"] .coach-insight h3 {
+  font-size: 19px !important;
+}
+
+body[data-view="special"] .coach-insight span:not(.insight-mark) {
+  -webkit-line-clamp: 1;
+}
+
+body[data-view="special"] .today-hub {
+  padding: 12px !important;
+}
+
+.flow-stage-strip {
+  min-height: 30px !important;
+  margin-bottom: 7px !important;
+}
+
+.flow-stage-strip span,
+.flow-stage-strip strong {
+  min-height: 26px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 10px;
+}
+
+.flow-step-tabs {
+  margin-bottom: 8px;
+}
+
+.flow-step-pill {
+  min-height: 58px !important;
+  grid-template-rows: 28px 11px 13px !important;
+  padding: 6px 3px 5px !important;
+}
+
+.flow-step-pill img {
+  width: 26px !important;
+  height: 26px !important;
+  padding: 6px !important;
+}
+
+.flow-focus-card {
+  min-height: 156px;
+  grid-template-columns: minmax(0, 1fr) 96px !important;
+  padding: 13px !important;
+}
+
+.flow-focus-icon {
+  width: 36px !important;
+  height: 36px !important;
+  margin: 0 9px 6px 0;
+  padding: 7px;
+  border-radius: 13px;
+}
+
+.flow-card-head {
+  margin-bottom: 4px;
+}
+
+.step-index,
+.completion-badge {
+  min-height: 20px;
+  padding: 0 8px;
+}
+
+.flow-focus-main h4 {
+  margin-bottom: 5px !important;
+  font-size: 20px !important;
+}
+
+.flow-focus-main p {
+  margin-bottom: 7px;
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.flow-cue-list {
+  margin-bottom: 7px;
+}
+
+.flow-cue-list span {
+  min-height: 20px;
+}
+
+.flow-focus-main small {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}
+
+.flow-focus-actions {
+  gap: 7px;
+  padding-left: 10px;
+}
+
+.primary-flow-button,
+.flow-focus-actions .text-button {
+  min-height: 39px;
+}
+
+.flow-preview-list {
+  display: none !important;
+}
+
+body[data-view="special"] .training-card {
+  padding: 12px !important;
+}
+
+body[data-view="special"] .training-toolbar {
+  margin-bottom: 9px;
+}
+
+body[data-view="special"] .media-frame {
+  display: none !important;
+}
+
+body[data-view="special"] .compact-heading {
+  min-height: auto;
+  margin: 0 0 8px;
+  padding: 0 2px;
+}
+
+body[data-view="special"] .compact-heading h3 {
+  font-size: 18px;
+  line-height: 1.1;
+}
+
+body[data-view="special"] .compact-heading span {
+  font-size: 12px;
+  line-height: 1.1;
+}
+
+@media (max-width: 390px) {
+  body[data-view="special"] .coach-insight {
+    grid-template-columns: 40px minmax(0, 1fr) !important;
+  }
+
+  body[data-view="special"] .insight-glyph {
+    width: 40px;
+    height: 40px;
+  }
+
+  .flow-focus-card {
+    min-height: 150px;
+  }
+}
+
+/* 20260707 final fit override: keep narrow browser widths from showing side gutters. */
+@media (max-width: 560px) {
+  html,
+  body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+    background-color: #08090c;
+  }
+
+  body::before,
+  body::after {
+    width: 100vw;
+  }
+
+  .app-shell {
+    width: 100vw !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding-inline: 0 !important;
+    overflow-x: clip;
+  }
+
+  .app-header {
+    width: 100%;
+    max-width: none;
+    grid-template-columns: 48px minmax(0, 1fr) minmax(106px, 132px);
+    gap: 10px;
+    padding-inline: max(14px, env(safe-area-inset-left)) max(14px, env(safe-area-inset-right));
+  }
+
+  .app-main {
+    width: 100%;
+    max-width: none;
+    padding-inline: 14px;
+  }
+
+  .view-panel,
+  .hero-card,
+  .daily-dashboard,
+  .today-hub,
+  .training-card,
+  .special-hero,
+  .overview-focus,
+  .overview-card,
+  .storage-warning {
+    width: 100%;
+    max-width: none;
+  }
+
+  .screen-title {
+    width: 100%;
+    padding-inline: 0;
+  }
+
+  .tab-switch {
+    width: calc(100vw - 28px) !important;
+    max-width: none !important;
+    left: 14px !important;
+    right: 14px !important;
+    transform: none !important;
+  }
+
+  .profile-drawer {
+    width: calc(100vw - 20px);
+    max-width: none;
+    right: 10px;
+    left: 10px;
+  }
+}
+
+@media (min-width: 431px) and (max-width: 560px) {
+  .app-main {
+    gap: 14px;
+    padding-bottom: calc(108px + env(safe-area-inset-bottom));
+  }
+
+  .screen-title h2 {
+    font-size: 30px;
+    line-height: 1.05;
+  }
+
+  .overview-focus {
+    min-height: 220px;
+    grid-template-columns: minmax(0, 1fr) 108px;
+    gap: 14px;
+    padding: 17px;
+    border-radius: 26px;
+  }
+
+  .overview-focus .focus-copy h2 {
+    font-size: 26px;
+    line-height: 1.12;
+  }
+
+  .overview-focus .focus-copy p:not(.eyebrow) {
+    font-size: 13px;
+    line-height: 1.45;
+  }
+
+  .focus-score {
+    width: 108px;
+    height: 108px;
+  }
+
+  .focus-stats {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 7px;
+  }
+
+  .focus-stats div {
+    min-width: 0;
+    padding: 12px 10px;
+  }
+
+  .overview-card {
+    border-radius: 24px;
+  }
+}
+
+@media (max-width: 390px) {
+  .app-header {
+    grid-template-columns: 44px minmax(0, 1fr) minmax(96px, 116px);
+    padding-inline: 12px;
+  }
+
+  .app-main {
+    padding-inline: 12px;
+  }
+
+  .tab-switch {
+    width: calc(100vw - 24px) !important;
+    left: 12px !important;
+    right: 12px !important;
+  }
+
+  .overview-focus {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .focus-score {
+    justify-self: start;
+  }
+}
+
+/* 20260707 last-mile icon override: keep training icons consistent after all density rules. */
+.flow-step-pill img,
+.flow-focus-icon,
+.flow-preview-row img {
+  object-fit: contain !important;
+  background: transparent !important;
+  border: 0 !important;
+  filter: none !important;
+  box-shadow: none !important;
+}
+
+.flow-step-pill img {
+  width: 32px !important;
+  height: 32px !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+}
+
+.flow-step-pill.active img {
+  width: 34px !important;
+  height: 34px !important;
+}
+
+.flow-focus-icon {
+  width: 44px !important;
+  height: 44px !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+}
+
+.flow-preview-row img {
+  width: 30px !important;
+  height: 30px !important;
+  padding: 0 !important;
+}
+
+body[data-view="special"] .coach-insight::before {
+  display: none !important;
+  content: none !important;
+}
+
+.action-thumb {
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+    0 8px 18px rgba(0, 0, 0, 0.18);
 }
 

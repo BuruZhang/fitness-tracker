@@ -1009,7 +1009,7 @@ function renderTrainingFlow(record, plan, planIndex) {
       id: "warmup",
       index: "01",
       short: "热身",
-      icon: "./assets/step-icon-warmup.png",
+      icon: "./assets/ri-glyph-warmup.svg",
       title: warmup.title,
       status: record.warmupComplete ? "已完成" : "待完成",
       done: Boolean(record.warmupComplete),
@@ -1023,7 +1023,7 @@ function renderTrainingFlow(record, plan, planIndex) {
       id: "train",
       index: "02",
       short: "正训",
-      icon: "./assets/step-icon-train.png",
+      icon: "./assets/ri-glyph-train.svg",
       title: "正式训练",
       status: record.complete ? "已完成" : `${progress.done}/${progress.total}`,
       done: Boolean(record.complete),
@@ -1039,7 +1039,7 @@ function renderTrainingFlow(record, plan, planIndex) {
       id: "special",
       index: "03",
       short: "专项",
-      icon: "./assets/step-icon-special.png",
+      icon: "./assets/ri-glyph-special.svg",
       title: "今日专项",
       status: specialDone ? "已完成" : `${specialProgress.done}/${specialProgress.total}`,
       done: specialDone,
@@ -1055,7 +1055,7 @@ function renderTrainingFlow(record, plan, planIndex) {
       id: "stretch",
       index: "04",
       short: "拉伸",
-      icon: "./assets/step-icon-stretch.png",
+      icon: "./assets/ri-glyph-stretch.svg",
       title: "拉伸放松",
       status: stretchDone ? "已完成" : "收尾",
       done: stretchDone,
@@ -1118,7 +1118,6 @@ function renderTrainingFlow(record, plan, planIndex) {
     </div>
     <article class="flow-focus-card ${activeStep.done ? "done" : ""}">
       <div class="flow-focus-main">
-        <img class="flow-focus-icon" src="${activeStep.icon}" alt="" loading="lazy" decoding="async" />
         <span class="flow-card-head">
           <span class="step-index">${activeStep.index}</span>
           <span class="completion-badge">${activeStep.status}</span>

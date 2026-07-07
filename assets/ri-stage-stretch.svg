@@ -1,0 +1,19 @@
+<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g" x1="10" y1="10" x2="54" y2="54" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FF7448"/>
+      <stop offset=".48" stop-color="#FF486F"/>
+      <stop offset="1" stop-color="#6248FF"/>
+    </linearGradient>
+    <radialGradient id="r" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(16 50) rotate(-43) scale(48)">
+      <stop stop-color="#FF7448" stop-opacity=".16"/>
+      <stop offset="1" stop-color="#6248FF" stop-opacity=".2"/>
+    </radialGradient>
+  </defs>
+  <rect x="1" y="1" width="62" height="62" rx="18" fill="#15151A"/>
+  <rect x="1" y="1" width="62" height="62" rx="18" fill="url(#r)"/>
+  <rect x="1" y="1" width="62" height="62" rx="18" stroke="url(#g)" stroke-opacity=".72" stroke-width="2"/>
+  <g transform="translate(16 16) scale(1.34)">
+    <path fill="url(#g)" d="M11 6V8C7.68629 8 5 10.6863 5 14C5 17.3137 7.68629 20 11 20C14.2384 20 16.8776 17.4344 16.9959 14.2249L17 14H19C19 18.4183 15.4183 22 11 22C6.58172 22 3 18.4183 3 14C3 9.66509 6.58 6 11 6ZM21 2V4L15.6726 10H21V12H13V10L18.3256 4H13V2H21Z"/>
+  </g>
+</svg>
