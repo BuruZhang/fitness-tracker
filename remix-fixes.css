@@ -1,220 +1,27 @@
-/* 20260707 clean fix layer: reduce repeated icons and remove redundant icon boxes. */
-.nav-glyph {
-  width: 31px !important;
-  height: 31px !important;
-  display: block !important;
-  object-fit: contain !important;
-  opacity: 0.68;
-  filter: grayscale(0.14) saturate(0.9) brightness(1.05) drop-shadow(0 8px 14px rgba(0, 0, 0, 0.24)) !important;
-  transition: transform 180ms ease, opacity 180ms ease, filter 180ms ease;
-}
-
-.view-tab.active .nav-glyph {
-  opacity: 1;
-  transform: translateY(-1px) scale(1.06) !important;
-  filter: saturate(1.1) brightness(1.12) drop-shadow(0 10px 20px rgba(98, 72, 255, 0.3)) !important;
-}
-
-body[data-view="special"] .coach-insight {
-  grid-template-columns: minmax(0, 1fr) !important;
-  min-height: 108px !important;
-  padding: 17px 18px !important;
-}
-
-body[data-view="special"] .coach-insight::before {
-  content: "" !important;
-  position: absolute !important;
-  left: 18px !important;
-  top: 19px !important;
-  width: 8px !important;
-  height: 8px !important;
-  display: block !important;
-  border-radius: 999px !important;
-  background: linear-gradient(135deg, #ff7448, #ff486f 48%, #6248ff) !important;
-  box-shadow: 0 0 18px rgba(255, 72, 111, 0.44) !important;
-}
-
-body[data-view="special"] .coach-insight::after {
-  opacity: 0.35 !important;
-}
-
-body[data-view="special"] .insight-glyph {
-  display: none !important;
-}
-
-body[data-view="special"] .coach-insight > div {
-  max-width: none !important;
-}
-
-body[data-view="special"] .coach-insight .eyebrow {
-  padding-left: 14px !important;
-  margin-bottom: 6px !important;
-  color: #ff7b62 !important;
-}
-
-body[data-view="special"] .coach-insight h3 {
-  font-size: 21px !important;
-  line-height: 1.15 !important;
-}
-
-body[data-view="special"] .coach-insight span:not(.insight-mark) {
-  max-width: 100% !important;
-  font-size: 12px !important;
-  line-height: 1.45 !important;
-}
-
-.flow-step-tabs {
-  gap: 9px !important;
-  margin-bottom: 12px !important;
-}
-
-.flow-step-pill {
-  min-height: 56px !important;
-  grid-template-rows: 22px 11px 13px !important;
-  gap: 2px !important;
-  padding: 7px 4px 6px !important;
-  border-radius: 19px !important;
-  background:
-    radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.08), transparent 55%),
-    rgba(255, 255, 255, 0.045) !important;
-  box-shadow: none !important;
-}
-
-.flow-step-pill.active {
-  background:
-    radial-gradient(circle at 35% 0%, rgba(255, 116, 72, 0.18), transparent 52%),
-    radial-gradient(circle at 80% 70%, rgba(98, 72, 255, 0.2), transparent 62%),
-    rgba(255, 255, 255, 0.055) !important;
-  box-shadow: inset 0 0 0 1px rgba(255, 116, 72, 0.36) !important;
-}
-
-.flow-step-pill img,
-.flow-preview-row img {
-  width: 23px !important;
-  height: 23px !important;
-  padding: 0 !important;
-  border: 0 !important;
-  border-radius: 0 !important;
-  background: transparent !important;
-  box-shadow: none !important;
-  object-fit: contain !important;
-  filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.24)) !important;
-}
-
-.flow-step-pill.active img {
-  width: 24px !important;
-  height: 24px !important;
-}
-
-.flow-step-pill span {
-  font-size: 9px !important;
-  opacity: 0.58;
-}
-
-.flow-step-pill strong {
-  font-size: 11px !important;
-}
-
+/* Structural cleanup only. Visual rules live in visual-system.css. */
+body[data-view="special"] .insight-glyph,
 .flow-focus-icon,
 .flow-action-visual {
   display: none !important;
 }
 
-.flow-focus-card {
-  min-height: 144px !important;
-  grid-template-columns: minmax(0, 1fr) 96px !important;
-  gap: 12px !important;
-  padding: 15px !important;
-}
-
-.flow-card-head {
-  justify-content: flex-start !important;
-  gap: 8px !important;
-  margin-bottom: 7px !important;
-}
-
-.step-index,
-.completion-badge {
-  min-height: 21px !important;
-  padding: 0 8px !important;
-  font-size: 10px !important;
-}
-
-.flow-focus-main h4 {
-  margin-bottom: 7px !important;
-  font-size: 21px !important;
-  line-height: 1.08 !important;
-}
-
-.flow-focus-main p {
-  clear: none !important;
-  margin-bottom: 8px !important;
-  font-size: 12px !important;
-  line-height: 1.42 !important;
-}
-
-.flow-cue-list {
-  gap: 5px !important;
-  margin-bottom: 8px !important;
-}
-
-.flow-cue-list span {
-  min-height: 20px !important;
-  padding: 0 8px !important;
-}
-
-.flow-focus-main small {
-  -webkit-line-clamp: 1;
-  display: -webkit-box !important;
-  overflow: hidden;
-  -webkit-box-orient: vertical;
-}
-
-.flow-focus-actions {
-  justify-content: flex-end !important;
-  gap: 8px !important;
-  padding-left: 12px !important;
+body[data-view="special"] .coach-insight {
+  grid-template-columns: minmax(0, 1fr) !important;
 }
 
 .flow-focus-actions > strong {
   display: none !important;
 }
 
-.primary-flow-button,
-.flow-focus-actions .text-button {
-  min-height: 40px !important;
-  padding-inline: 12px !important;
-  font-size: 12px !important;
+.flow-focus-main small {
+  display: -webkit-box !important;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
 }
 
 @media (max-width: 390px) {
-  .flow-step-tabs {
-    gap: 7px !important;
-  }
-
-  .flow-step-pill {
-    min-height: 54px !important;
-    border-radius: 18px !important;
-  }
-
   .flow-focus-card {
-    grid-template-columns: minmax(0, 1fr) 86px !important;
-    min-height: 140px !important;
-    padding: 14px !important;
-  }
-
-  .flow-focus-main h4 {
-    font-size: 20px !important;
-  }
-
-  .flow-focus-actions {
-    padding-left: 9px !important;
-  }
-
-  .primary-flow-button,
-  .flow-focus-actions .text-button {
-    min-height: 36px !important;
-    padding-inline: 10px !important;
-    font-size: 11px !important;
+    grid-template-columns: minmax(0, 1fr) 84px !important;
   }
 }

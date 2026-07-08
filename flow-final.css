@@ -1,0 +1,143 @@
+/* Final training-flow overrides. Keep this file loaded after visual-system.css. */
+.flow-focus-card {
+  min-height: 148px !important;
+  grid-template-columns: minmax(0, 1fr) 78px !important;
+  gap: 10px !important;
+  padding: 15px 14px 14px !important;
+  border-radius: 24px !important;
+  border-color: rgba(255, 255, 255, 0.095) !important;
+  background:
+    radial-gradient(circle at 92% 18%, rgba(98, 72, 255, 0.12), transparent 35%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.064), rgba(255, 255, 255, 0.022)),
+    rgba(24, 25, 30, 0.9) !important;
+}
+
+.flow-focus-card.done {
+  border-color: rgba(167, 215, 122, 0.18) !important;
+  background:
+    radial-gradient(circle at 92% 18%, rgba(167, 215, 122, 0.105), transparent 34%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.064), rgba(255, 255, 255, 0.022)),
+    rgba(23, 27, 25, 0.92) !important;
+}
+
+.flow-focus-card::after,
+.flow-progress-line,
+.flow-progress-line::before {
+  display: none !important;
+  content: none !important;
+  background: none !important;
+  box-shadow: none !important;
+}
+
+.flow-focus-card::before {
+  inset: 18px auto 18px 0 !important;
+  width: 2px !important;
+  opacity: 0.52 !important;
+}
+
+.flow-focus-actions {
+  min-width: 0 !important;
+  min-height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-end !important;
+  justify-content: space-between !important;
+  gap: 10px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+}
+
+.flow-state-orb,
+.flow-focus-actions .primary-flow-button {
+  position: static !important;
+  flex: 0 0 auto !important;
+  transform: none !important;
+  margin: 0 !important;
+}
+
+.flow-state-orb {
+  width: auto !important;
+  min-width: 58px !important;
+  height: 34px !important;
+  display: inline-flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 5px 9px !important;
+  border: 1px solid rgba(255, 255, 255, 0.07) !important;
+  border-radius: 999px !important;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.082), rgba(255, 255, 255, 0.035)),
+    rgba(255, 255, 255, 0.035) !important;
+  box-shadow: none !important;
+}
+
+.flow-state-orb strong {
+  color: rgba(255, 255, 255, 0.92) !important;
+  font-size: 13px !important;
+  line-height: 1 !important;
+  font-weight: 900 !important;
+}
+
+.flow-state-orb span {
+  margin-top: 3px !important;
+  color: rgba(255, 255, 255, 0.48) !important;
+  font-size: 8px !important;
+  line-height: 1 !important;
+  font-weight: 800 !important;
+}
+
+.flow-focus-card.done .flow-state-orb {
+  min-width: 54px !important;
+  border-color: rgba(167, 215, 122, 0.2) !important;
+  background:
+    linear-gradient(180deg, rgba(167, 215, 122, 0.16), rgba(167, 215, 122, 0.07)),
+    rgba(255, 255, 255, 0.032) !important;
+}
+
+.flow-focus-card.done .flow-state-orb strong {
+  color: rgba(226, 250, 204, 0.96) !important;
+  font-size: 14px !important;
+}
+
+.flow-focus-main small {
+  padding-top: 0 !important;
+  border-top: 0 !important;
+}
+
+.flow-focus-actions .primary-flow-button {
+  width: auto !important;
+  min-width: 62px !important;
+  max-width: 72px !important;
+  min-height: 32px !important;
+  padding: 0 8px !important;
+  border-radius: 999px !important;
+  font-size: 10px !important;
+}
+
+.flow-focus-card.done .primary-flow-button {
+  background: rgba(255, 255, 255, 0.12) !important;
+  color: rgba(226, 250, 204, 0.95) !important;
+  box-shadow: none !important;
+}
+
+@media (max-width: 390px) {
+  .flow-focus-card {
+    grid-template-columns: minmax(0, 1fr) 66px !important;
+    min-height: 144px !important;
+    gap: 8px !important;
+  }
+
+  .flow-state-orb {
+    min-width: 52px !important;
+    height: 32px !important;
+    padding-inline: 7px !important;
+  }
+
+  .flow-focus-actions .primary-flow-button {
+    min-width: 58px !important;
+    max-width: 64px !important;
+    font-size: 10px !important;
+  }
+}

@@ -846,7 +846,7 @@ function renderProfile() {
     if (!avatar) return;
     if (profile.avatar) {
       avatar.classList.add("has-image");
-      avatar.style.backgroundImage = `url("${profile.avatar}")`;
+      avatar.style.backgroundImage = `url("${profile.avatar}"), url("./assets/mascot-dachshund-q-brown.png")`;
     } else {
       avatar.classList.remove("has-image");
       avatar.style.backgroundImage = "";
@@ -1004,6 +1004,7 @@ function renderTrainingFlow(record, plan, planIndex) {
       readiness === "状态很好" ? "状态很好" : readiness === "建议降强度" ? "适合轻练" : "状态良好";
   }
   if (els.dailyReadinessScore) els.dailyReadinessScore.textContent = `${readinessScore} 综合评分`;
+  const formatProgressLabel = (done, total) => `${done}/${Math.max(total, 1)}`;
   const flowSteps = [
     {
       id: "warmup",
@@ -1013,9 +1014,11 @@ function renderTrainingFlow(record, plan, planIndex) {
       title: warmup.title,
       status: record.warmupComplete ? "已完成" : "待完成",
       done: Boolean(record.warmupComplete),
+      doneCount: record.warmupComplete ? warmup.steps.length : 0,
+      totalCount: warmup.steps.length,
       action: "warmup",
-      actionText: record.warmupComplete ? "取消热身完成" : "完成热身",
-      detail: warmup.summary,
+      actionText: record.warmupComplete ? "取消热身" : "完成热身",
+      detail: record.warmupComplete ? "肩背和核心已经唤醒，可以进入下一段。" : warmup.summary,
       meta: warmup.steps.slice(0, 3).join(" · "),
       cues: ["唤醒肩背", "核心收紧", "轻量开始"],
     },
@@ -1027,11 +1030,17 @@ function renderTrainingFlow(record, plan, planIndex) {
       title: "正式训练",
       status: record.complete ? "已完成" : `${progress.done}/${progress.total}`,
       done: Boolean(record.complete),
+      doneCount: progress.done,
+      totalCount: progress.total,
       action: "train",
-      actionText: progress.done > 0 ? "继续动作清单" : "查看动作清单",
-      detail: `${plan.focus} · 动作质量优先，不抢速度。`,
+      actionText: progress.done > 0 ? "继续清单" : "动作清单",
+      detail: record.complete
+        ? "这一段完成得很好，下一步进入专项或拉伸。"
+        : progress.done > 0
+          ? `已完成 ${progress.done} 项，保持节奏继续推进。`
+          : "先稳住动作质量，再追求数量。",
       meta: `${progress.done}/${progress.total} 项已完成`,
-      cues: ["推拉力量", "动作质量", "不抢速度"],
+      cues: progress.done > 0 ? ["动作质量", "呼吸稳定", "慢起慢落"] : ["推拉力量", "核心收紧", "不抢速度"],
       secondaryAction: "image",
       secondaryText: "动作图",
     },
@@ -1043,9 +1052,15 @@ function renderTrainingFlow(record, plan, planIndex) {
       title: "今日专项",
       status: specialDone ? "已完成" : `${specialProgress.done}/${specialProgress.total}`,
       done: specialDone,
+      doneCount: specialProgress.done,
+      totalCount: specialProgress.total,
       action: "specialDone",
-      actionText: specialDone ? "取消专项完成" : "完成建议专项",
-      detail: readiness === "建议降强度" ? "今天优先恢复专项。" : `建议：${recommendedNames}`,
+      actionText: specialDone ? "取消专项" : "完成专项",
+      detail: specialDone
+        ? "专项补强已完成，训练闭环更完整。"
+        : readiness === "建议降强度"
+          ? "今天优先恢复专项。"
+          : `建议：${recommendedNames}`,
       meta: "俯卧撑 / 核心 / 体态按需补强",
       cues: ["按需补强", "小量完成", "保持体态"],
       secondaryAction: "special",
@@ -1059,9 +1074,11 @@ function renderTrainingFlow(record, plan, planIndex) {
       title: "拉伸放松",
       status: stretchDone ? "已完成" : "收尾",
       done: stretchDone,
+      doneCount: stretchDone ? 1 : 0,
+      totalCount: 1,
       action: "stretch",
-      actionText: stretchDone ? "取消拉伸完成" : "完成拉伸",
-      detail: "舒缓肩颈、髋部和腰背，训练后恢复更稳。",
+      actionText: stretchDone ? "取消拉伸" : "完成拉伸",
+      detail: stretchDone ? "今天的训练已经完整收尾，安心记录状态。" : "舒缓肩颈、髋部和腰背，训练后恢复更稳。",
       meta: "放慢呼吸，拉到舒服的位置即可",
       cues: ["慢呼吸", "肩颈放松", "恢复闭环"],
     },
@@ -1070,6 +1087,21 @@ function renderTrainingFlow(record, plan, planIndex) {
     flowSteps.find((step) => step.id === selectedFlowStepId) ||
     flowSteps.find((step) => !step.done) ||
     flowSteps[flowSteps.length - 1];
+  const activeIndex = flowSteps.findIndex((step) => step.id === activeStep.id);
+  const nextStep = flowSteps[activeIndex + 1] || flowSteps.find((step) => !step.done) || activeStep;
+  const activeStepProgress = Math.round((activeStep.doneCount / Math.max(activeStep.totalCount, 1)) * 100);
+  const activeStepMode = activeStep.done ? "complete" : activeStep.doneCount > 0 ? "progress" : "pending";
+  const activeStepTitle =
+    activeStep.id === "train" && activeStep.done
+      ? "正训完成"
+      : activeStep.id === "train" && activeStepMode === "progress"
+        ? "继续正训"
+        : activeStep.done
+          ? `${activeStep.short}完成`
+          : activeStep.title;
+  const activeStepAction = activeStep.done ? "nextStep" : activeStep.action;
+  const activeStepActionText = activeStep.done ? "下一步" : activeStep.actionText;
+  const activeStepStatusLabel = activeStep.done ? "完成" : formatProgressLabel(activeStep.doneCount, activeStep.totalCount);
   if (els.trainingInsightTitle && els.trainingInsightText) {
     const stepInsight = {
       warmup: [
@@ -1116,13 +1148,13 @@ function renderTrainingFlow(record, plan, planIndex) {
         )
         .join("")}
     </div>
-    <article class="flow-focus-card ${activeStep.done ? "done" : ""}">
+    <article class="flow-focus-card ${activeStep.done ? "done" : ""} is-${activeStepMode}" style="--step-progress: ${activeStepProgress}%">
       <div class="flow-focus-main">
         <span class="flow-card-head">
           <span class="step-index">${activeStep.index}</span>
-          <span class="completion-badge">${activeStep.status}</span>
+          <span class="completion-badge">${activeStep.done ? "已完成" : activeStepStatusLabel}</span>
         </span>
-        <h4>${activeStep.title}</h4>
+        <h4>${activeStepTitle}</h4>
         <p>${activeStep.detail}</p>
         <div class="flow-cue-list" aria-label="动作提示">
           ${activeStep.cues.map((cue) => `<span>${cue}</span>`).join("")}
@@ -1130,10 +1162,13 @@ function renderTrainingFlow(record, plan, planIndex) {
         <small>${activeStep.meta}</small>
       </div>
       <div class="flow-focus-actions">
-        <strong>${activeStep.status}</strong>
-        ${activeStep.secondaryAction ? `<button class="text-button" type="button" data-action="${activeStep.secondaryAction}">${activeStep.secondaryText}</button>` : ""}
-        <button class="primary-flow-button" type="button" data-action="${activeStep.action}">${activeStep.actionText}</button>
+        <div class="flow-state-orb" aria-label="${activeStepStatusLabel}">
+          <strong>${activeStep.done ? "✓" : activeStepStatusLabel}</strong>
+          <span>${activeStep.done ? "完成" : activeStep.short}</span>
+        </div>
+        <button class="primary-flow-button" type="button" data-action="${activeStepAction}">${activeStepActionText}</button>
       </div>
+      <span class="flow-progress-line" aria-hidden="true"></span>
     </article>
     <div class="flow-preview-list" aria-label="其他训练步骤">
       ${flowSteps
@@ -1177,6 +1212,10 @@ function renderTrainingFlow(record, plan, planIndex) {
         });
         setRecord(selectedDate, { specials });
         renderAll();
+      }
+      if (action === "nextStep") {
+        selectedFlowStepId = nextStep.id;
+        renderTrainingFlow(getRecord(selectedDate), plans[getPlanIndex(selectedDate)], getPlanIndex(selectedDate));
       }
       if (action === "image") openImageModal();
     });

@@ -1,0 +1,1811 @@
+/* 20260708 system v2: single visual language for color, type, icon, and cards. */
+:root {
+  --ui-bg: #07080b;
+  --ui-panel: rgba(20, 21, 26, 0.88);
+  --ui-panel-strong: rgba(29, 30, 37, 0.9);
+  --ui-panel-soft: rgba(255, 255, 255, 0.052);
+  --ui-line: rgba(255, 255, 255, 0.1);
+  --ui-line-soft: rgba(255, 255, 255, 0.062);
+  --ui-text: rgba(255, 255, 255, 0.96);
+  --ui-muted: rgba(255, 255, 255, 0.64);
+  --ui-faint: rgba(255, 255, 255, 0.42);
+  --ui-coral: #ff7448;
+  --ui-rose: #ff486f;
+  --ui-violet: #6248ff;
+  --ui-lime: #a7d77a;
+  --ui-grad: linear-gradient(135deg, var(--ui-coral) 0%, var(--ui-rose) 48%, var(--ui-violet) 100%);
+  --ui-grad-soft: linear-gradient(135deg, rgba(255, 116, 72, 0.18), rgba(255, 72, 111, 0.12) 48%, rgba(98, 72, 255, 0.16));
+  --r-page: 30px;
+  --r-card: 24px;
+  --r-card-sm: 20px;
+  --r-control: 18px;
+  --r-pill: 999px;
+  --shadow-card: 0 18px 42px rgba(0, 0, 0, 0.34);
+  --shadow-soft: 0 10px 24px rgba(0, 0, 0, 0.22);
+  --font-ui: "Alimama FangYuanTi VF", "PingFang SC", "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+html,
+body {
+  background:
+    radial-gradient(circle at 18% -6%, rgba(255, 72, 111, 0.12), transparent 32%),
+    radial-gradient(circle at 96% 10%, rgba(98, 72, 255, 0.16), transparent 34%),
+    linear-gradient(180deg, #09090d 0%, var(--ui-bg) 48%, #050609 100%) !important;
+  color: var(--ui-text);
+  font-family: var(--font-ui) !important;
+  letter-spacing: 0 !important;
+  text-rendering: geometricPrecision;
+  -webkit-font-smoothing: antialiased;
+}
+
+body::before {
+  opacity: 0.42 !important;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.018) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.014) 1px, transparent 1px) !important;
+  background-size: 44px 44px !important;
+  mask-image: linear-gradient(180deg, transparent, #000 18%, #000 68%, transparent);
+}
+
+body::after {
+  opacity: 0.5 !important;
+  background:
+    radial-gradient(circle at 6% 30%, rgba(255, 116, 72, 0.09), transparent 30%),
+    radial-gradient(circle at 96% 16%, rgba(98, 72, 255, 0.13), transparent 34%),
+    radial-gradient(circle at 48% 96%, rgba(255, 72, 111, 0.08), transparent 38%) !important;
+}
+
+.app-shell {
+  background: transparent !important;
+}
+
+.app-header {
+  min-height: 90px !important;
+  border-bottom: 1px solid var(--ui-line-soft) !important;
+  background:
+    radial-gradient(circle at 94% 12%, rgba(98, 72, 255, 0.12), transparent 38%),
+    linear-gradient(180deg, rgba(13, 14, 18, 0.94), rgba(9, 10, 13, 0.78)) !important;
+  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(20px);
+}
+
+button,
+input,
+textarea,
+select {
+  font-family: var(--font-ui) !important;
+  letter-spacing: 0 !important;
+}
+
+.app-title p,
+.screen-title p,
+.eyebrow,
+.section-heading p,
+.compact-heading span,
+.save-status,
+.hero-card small,
+.overview-card p,
+.flow-focus-main p,
+.flow-focus-main small,
+.drawer-stage-card small,
+.action-card small {
+  color: var(--ui-muted) !important;
+  font-weight: 700 !important;
+}
+
+.app-title h1,
+.screen-title h2,
+.section-heading h3,
+.compact-heading h3,
+.flow-focus-main h4,
+.overview-focus .focus-copy h2,
+.drawer-head h2 {
+  color: var(--ui-text) !important;
+  font-family: var(--font-ui) !important;
+  font-weight: 900 !important;
+  line-height: 1.08 !important;
+  letter-spacing: 0 !important;
+}
+
+.app-title h1 {
+  font-size: clamp(25px, 7vw, 32px) !important;
+}
+
+.screen-title h2 {
+  font-size: clamp(27px, 8vw, 34px) !important;
+}
+
+.glass,
+.hero-card,
+.daily-dashboard,
+.quick-log,
+.today-hub,
+.training-card,
+.special-hero,
+.overview-focus,
+.overview-card,
+.storage-warning,
+.coach-insight,
+.drawer-stage-card,
+.drawer-tools,
+.nutrition-row,
+.action-card,
+.action-list li,
+.record-card,
+.cue-summary-item,
+.choice-sheet,
+.profile-drawer {
+  border: 1px solid var(--ui-line) !important;
+  border-radius: var(--r-card) !important;
+  background:
+    radial-gradient(circle at 94% 8%, rgba(98, 72, 255, 0.11), transparent 36%),
+    radial-gradient(circle at 4% 100%, rgba(255, 116, 72, 0.075), transparent 32%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.024)),
+    var(--ui-panel) !important;
+  box-shadow: var(--shadow-card) !important;
+}
+
+.hero-card,
+.overview-focus {
+  border-radius: var(--r-page) !important;
+  background:
+    radial-gradient(circle at 82% 14%, rgba(98, 72, 255, 0.18), transparent 38%),
+    radial-gradient(circle at 0% 94%, rgba(255, 116, 72, 0.11), transparent 34%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.078), rgba(255, 255, 255, 0.022)),
+    var(--ui-panel-strong) !important;
+}
+
+.daily-dashboard,
+.quick-log,
+.today-hub,
+.training-card,
+.special-hero,
+.overview-card {
+  border-radius: var(--r-card) !important;
+}
+
+.header-focus,
+.visual-control,
+.week-strip,
+.tab-switch {
+  border: 1px solid var(--ui-line) !important;
+  border-radius: var(--r-card-sm) !important;
+  background:
+    radial-gradient(circle at 92% 8%, rgba(98, 72, 255, 0.11), transparent 44%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.072), rgba(255, 255, 255, 0.024)),
+    rgba(15, 16, 20, 0.88) !important;
+  box-shadow: var(--shadow-soft) !important;
+}
+
+.avatar-button,
+.avatar-large {
+  border-radius: 18px !important;
+  border: 1px solid transparent !important;
+  background:
+    linear-gradient(#14151a, #14151a) padding-box,
+    var(--ui-grad) border-box !important;
+  box-shadow: var(--shadow-soft) !important;
+}
+
+.save-status,
+.flow-stage-strip,
+.step-index,
+.completion-badge,
+.flow-cue-list span,
+.action-chip,
+.tag,
+.status-dot {
+  border-radius: var(--r-pill) !important;
+}
+
+.save-status {
+  min-height: 22px !important;
+  padding: 0 9px !important;
+  border: 1px solid var(--ui-line-soft) !important;
+  background: rgba(255, 255, 255, 0.052) !important;
+  color: var(--ui-faint) !important;
+  box-shadow: none !important;
+}
+
+.header-ring,
+.ring,
+.focus-score,
+.completion-ring,
+.pushup-ring {
+  border-radius: 50% !important;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02) 58%, transparent 59%),
+    conic-gradient(from -35deg, var(--ui-coral), var(--ui-rose), var(--ui-violet), rgba(255, 255, 255, 0.1) var(--progress, 0%)) !important;
+  box-shadow:
+    inset 0 0 0 8px rgba(255, 255, 255, 0.045),
+    0 12px 26px rgba(98, 72, 255, 0.15) !important;
+}
+
+.header-ring span,
+.ring span,
+.focus-score strong,
+.completion-count,
+.pushup-best {
+  color: var(--ui-text) !important;
+  font-weight: 900 !important;
+}
+
+.primary-flow-button,
+.primary-button {
+  border: 0 !important;
+  border-radius: var(--r-control) !important;
+  background: var(--ui-grad) !important;
+  color: #fff !important;
+  box-shadow: 0 14px 26px rgba(98, 72, 255, 0.2) !important;
+}
+
+.text-button,
+.screen-tool,
+.mini-button,
+.tool-button,
+.icon-button,
+.complete-toggle,
+.choice-option,
+.flow-preview-row,
+.view-tab,
+.flow-step-pill {
+  border-radius: var(--r-control) !important;
+  border: 1px solid var(--ui-line-soft) !important;
+  background: var(--ui-panel-soft) !important;
+  color: rgba(255, 255, 255, 0.76) !important;
+  box-shadow: none !important;
+}
+
+.nav-glyph,
+.flow-step-pill img,
+.flow-preview-row img {
+  object-fit: contain !important;
+  transform-origin: center;
+}
+
+.nav-glyph {
+  width: 29px !important;
+  height: 29px !important;
+  opacity: 0.72 !important;
+  filter: saturate(0.92) brightness(1.03) drop-shadow(0 8px 14px rgba(0, 0, 0, 0.24)) !important;
+}
+
+.view-tab.active .nav-glyph,
+.flow-step-pill.active img {
+  opacity: 1 !important;
+  filter: saturate(1.08) brightness(1.12) drop-shadow(0 10px 18px rgba(98, 72, 255, 0.28)) !important;
+}
+
+.tab-switch {
+  width: min(354px, calc(100vw - 28px)) !important;
+  height: 76px !important;
+  padding: 8px 12px !important;
+  border-radius: 30px !important;
+}
+
+.view-tab {
+  min-height: 58px !important;
+  display: grid !important;
+  grid-template-rows: 31px auto !important;
+  place-items: center !important;
+  gap: 3px !important;
+  border-color: transparent !important;
+  background: transparent !important;
+}
+
+.view-tab span {
+  color: rgba(255, 255, 255, 0.56) !important;
+  font-size: 11px !important;
+  font-weight: 850 !important;
+}
+
+.view-tab.active {
+  background:
+    radial-gradient(circle at 50% 8%, rgba(255, 72, 111, 0.15), transparent 54%),
+    radial-gradient(circle at 82% 78%, rgba(98, 72, 255, 0.16), transparent 60%),
+    rgba(255, 255, 255, 0.055) !important;
+  border-color: var(--ui-line-soft) !important;
+}
+
+.view-tab.active span {
+  color: #fff !important;
+}
+
+.flow-step-tabs {
+  gap: 8px !important;
+}
+
+.flow-step-pill {
+  min-height: 55px !important;
+  padding: 7px 4px 6px !important;
+}
+
+.flow-step-pill.active {
+  border-color: rgba(255, 116, 72, 0.42) !important;
+  background: var(--ui-grad-soft) !important;
+}
+
+.flow-step-pill img,
+.flow-preview-row img {
+  width: 23px !important;
+  height: 23px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.flow-step-pill.active img {
+  width: 24px !important;
+  height: 24px !important;
+}
+
+.flow-step-pill span {
+  color: var(--ui-faint) !important;
+  font-size: 9px !important;
+}
+
+.flow-step-pill strong {
+  color: var(--ui-muted) !important;
+  font-size: 11px !important;
+  font-weight: 850 !important;
+}
+
+.flow-step-pill.active strong {
+  color: var(--ui-text) !important;
+}
+
+.flow-focus-card {
+  min-height: 140px !important;
+  grid-template-columns: minmax(0, 1fr) 92px !important;
+  gap: 12px !important;
+  padding: 15px !important;
+  border-radius: var(--r-card) !important;
+  background:
+    radial-gradient(circle at 94% 8%, rgba(98, 72, 255, 0.14), transparent 35%),
+    radial-gradient(circle at 0% 100%, rgba(255, 116, 72, 0.09), transparent 34%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.066), rgba(255, 255, 255, 0.022)),
+    rgba(24, 25, 31, 0.86) !important;
+}
+
+.flow-card-head {
+  justify-content: flex-start !important;
+  gap: 8px !important;
+  margin-bottom: 7px !important;
+}
+
+.step-index,
+.completion-badge,
+.flow-cue-list span {
+  min-height: 20px !important;
+  padding: 0 8px !important;
+  border: 1px solid var(--ui-line-soft) !important;
+  background: rgba(255, 255, 255, 0.052) !important;
+  color: var(--ui-muted) !important;
+  font-size: 10px !important;
+}
+
+.completion-badge {
+  color: #fff !important;
+  background: rgba(98, 72, 255, 0.15) !important;
+}
+
+.flow-focus-main h4 {
+  margin-bottom: 7px !important;
+  font-size: 21px !important;
+}
+
+.flow-focus-main p {
+  clear: none !important;
+  margin-bottom: 8px !important;
+  font-size: 12px !important;
+  line-height: 1.42 !important;
+}
+
+.flow-cue-list {
+  gap: 5px !important;
+  margin-bottom: 8px !important;
+}
+
+.flow-focus-actions {
+  justify-content: flex-end !important;
+  gap: 8px !important;
+  padding-left: 12px !important;
+}
+
+.primary-flow-button,
+.flow-focus-actions .text-button {
+  min-height: 38px !important;
+  padding-inline: 12px !important;
+  font-size: 12px !important;
+}
+
+body[data-view="special"] .coach-insight {
+  min-height: 104px !important;
+  padding: 17px 18px !important;
+  border-radius: var(--r-card) !important;
+}
+
+body[data-view="special"] .coach-insight::before {
+  content: "" !important;
+  position: absolute !important;
+  left: 18px !important;
+  top: 19px !important;
+  width: 8px !important;
+  height: 8px !important;
+  display: block !important;
+  border-radius: var(--r-pill) !important;
+  background: var(--ui-grad) !important;
+  box-shadow: 0 0 16px rgba(255, 72, 111, 0.38) !important;
+}
+
+body[data-view="special"] .coach-insight .eyebrow {
+  padding-left: 14px !important;
+  margin-bottom: 6px !important;
+  color: var(--ui-coral) !important;
+}
+
+body[data-view="special"] .coach-insight h3 {
+  font-size: 21px !important;
+}
+
+body[data-view="special"] .coach-insight span:not(.insight-mark) {
+  max-width: 100% !important;
+  font-size: 12px !important;
+  line-height: 1.45 !important;
+}
+
+.media-frame,
+.image-modal-content,
+.action-thumb {
+  border-radius: var(--r-card-sm) !important;
+  border: 1px solid var(--ui-line-soft) !important;
+  background: rgba(255, 255, 255, 0.045) !important;
+}
+
+.profile-drawer {
+  border-radius: var(--r-page) !important;
+  background:
+    radial-gradient(circle at 88% 4%, rgba(98, 72, 255, 0.16), transparent 38%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.076), rgba(255, 255, 255, 0.026)),
+    rgba(13, 14, 18, 0.96) !important;
+}
+
+input,
+textarea,
+select {
+  border: 1px solid var(--ui-line-soft) !important;
+  border-radius: 17px !important;
+  background: rgba(255, 255, 255, 0.052) !important;
+  color: var(--ui-text) !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: rgba(255, 255, 255, 0.34) !important;
+}
+
+@media (max-width: 430px) {
+  .app-header {
+    min-height: 88px !important;
+  }
+
+  .app-title h1 {
+    font-size: clamp(25px, 7.4vw, 31px) !important;
+  }
+
+  .glass,
+  .hero-card,
+  .daily-dashboard,
+  .quick-log,
+  .today-hub,
+  .training-card,
+  .special-hero,
+  .overview-focus,
+  .overview-card,
+  .coach-insight {
+    border-radius: var(--r-card) !important;
+  }
+
+  .tab-switch {
+    width: calc(100vw - 28px) !important;
+    left: 14px !important;
+    right: 14px !important;
+  }
+
+  .flow-focus-card {
+    grid-template-columns: minmax(0, 1fr) 84px !important;
+    min-height: 136px !important;
+    padding: 14px !important;
+  }
+
+  .flow-focus-main h4 {
+    font-size: 20px !important;
+  }
+
+  .flow-focus-actions {
+    padding-left: 8px !important;
+  }
+}
+
+/* 20260708 detail v1: fix avatar fallback, step icon glow, and focus-card balance. */
+.avatar-button,
+.avatar-large {
+  overflow: hidden !important;
+  background:
+    linear-gradient(rgba(10, 10, 14, 0.08), rgba(10, 10, 14, 0.1)) padding-box,
+    var(--ui-grad) border-box !important;
+  background-size: cover, auto !important;
+  background-position: center !important;
+}
+
+.avatar-button:not(.has-image),
+.avatar-large:not(.has-image) {
+  background:
+    linear-gradient(rgba(10, 10, 14, 0.04), rgba(10, 10, 14, 0.16)) padding-box,
+    url("./assets/mascot-dachshund-q-brown.png") center / cover no-repeat padding-box,
+    var(--ui-grad) border-box !important;
+}
+
+.avatar-button.has-image,
+.avatar-large.has-image {
+  background-size: cover !important;
+  background-position: center !important;
+}
+
+.header-focus {
+  min-width: 124px !important;
+  max-width: 152px !important;
+  padding: 8px 8px 8px 12px !important;
+  gap: 8px !important;
+}
+
+.header-focus div:first-child {
+  min-width: 0 !important;
+}
+
+.header-focus span,
+.header-focus strong {
+  max-width: 76px !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+.header-ring {
+  width: 36px !important;
+  height: 36px !important;
+  flex: 0 0 36px !important;
+}
+
+.header-ring span {
+  font-size: 13px !important;
+}
+
+.flow-step-pill {
+  position: relative !important;
+  isolation: isolate !important;
+  overflow: hidden !important;
+  min-height: 58px !important;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.07), transparent 58%),
+    rgba(255, 255, 255, 0.046) !important;
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    background 180ms ease,
+    box-shadow 180ms ease !important;
+}
+
+.flow-step-pill[data-step="warmup"] {
+  --step-icon: url("./assets/ri-glyph-warmup.svg");
+}
+
+.flow-step-pill[data-step="train"] {
+  --step-icon: url("./assets/ri-glyph-train.svg");
+}
+
+.flow-step-pill[data-step="special"] {
+  --step-icon: url("./assets/ri-glyph-special.svg");
+}
+
+.flow-step-pill[data-step="stretch"] {
+  --step-icon: url("./assets/ri-glyph-stretch.svg");
+}
+
+.flow-step-pill::before {
+  content: "" !important;
+  position: absolute !important;
+  top: 6px !important;
+  left: 50% !important;
+  z-index: 0 !important;
+  width: 28px !important;
+  height: 28px !important;
+  transform: translateX(-50%) scale(1.18) !important;
+  background: var(--step-icon) center / contain no-repeat !important;
+  opacity: 0 !important;
+  filter: blur(10px) saturate(1.35) brightness(1.08) !important;
+  pointer-events: none !important;
+}
+
+.flow-step-pill > * {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+.flow-step-pill.active {
+  transform: translateY(-1px) !important;
+  border-color: rgba(255, 116, 72, 0.46) !important;
+  background:
+    radial-gradient(circle at 50% 12%, rgba(255, 72, 111, 0.1), transparent 56%),
+    rgba(255, 255, 255, 0.058) !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(98, 72, 255, 0.18),
+    0 14px 24px rgba(98, 72, 255, 0.16) !important;
+}
+
+.flow-step-pill.active::before {
+  opacity: 0.78 !important;
+}
+
+.flow-step-pill img {
+  position: relative !important;
+  width: 24px !important;
+  height: 24px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.flow-step-pill.active img {
+  width: 25px !important;
+  height: 25px !important;
+  background: transparent !important;
+  filter: saturate(1.1) brightness(1.16) drop-shadow(0 8px 14px rgba(98, 72, 255, 0.28)) !important;
+}
+
+.flow-focus-card {
+  min-height: 132px !important;
+  grid-template-columns: minmax(0, 1fr) 86px !important;
+  align-items: stretch !important;
+  gap: 10px !important;
+  padding: 14px !important;
+}
+
+.flow-focus-card::after,
+.flow-focus-card::before {
+  pointer-events: none !important;
+}
+
+.flow-focus-main h4 {
+  font-size: 20px !important;
+}
+
+.flow-focus-main p {
+  display: -webkit-box !important;
+  overflow: hidden !important;
+  -webkit-box-orient: vertical !important;
+  -webkit-line-clamp: 2 !important;
+}
+
+.flow-focus-actions {
+  min-width: 0 !important;
+  justify-content: flex-end !important;
+  align-items: stretch !important;
+  gap: 7px !important;
+  padding-left: 10px !important;
+  border-left: 1px solid rgba(255, 255, 255, 0.055) !important;
+  background: transparent !important;
+}
+
+.flow-focus-actions .text-button,
+.primary-flow-button {
+  min-height: 34px !important;
+  height: auto !important;
+  padding: 0 10px !important;
+  border-radius: var(--r-pill) !important;
+  font-size: 11px !important;
+  line-height: 1.1 !important;
+  white-space: nowrap !important;
+  letter-spacing: 0 !important;
+  text-align: center !important;
+}
+
+.flow-focus-actions .text-button {
+  background: rgba(255, 255, 255, 0.066) !important;
+  color: rgba(255, 255, 255, 0.72) !important;
+}
+
+.primary-flow-button {
+  box-shadow: 0 10px 18px rgba(255, 72, 111, 0.2) !important;
+}
+
+@media (max-width: 390px) {
+  .app-header {
+    grid-template-columns: 46px minmax(0, 1fr) 116px !important;
+    gap: 9px !important;
+  }
+
+  .avatar-button {
+    width: 46px !important;
+    height: 46px !important;
+    border-radius: 15px !important;
+  }
+
+  .app-title h1 {
+    font-size: 25px !important;
+  }
+
+  .header-focus {
+    min-width: 116px !important;
+    max-width: 116px !important;
+    padding: 7px 7px 7px 10px !important;
+  }
+
+  .header-focus span,
+  .header-focus strong {
+    max-width: 64px !important;
+  }
+
+  .header-ring {
+    width: 34px !important;
+    height: 34px !important;
+    flex-basis: 34px !important;
+  }
+
+  .flow-step-tabs {
+    gap: 7px !important;
+  }
+
+  .flow-step-pill {
+    min-height: 55px !important;
+    padding-inline: 3px !important;
+  }
+
+  .flow-step-pill::before {
+    width: 25px !important;
+    height: 25px !important;
+  }
+
+  .flow-step-pill img {
+    width: 22px !important;
+    height: 22px !important;
+  }
+
+  .flow-step-pill strong {
+    font-size: 10px !important;
+  }
+
+  .flow-focus-card {
+    grid-template-columns: minmax(0, 1fr) 78px !important;
+    min-height: 128px !important;
+    gap: 8px !important;
+    padding: 13px !important;
+  }
+
+  .flow-focus-actions {
+    padding-left: 8px !important;
+  }
+
+  .flow-focus-actions .text-button,
+  .primary-flow-button {
+    min-height: 32px !important;
+    padding-inline: 8px !important;
+    font-size: 10px !important;
+    font-weight: 850 !important;
+  }
+}
+
+/* 20260708 flow v2: remove legacy orb overlay and integrate the action rail. */
+.flow-focus-card::after {
+  content: none !important;
+  display: none !important;
+  background: none !important;
+}
+
+.flow-focus-card::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 14px auto 14px 0 !important;
+  width: 2px !important;
+  border-radius: var(--r-pill) !important;
+  background: var(--ui-grad) !important;
+  opacity: 0.85 !important;
+  pointer-events: none !important;
+}
+
+.flow-focus-card.done::before {
+  background: linear-gradient(180deg, var(--ui-lime), rgba(255, 116, 72, 0.7)) !important;
+  opacity: 0.72 !important;
+}
+
+.flow-focus-actions {
+  padding-left: 4px !important;
+  border-left: 0 !important;
+  background: transparent !important;
+}
+
+.flow-state-orb {
+  justify-self: center !important;
+  align-self: start !important;
+  width: 56px !important;
+  height: 56px !important;
+}
+
+.flow-state-orb strong {
+  font-size: 14px !important;
+}
+
+.flow-focus-actions .primary-flow-button {
+  justify-self: stretch !important;
+  min-width: 0 !important;
+  max-width: 76px !important;
+  margin-inline: auto !important;
+}
+
+@media (max-width: 390px) {
+  .flow-focus-card {
+    grid-template-columns: minmax(0, 1fr) 70px !important;
+    gap: 7px !important;
+  }
+
+  .flow-focus-actions {
+    padding-left: 2px !important;
+  }
+
+  .flow-state-orb {
+    width: 50px !important;
+    height: 50px !important;
+  }
+
+  .flow-focus-actions .primary-flow-button {
+    max-width: 68px !important;
+  }
+}
+
+/* 20260708 apple-state v3: absolute final layer at EOF. */
+.flow-focus-card {
+  min-height: 148px !important;
+  grid-template-columns: minmax(0, 1fr) 78px !important;
+  gap: 10px !important;
+  padding: 15px 14px 14px !important;
+  border-radius: 24px !important;
+  border-color: rgba(255, 255, 255, 0.095) !important;
+  background:
+    radial-gradient(circle at 92% 18%, rgba(98, 72, 255, 0.12), transparent 35%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.064), rgba(255, 255, 255, 0.022)),
+    rgba(24, 25, 30, 0.9) !important;
+}
+
+.flow-focus-card.done {
+  border-color: rgba(167, 215, 122, 0.18) !important;
+  background:
+    radial-gradient(circle at 92% 18%, rgba(167, 215, 122, 0.105), transparent 34%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.064), rgba(255, 255, 255, 0.022)),
+    rgba(23, 27, 25, 0.92) !important;
+}
+
+.flow-progress-line,
+.flow-progress-line::before {
+  display: none !important;
+  content: none !important;
+  background: none !important;
+  box-shadow: none !important;
+}
+
+.flow-focus-card::after {
+  content: none !important;
+  display: none !important;
+}
+
+.flow-focus-card::before {
+  inset: 18px auto 18px 0 !important;
+  width: 2px !important;
+  opacity: 0.52 !important;
+}
+
+.flow-focus-actions {
+  display: grid !important;
+  grid-template-rows: auto 1fr auto !important;
+  justify-items: end !important;
+  gap: 8px !important;
+  padding: 0 !important;
+  border: 0 !important;
+}
+
+.flow-state-orb {
+  width: auto !important;
+  min-width: 58px !important;
+  height: 34px !important;
+  display: inline-flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 5px 9px !important;
+  border: 1px solid rgba(255, 255, 255, 0.07) !important;
+  border-radius: 999px !important;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.082), rgba(255, 255, 255, 0.035)),
+    rgba(255, 255, 255, 0.035) !important;
+  box-shadow: none !important;
+}
+
+.flow-state-orb strong {
+  color: rgba(255, 255, 255, 0.92) !important;
+  font-size: 13px !important;
+  line-height: 1 !important;
+  font-weight: 900 !important;
+}
+
+.flow-state-orb span {
+  margin-top: 3px !important;
+  color: rgba(255, 255, 255, 0.48) !important;
+  font-size: 8px !important;
+  line-height: 1 !important;
+  font-weight: 800 !important;
+}
+
+.flow-focus-card.done .flow-state-orb {
+  min-width: 54px !important;
+  border-color: rgba(167, 215, 122, 0.2) !important;
+  background:
+    linear-gradient(180deg, rgba(167, 215, 122, 0.16), rgba(167, 215, 122, 0.07)),
+    rgba(255, 255, 255, 0.032) !important;
+}
+
+.flow-focus-card.done .flow-state-orb strong {
+  color: rgba(226, 250, 204, 0.96) !important;
+  font-size: 14px !important;
+}
+
+.flow-focus-main small {
+  padding-top: 0 !important;
+  border-top: 0 !important;
+}
+
+.flow-focus-actions .primary-flow-button {
+  width: auto !important;
+  min-width: 62px !important;
+  max-width: 72px !important;
+  min-height: 32px !important;
+  padding: 0 8px !important;
+  font-size: 10px !important;
+}
+
+.flow-focus-card.done .primary-flow-button {
+  background: rgba(255, 255, 255, 0.12) !important;
+  color: rgba(226, 250, 204, 0.95) !important;
+  box-shadow: none !important;
+}
+
+/* 20260708 apple-state v5: prevent done-state overlap with explicit vertical rail. */
+.flow-focus-actions {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-end !important;
+  justify-content: space-between !important;
+  min-width: 0 !important;
+  min-height: 100% !important;
+  gap: 10px !important;
+  padding: 0 !important;
+  border: 0 !important;
+}
+
+.flow-state-orb,
+.flow-focus-actions .primary-flow-button {
+  flex: 0 0 auto !important;
+}
+
+.flow-state-orb {
+  position: static !important;
+  transform: none !important;
+  margin: 0 !important;
+}
+
+.flow-focus-actions .primary-flow-button {
+  position: static !important;
+  transform: none !important;
+  margin: auto 0 0 !important;
+}
+
+.flow-focus-card.done .flow-state-orb {
+  margin-bottom: 6px !important;
+}
+
+@media (max-width: 390px) {
+  .flow-focus-actions {
+    gap: 8px !important;
+  }
+}
+
+/* 20260708 apple-state v2: final Apple-like state layer, placed last. */
+.flow-focus-card {
+  min-height: 148px !important;
+  grid-template-columns: minmax(0, 1fr) 78px !important;
+  gap: 10px !important;
+  padding: 15px 14px 14px !important;
+  border-radius: 24px !important;
+  border-color: rgba(255, 255, 255, 0.095) !important;
+  background:
+    radial-gradient(circle at 92% 18%, rgba(98, 72, 255, 0.12), transparent 35%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.064), rgba(255, 255, 255, 0.022)),
+    rgba(24, 25, 30, 0.9) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.055),
+    0 18px 34px rgba(0, 0, 0, 0.2) !important;
+}
+
+.flow-focus-card.is-progress {
+  background:
+    radial-gradient(circle at 92% 18%, rgba(255, 72, 111, 0.105), transparent 34%),
+    radial-gradient(circle at 100% 86%, rgba(98, 72, 255, 0.13), transparent 34%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.068), rgba(255, 255, 255, 0.024)),
+    rgba(24, 25, 30, 0.92) !important;
+}
+
+.flow-focus-card.done {
+  border-color: rgba(167, 215, 122, 0.18) !important;
+  background:
+    radial-gradient(circle at 92% 18%, rgba(167, 215, 122, 0.105), transparent 34%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.064), rgba(255, 255, 255, 0.022)),
+    rgba(23, 27, 25, 0.92) !important;
+}
+
+.flow-progress-line,
+.flow-progress-line::before {
+  display: none !important;
+  content: none !important;
+  background: none !important;
+  box-shadow: none !important;
+}
+
+.flow-focus-card::after {
+  content: none !important;
+  display: none !important;
+}
+
+.flow-focus-card::before {
+  inset: 18px auto 18px 0 !important;
+  width: 2px !important;
+  opacity: 0.52 !important;
+}
+
+.flow-card-head {
+  margin-bottom: 9px !important;
+}
+
+.completion-badge {
+  min-height: 20px !important;
+  padding: 0 8px !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+  color: rgba(255, 255, 255, 0.7) !important;
+  border-color: rgba(255, 255, 255, 0.055) !important;
+}
+
+.flow-focus-card.done .completion-badge {
+  background: rgba(167, 215, 122, 0.1) !important;
+  color: rgba(226, 250, 204, 0.82) !important;
+  border-color: rgba(167, 215, 122, 0.16) !important;
+}
+
+.flow-focus-main h4 {
+  margin-bottom: 8px !important;
+  font-size: 21px !important;
+}
+
+.flow-focus-main p {
+  margin-bottom: 9px !important;
+  color: rgba(255, 255, 255, 0.66) !important;
+  -webkit-line-clamp: 2 !important;
+}
+
+.flow-focus-main small {
+  margin-top: 1px !important;
+  padding-top: 0 !important;
+  border-top: 0 !important;
+  background: transparent !important;
+}
+
+.flow-focus-actions {
+  display: grid !important;
+  grid-template-rows: auto 1fr auto !important;
+  justify-items: end !important;
+  gap: 8px !important;
+  padding: 0 !important;
+  border: 0 !important;
+}
+
+.flow-state-orb {
+  width: auto !important;
+  min-width: 58px !important;
+  height: 34px !important;
+  display: inline-flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 5px 9px !important;
+  border: 1px solid rgba(255, 255, 255, 0.07) !important;
+  border-radius: 999px !important;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.082), rgba(255, 255, 255, 0.035)),
+    rgba(255, 255, 255, 0.035) !important;
+  box-shadow: none !important;
+}
+
+.flow-state-orb strong {
+  color: rgba(255, 255, 255, 0.92) !important;
+  font-size: 13px !important;
+  line-height: 1 !important;
+  font-weight: 900 !important;
+}
+
+.flow-state-orb span {
+  margin-top: 3px !important;
+  color: rgba(255, 255, 255, 0.48) !important;
+  font-size: 8px !important;
+  line-height: 1 !important;
+  font-weight: 800 !important;
+}
+
+.flow-focus-card.is-progress .flow-state-orb {
+  border-color: rgba(255, 116, 72, 0.16) !important;
+  background:
+    linear-gradient(180deg, rgba(255, 116, 72, 0.12), rgba(98, 72, 255, 0.075)),
+    rgba(255, 255, 255, 0.035) !important;
+}
+
+.flow-focus-card.done .flow-state-orb {
+  min-width: 54px !important;
+  border-color: rgba(167, 215, 122, 0.2) !important;
+  background:
+    linear-gradient(180deg, rgba(167, 215, 122, 0.16), rgba(167, 215, 122, 0.07)),
+    rgba(255, 255, 255, 0.032) !important;
+}
+
+.flow-focus-card.done .flow-state-orb strong {
+  color: rgba(226, 250, 204, 0.96) !important;
+  font-size: 14px !important;
+}
+
+.flow-focus-card.done .flow-state-orb span {
+  color: rgba(226, 250, 204, 0.6) !important;
+}
+
+.flow-focus-actions .primary-flow-button {
+  align-self: end !important;
+  min-width: 62px !important;
+  max-width: 72px !important;
+  width: auto !important;
+  min-height: 32px !important;
+  padding: 0 8px !important;
+  border-radius: 999px !important;
+  font-size: 10px !important;
+  box-shadow: 0 8px 16px rgba(255, 72, 111, 0.18) !important;
+}
+
+.flow-focus-card.done .primary-flow-button {
+  background: rgba(255, 255, 255, 0.12) !important;
+  color: rgba(226, 250, 204, 0.95) !important;
+  box-shadow: none !important;
+}
+
+@media (max-width: 390px) {
+  .flow-focus-card {
+    grid-template-columns: minmax(0, 1fr) 66px !important;
+    min-height: 144px !important;
+    gap: 8px !important;
+  }
+
+  .flow-state-orb {
+    min-width: 52px !important;
+    height: 32px !important;
+    padding-inline: 7px !important;
+  }
+
+  .flow-focus-actions .primary-flow-button {
+    min-width: 58px !important;
+    max-width: 64px !important;
+    font-size: 10px !important;
+  }
+}
+
+/* 20260708 apple-state v1: quieter Apple-like focus card states. */
+.flow-focus-card {
+  min-height: 148px !important;
+  grid-template-columns: minmax(0, 1fr) 78px !important;
+  gap: 10px !important;
+  padding: 15px 14px 14px !important;
+  border-radius: 24px !important;
+  border-color: rgba(255, 255, 255, 0.095) !important;
+  background:
+    radial-gradient(circle at 92% 18%, rgba(98, 72, 255, 0.12), transparent 35%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.064), rgba(255, 255, 255, 0.022)),
+    rgba(24, 25, 30, 0.9) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.055),
+    0 18px 34px rgba(0, 0, 0, 0.2) !important;
+}
+
+.flow-focus-card.is-progress {
+  background:
+    radial-gradient(circle at 92% 18%, rgba(255, 72, 111, 0.105), transparent 34%),
+    radial-gradient(circle at 100% 86%, rgba(98, 72, 255, 0.13), transparent 34%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.068), rgba(255, 255, 255, 0.024)),
+    rgba(24, 25, 30, 0.92) !important;
+}
+
+.flow-focus-card.done {
+  border-color: rgba(167, 215, 122, 0.18) !important;
+  background:
+    radial-gradient(circle at 92% 18%, rgba(167, 215, 122, 0.105), transparent 34%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.064), rgba(255, 255, 255, 0.022)),
+    rgba(23, 27, 25, 0.92) !important;
+}
+
+.flow-progress-line {
+  display: none !important;
+}
+
+.flow-focus-card::after {
+  content: none !important;
+  display: none !important;
+}
+
+.flow-focus-card::before {
+  inset: 18px auto 18px 0 !important;
+  width: 2px !important;
+  opacity: 0.55 !important;
+}
+
+.flow-focus-card.done::before {
+  opacity: 0.55 !important;
+}
+
+.flow-card-head {
+  margin-bottom: 9px !important;
+}
+
+.completion-badge {
+  min-height: 20px !important;
+  padding: 0 8px !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+  color: rgba(255, 255, 255, 0.7) !important;
+  border-color: rgba(255, 255, 255, 0.055) !important;
+}
+
+.flow-focus-main h4 {
+  margin-bottom: 8px !important;
+  font-size: 21px !important;
+}
+
+.flow-focus-main p {
+  max-width: 100% !important;
+  margin-bottom: 9px !important;
+  color: rgba(255, 255, 255, 0.66) !important;
+  -webkit-line-clamp: 2 !important;
+}
+
+.flow-focus-main small {
+  margin-top: 1px !important;
+  padding-top: 0 !important;
+  border-top: 0 !important;
+  background: transparent !important;
+}
+
+.flow-focus-actions {
+  display: grid !important;
+  grid-template-rows: auto 1fr auto !important;
+  align-items: start !important;
+  justify-items: end !important;
+  gap: 8px !important;
+  padding: 0 !important;
+  border: 0 !important;
+}
+
+.flow-state-orb {
+  width: auto !important;
+  min-width: 58px !important;
+  height: 34px !important;
+  display: inline-flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 5px 9px !important;
+  border: 1px solid rgba(255, 255, 255, 0.07) !important;
+  border-radius: 999px !important;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.082), rgba(255, 255, 255, 0.035)),
+    rgba(255, 255, 255, 0.035) !important;
+  box-shadow: none !important;
+}
+
+.flow-state-orb strong {
+  color: rgba(255, 255, 255, 0.92) !important;
+  font-size: 13px !important;
+  line-height: 1 !important;
+  font-weight: 900 !important;
+}
+
+.flow-state-orb span {
+  margin-top: 3px !important;
+  color: rgba(255, 255, 255, 0.48) !important;
+  font-size: 8px !important;
+  line-height: 1 !important;
+  font-weight: 800 !important;
+}
+
+.flow-focus-card.is-progress .flow-state-orb {
+  border-color: rgba(255, 116, 72, 0.16) !important;
+  background:
+    linear-gradient(180deg, rgba(255, 116, 72, 0.12), rgba(98, 72, 255, 0.075)),
+    rgba(255, 255, 255, 0.035) !important;
+}
+
+.flow-focus-card.done .flow-state-orb {
+  min-width: 54px !important;
+  border-color: rgba(167, 215, 122, 0.2) !important;
+  background:
+    linear-gradient(180deg, rgba(167, 215, 122, 0.16), rgba(167, 215, 122, 0.07)),
+    rgba(255, 255, 255, 0.032) !important;
+}
+
+.flow-focus-card.done .flow-state-orb strong {
+  color: rgba(226, 250, 204, 0.96) !important;
+  font-size: 14px !important;
+}
+
+.flow-focus-card.done .flow-state-orb span {
+  color: rgba(226, 250, 204, 0.6) !important;
+}
+
+.flow-focus-actions .primary-flow-button {
+  align-self: end !important;
+  min-width: 62px !important;
+  max-width: 72px !important;
+  min-height: 32px !important;
+  padding: 0 8px !important;
+  border-radius: 999px !important;
+  font-size: 10px !important;
+  box-shadow: 0 8px 16px rgba(255, 72, 111, 0.18) !important;
+}
+
+.flow-focus-card.done .primary-flow-button {
+  background: rgba(255, 255, 255, 0.12) !important;
+  color: rgba(226, 250, 204, 0.95) !important;
+  box-shadow: none !important;
+}
+
+@media (max-width: 390px) {
+  .flow-focus-card {
+    grid-template-columns: minmax(0, 1fr) 66px !important;
+    min-height: 144px !important;
+    gap: 8px !important;
+  }
+
+  .flow-state-orb {
+    min-width: 52px !important;
+    height: 32px !important;
+    padding-inline: 7px !important;
+  }
+
+  .flow-focus-actions .primary-flow-button {
+    min-width: 58px !important;
+    max-width: 64px !important;
+    font-size: 10px !important;
+  }
+}
+
+/* 20260708 flow v1: training step console with pending / progress / complete states. */
+.flow-focus-card {
+  position: relative !important;
+  min-height: 146px !important;
+  grid-template-columns: minmax(0, 1fr) 88px !important;
+  align-items: stretch !important;
+  padding: 15px !important;
+  gap: 12px !important;
+  border-color: rgba(255, 255, 255, 0.11) !important;
+  background:
+    radial-gradient(circle at 92% 16%, rgba(98, 72, 255, 0.16), transparent 38%),
+    radial-gradient(circle at 0% 100%, rgba(255, 116, 72, 0.1), transparent 34%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.024)),
+    rgba(24, 25, 31, 0.88) !important;
+}
+
+.flow-focus-card.is-progress {
+  border-color: rgba(255, 116, 72, 0.2) !important;
+  background:
+    radial-gradient(circle at 94% 12%, rgba(255, 72, 111, 0.11), transparent 34%),
+    radial-gradient(circle at 100% 92%, rgba(98, 72, 255, 0.18), transparent 38%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.078), rgba(255, 255, 255, 0.024)),
+    rgba(24, 25, 31, 0.9) !important;
+}
+
+.flow-focus-card.done {
+  border-color: rgba(167, 215, 122, 0.24) !important;
+  background:
+    radial-gradient(circle at 92% 14%, rgba(167, 215, 122, 0.12), transparent 36%),
+    radial-gradient(circle at 0% 100%, rgba(255, 116, 72, 0.075), transparent 34%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.022)),
+    rgba(23, 28, 25, 0.9) !important;
+}
+
+.flow-card-head {
+  align-items: center !important;
+  margin-bottom: 8px !important;
+}
+
+.flow-focus-card .completion-badge {
+  margin-left: 0 !important;
+  color: rgba(255, 255, 255, 0.74) !important;
+}
+
+.flow-focus-card.done .completion-badge {
+  color: rgba(223, 246, 200, 0.92) !important;
+  background: rgba(167, 215, 122, 0.12) !important;
+  border-color: rgba(167, 215, 122, 0.22) !important;
+}
+
+.flow-focus-main h4 {
+  margin-bottom: 8px !important;
+  font-size: 21px !important;
+  line-height: 1.05 !important;
+}
+
+.flow-focus-main p {
+  margin-bottom: 9px !important;
+  line-height: 1.48 !important;
+}
+
+.flow-cue-list {
+  margin-bottom: 8px !important;
+}
+
+.flow-cue-list span {
+  min-height: 21px !important;
+  padding-inline: 8px !important;
+  font-size: 10px !important;
+}
+
+.flow-focus-card.is-progress .flow-cue-list span:first-child,
+.flow-focus-card.done .flow-cue-list span:first-child {
+  color: rgba(255, 255, 255, 0.9) !important;
+  background: rgba(255, 116, 72, 0.13) !important;
+  border-color: rgba(255, 116, 72, 0.18) !important;
+}
+
+.flow-focus-actions {
+  display: grid !important;
+  grid-template-rows: minmax(0, 1fr) auto !important;
+  align-items: end !important;
+  gap: 10px !important;
+  padding-left: 12px !important;
+  border-left: 1px solid rgba(255, 255, 255, 0.06) !important;
+}
+
+.flow-state-orb {
+  width: 58px !important;
+  height: 58px !important;
+  justify-self: end !important;
+  align-self: start !important;
+  display: grid !important;
+  place-items: center !important;
+  padding: 8px !important;
+  border-radius: 50% !important;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.025) 58%, transparent 59%),
+    conic-gradient(from -35deg, var(--ui-coral), var(--ui-rose), var(--ui-violet) var(--step-progress), rgba(255, 255, 255, 0.12) 0) !important;
+  box-shadow:
+    inset 0 0 0 7px rgba(255, 255, 255, 0.04),
+    0 12px 20px rgba(98, 72, 255, 0.14) !important;
+}
+
+.flow-state-orb strong,
+.flow-state-orb span {
+  display: block !important;
+  text-align: center !important;
+  line-height: 1 !important;
+}
+
+.flow-state-orb strong {
+  color: #fff !important;
+  font-size: 15px !important;
+  font-weight: 900 !important;
+}
+
+.flow-state-orb span {
+  margin-top: 3px !important;
+  color: rgba(255, 255, 255, 0.54) !important;
+  font-size: 9px !important;
+  font-weight: 850 !important;
+}
+
+.flow-focus-card.done .flow-state-orb {
+  background:
+    radial-gradient(circle at 50% 50%, rgba(167, 215, 122, 0.18), rgba(255, 255, 255, 0.03) 58%, transparent 59%),
+    conic-gradient(from -35deg, var(--ui-lime), rgba(167, 215, 122, 0.9), rgba(255, 255, 255, 0.12) 0) !important;
+  box-shadow:
+    inset 0 0 0 7px rgba(167, 215, 122, 0.075),
+    0 12px 22px rgba(167, 215, 122, 0.12) !important;
+}
+
+.flow-focus-card.done .flow-state-orb strong {
+  color: rgba(230, 255, 206, 0.98) !important;
+  font-size: 18px !important;
+}
+
+.flow-focus-actions .primary-flow-button {
+  width: 100% !important;
+  min-height: 34px !important;
+  padding: 0 8px !important;
+}
+
+.flow-focus-card.done .primary-flow-button {
+  background:
+    linear-gradient(135deg, rgba(167, 215, 122, 0.95), rgba(255, 116, 72, 0.68)) !important;
+  color: #10140f !important;
+  box-shadow: 0 10px 18px rgba(167, 215, 122, 0.14) !important;
+}
+
+.flow-progress-line {
+  position: absolute !important;
+  left: 15px !important;
+  right: 15px !important;
+  bottom: 0 !important;
+  height: 2px !important;
+  border-radius: var(--r-pill) !important;
+  overflow: hidden !important;
+  background: rgba(255, 255, 255, 0.055) !important;
+}
+
+.flow-progress-line::before {
+  content: "" !important;
+  display: block !important;
+  width: var(--step-progress) !important;
+  height: 100% !important;
+  border-radius: inherit !important;
+  background: var(--ui-grad) !important;
+  box-shadow: 0 0 14px rgba(255, 72, 111, 0.34) !important;
+}
+
+.flow-focus-card.done .flow-progress-line::before {
+  width: 100% !important;
+  background: linear-gradient(90deg, var(--ui-lime), rgba(255, 116, 72, 0.82)) !important;
+}
+
+@media (max-width: 390px) {
+  .flow-focus-card {
+    grid-template-columns: minmax(0, 1fr) 76px !important;
+    min-height: 142px !important;
+    padding: 14px !important;
+    gap: 9px !important;
+  }
+
+  .flow-focus-main h4 {
+    font-size: 20px !important;
+  }
+
+  .flow-focus-main p {
+    font-size: 11px !important;
+  }
+
+  .flow-focus-actions {
+    gap: 8px !important;
+    padding-left: 8px !important;
+  }
+
+  .flow-state-orb {
+    width: 52px !important;
+    height: 52px !important;
+    padding: 7px !important;
+  }
+
+  .flow-state-orb strong {
+    font-size: 13px !important;
+  }
+
+  .flow-state-orb span {
+    font-size: 8px !important;
+  }
+
+  .flow-focus-actions .primary-flow-button {
+    min-height: 32px !important;
+    padding-inline: 6px !important;
+  }
+}
+
+/* 20260708 flow v3: final cascade guard for the focus card. */
+.flow-focus-card::after {
+  content: none !important;
+  display: none !important;
+  background: none !important;
+}
+
+.flow-focus-card::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 14px auto 14px 0 !important;
+  width: 2px !important;
+  border-radius: var(--r-pill) !important;
+  background: var(--ui-grad) !important;
+  opacity: 0.82 !important;
+  pointer-events: none !important;
+}
+
+.flow-focus-card.done::before {
+  background: linear-gradient(180deg, var(--ui-lime), rgba(255, 116, 72, 0.7)) !important;
+}
+
+.flow-focus-actions {
+  padding-left: 4px !important;
+  border-left: 0 !important;
+  background: transparent !important;
+}
+
+.flow-state-orb {
+  justify-self: center !important;
+  width: 56px !important;
+  height: 56px !important;
+}
+
+.flow-focus-actions .primary-flow-button {
+  max-width: 76px !important;
+  margin-inline: auto !important;
+}
+
+@media (max-width: 390px) {
+  .flow-focus-card {
+    grid-template-columns: minmax(0, 1fr) 70px !important;
+    gap: 7px !important;
+  }
+
+  .flow-focus-actions {
+    padding-left: 2px !important;
+  }
+
+  .flow-state-orb {
+    width: 50px !important;
+    height: 50px !important;
+  }
+
+  .flow-focus-actions .primary-flow-button {
+    max-width: 68px !important;
+  }
+}
+
+/* 20260708 apple-state v4: final Apple-like state layer. */
+.flow-focus-card {
+  min-height: 148px !important;
+  grid-template-columns: minmax(0, 1fr) 78px !important;
+  gap: 10px !important;
+  padding: 15px 14px 14px !important;
+  border-radius: 24px !important;
+  border-color: rgba(255, 255, 255, 0.095) !important;
+  background:
+    radial-gradient(circle at 92% 18%, rgba(98, 72, 255, 0.12), transparent 35%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.064), rgba(255, 255, 255, 0.022)),
+    rgba(24, 25, 30, 0.9) !important;
+}
+
+.flow-focus-card.done {
+  border-color: rgba(167, 215, 122, 0.18) !important;
+  background:
+    radial-gradient(circle at 92% 18%, rgba(167, 215, 122, 0.105), transparent 34%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.064), rgba(255, 255, 255, 0.022)),
+    rgba(23, 27, 25, 0.92) !important;
+}
+
+.flow-progress-line,
+.flow-progress-line::before {
+  display: none !important;
+  content: none !important;
+  background: none !important;
+  box-shadow: none !important;
+}
+
+.flow-focus-card::after {
+  content: none !important;
+  display: none !important;
+}
+
+.flow-focus-card::before {
+  inset: 18px auto 18px 0 !important;
+  width: 2px !important;
+  opacity: 0.52 !important;
+}
+
+.flow-focus-actions {
+  display: grid !important;
+  grid-template-rows: auto 1fr auto !important;
+  justify-items: end !important;
+  gap: 8px !important;
+  padding: 0 !important;
+  border: 0 !important;
+}
+
+.flow-state-orb {
+  width: auto !important;
+  min-width: 58px !important;
+  height: 34px !important;
+  display: inline-flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 5px 9px !important;
+  border: 1px solid rgba(255, 255, 255, 0.07) !important;
+  border-radius: 999px !important;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.082), rgba(255, 255, 255, 0.035)),
+    rgba(255, 255, 255, 0.035) !important;
+  box-shadow: none !important;
+}
+
+.flow-state-orb strong {
+  color: rgba(255, 255, 255, 0.92) !important;
+  font-size: 13px !important;
+  line-height: 1 !important;
+  font-weight: 900 !important;
+}
+
+.flow-state-orb span {
+  margin-top: 3px !important;
+  color: rgba(255, 255, 255, 0.48) !important;
+  font-size: 8px !important;
+  line-height: 1 !important;
+  font-weight: 800 !important;
+}
+
+.flow-focus-card.done .flow-state-orb {
+  min-width: 54px !important;
+  border-color: rgba(167, 215, 122, 0.2) !important;
+  background:
+    linear-gradient(180deg, rgba(167, 215, 122, 0.16), rgba(167, 215, 122, 0.07)),
+    rgba(255, 255, 255, 0.032) !important;
+}
+
+.flow-focus-card.done .flow-state-orb strong {
+  color: rgba(226, 250, 204, 0.96) !important;
+  font-size: 14px !important;
+}
+
+.flow-focus-main small {
+  padding-top: 0 !important;
+  border-top: 0 !important;
+}
+
+.flow-focus-actions .primary-flow-button {
+  width: auto !important;
+  min-width: 62px !important;
+  max-width: 72px !important;
+  min-height: 32px !important;
+  padding: 0 8px !important;
+  font-size: 10px !important;
+}
+
+.flow-focus-card.done .primary-flow-button {
+  background: rgba(255, 255, 255, 0.12) !important;
+  color: rgba(226, 250, 204, 0.95) !important;
+  box-shadow: none !important;
+}
+
+@media (max-width: 390px) {
+  .flow-focus-card {
+    grid-template-columns: minmax(0, 1fr) 66px !important;
+    min-height: 144px !important;
+    gap: 8px !important;
+  }
+
+  .flow-state-orb {
+    min-width: 52px !important;
+    height: 32px !important;
+    padding-inline: 7px !important;
+  }
+
+  .flow-focus-actions .primary-flow-button {
+    min-width: 58px !important;
+    max-width: 64px !important;
+    font-size: 10px !important;
+  }
+}
