@@ -1018,8 +1018,8 @@ function renderTrainingFlow(record, plan, planIndex) {
       totalCount: warmup.steps.length,
       action: "warmup",
       actionText: record.warmupComplete ? "取消热身" : "完成热身",
-      detail: record.warmupComplete ? "肩背和核心已经唤醒，可以进入下一段。" : warmup.summary,
-      meta: warmup.steps.slice(0, 3).join(" · "),
+      detail: record.warmupComplete ? "身体已经进入状态，可以安心进入正训。" : "激活髋、膝、踝，让接下来的动作更舒服。",
+      meta: `${warmup.steps.length} 项 · 约 3 分钟`,
       cues: ["唤醒肩背", "核心收紧", "轻量开始"],
     },
     {
@@ -1039,7 +1039,7 @@ function renderTrainingFlow(record, plan, planIndex) {
         : progress.done > 0
           ? `已完成 ${progress.done} 项，保持节奏继续推进。`
           : "先稳住动作质量，再追求数量。",
-      meta: `${progress.done}/${progress.total} 项已完成`,
+      meta: `${progress.done}/${progress.total} 项 · 逐项勾选`,
       cues: progress.done > 0 ? ["动作质量", "呼吸稳定", "慢起慢落"] : ["推拉力量", "核心收紧", "不抢速度"],
       secondaryAction: "image",
       secondaryText: "动作图",
@@ -1061,7 +1061,7 @@ function renderTrainingFlow(record, plan, planIndex) {
         : readiness === "建议降强度"
           ? "今天优先恢复专项。"
           : `建议：${recommendedNames}`,
-      meta: "俯卧撑 / 核心 / 体态按需补强",
+      meta: "按需补强 · 不练到力竭",
       cues: ["按需补强", "小量完成", "保持体态"],
       secondaryAction: "special",
       secondaryText: "专项库",
@@ -1079,7 +1079,7 @@ function renderTrainingFlow(record, plan, planIndex) {
       action: "stretch",
       actionText: stretchDone ? "取消拉伸" : "完成拉伸",
       detail: stretchDone ? "今天的训练已经完整收尾，安心记录状态。" : "舒缓肩颈、髋部和腰背，训练后恢复更稳。",
-      meta: "放慢呼吸，拉到舒服的位置即可",
+      meta: "约 8 分钟 · 拉到舒服的位置即可",
       cues: ["慢呼吸", "肩颈放松", "恢复闭环"],
     },
   ];
@@ -1152,12 +1152,12 @@ function renderTrainingFlow(record, plan, planIndex) {
       <div class="flow-focus-main">
         <span class="flow-card-head">
           <span class="step-index">${activeStep.index}</span>
-          <span class="completion-badge">${activeStep.done ? "已完成" : activeStepStatusLabel}</span>
+          <span class="flow-stage-label">${activeStep.done ? "本段完成" : "当前进行"}</span>
         </span>
         <h4>${activeStepTitle}</h4>
         <p>${activeStep.detail}</p>
         <div class="flow-cue-list" aria-label="动作提示">
-          ${activeStep.cues.map((cue) => `<span>${cue}</span>`).join("")}
+          ${activeStep.cues.slice(0, 2).map((cue) => `<span>${cue}</span>`).join("")}
         </div>
         <small>${activeStep.meta}</small>
       </div>
@@ -1168,7 +1168,6 @@ function renderTrainingFlow(record, plan, planIndex) {
         </div>
         <button class="primary-flow-button" type="button" data-action="${activeStepAction}">${activeStepActionText}</button>
       </div>
-      <span class="flow-progress-line" aria-hidden="true"></span>
     </article>
     <div class="flow-preview-list" aria-label="其他训练步骤">
       ${flowSteps
