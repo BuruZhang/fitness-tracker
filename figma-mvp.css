@@ -1,0 +1,1767 @@
+/*
+ * Figma-derived MVP surface. This layer intentionally comes last: it normalizes
+ * the legacy visual experiments without changing existing data, IDs, or flows.
+ */
+:root {
+  --figma-page: #f7f6fa;
+  --figma-ink: #192126;
+  --figma-muted: rgba(25, 33, 38, 0.56);
+  --figma-line: #e7e6ea;
+  --figma-card: #ffffff;
+  --figma-action: #bbf246;
+  --figma-action-strong: #97d72b;
+  --figma-dark: #192126;
+  --figma-radius-card: 22px;
+  --figma-radius-control: 14px;
+  --figma-shadow: 0 10px 28px rgba(25, 33, 38, 0.055);
+}
+
+html {
+  background: var(--figma-page) !important;
+  overflow-x: clip;
+}
+
+body {
+  min-width: 320px;
+  overflow-x: clip;
+  background: var(--figma-page) !important;
+  color: var(--figma-ink) !important;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif !important;
+}
+
+body::before,
+body::after,
+.app-shell::before,
+.app-shell::after {
+  display: none !important;
+}
+
+.app-shell {
+  width: min(100%, 430px) !important;
+  min-height: 100dvh;
+  margin: 0 auto;
+  padding: 0 0 calc(100px + env(safe-area-inset-bottom));
+  background: var(--figma-page) !important;
+  box-shadow: none !important;
+}
+
+.app-header {
+  position: relative !important;
+  z-index: 2;
+  display: grid !important;
+  grid-template-columns: 44px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  min-height: 94px;
+  padding: calc(18px + env(safe-area-inset-top)) 20px 14px !important;
+  border: 0 !important;
+  border-bottom: 0 !important;
+  background: var(--figma-page) !important;
+  box-shadow: none !important;
+}
+
+.avatar-button {
+  width: 44px !important;
+  height: 44px !important;
+  overflow: hidden;
+  border: 1px solid #dedde2 !important;
+  border-radius: 15px !important;
+  background: #ffffff !important;
+  box-shadow: none !important;
+}
+
+.app-title {
+  min-width: 0;
+}
+
+.app-title p,
+#todayLabel {
+  overflow: hidden;
+  margin: 0 0 2px !important;
+  color: var(--figma-muted) !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  line-height: 16px !important;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.app-title h1,
+#headerName {
+  overflow: hidden;
+  margin: 0 !important;
+  color: var(--figma-ink) !important;
+  font-size: 24px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0 !important;
+  line-height: 29px !important;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.save-status {
+  display: inline-flex !important;
+  align-items: center;
+  min-height: 17px;
+  margin-top: 2px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  color: var(--figma-muted) !important;
+  font-size: 10px !important;
+  font-weight: 600;
+}
+
+.header-focus {
+  display: flex !important;
+  align-items: center;
+  gap: 7px;
+  min-width: 82px;
+  max-width: 112px;
+  min-height: 44px;
+  padding: 6px 7px 6px 9px !important;
+  border: 1px solid #dedde2 !important;
+  border-radius: var(--figma-radius-control) !important;
+  background: #ffffff !important;
+  box-shadow: none !important;
+}
+
+.header-focus > div:first-child {
+  min-width: 0;
+}
+
+.header-focus span,
+.header-focus strong {
+  display: block;
+  overflow: hidden;
+  color: var(--figma-muted) !important;
+  font-size: 9px !important;
+  line-height: 12px !important;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.header-focus strong {
+  color: var(--figma-ink) !important;
+  font-weight: 750 !important;
+}
+
+.header-ring {
+  width: 30px !important;
+  height: 30px !important;
+  flex: 0 0 30px;
+  border: 0 !important;
+  background: conic-gradient(var(--figma-action) var(--progress), #ecebef 0) !important;
+  box-shadow: none !important;
+}
+
+.header-ring::after {
+  inset: 5px !important;
+  background: #ffffff !important;
+}
+
+.header-ring span {
+  position: relative;
+  z-index: 1;
+  color: var(--figma-ink) !important;
+  font-size: 9px !important;
+  font-weight: 800 !important;
+}
+
+.app-main {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 18px !important;
+  padding: 0 20px !important;
+  background: transparent !important;
+}
+
+.glass,
+.hero-card,
+.daily-dashboard,
+.week-strip,
+.today-hub,
+.training-card,
+.special-hero,
+.overview-card,
+.overview-focus,
+.coach-insight {
+  border: 0 !important;
+  border-radius: var(--figma-radius-card) !important;
+  background: var(--figma-card) !important;
+  box-shadow: var(--figma-shadow) !important;
+  backdrop-filter: none !important;
+}
+
+.storage-warning {
+  color: #6b4a00 !important;
+  background: #fff4d8 !important;
+}
+
+/* The existing hero becomes the single media-first entry point for today's plan. */
+.hero-card {
+  position: relative;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) 62px;
+  min-height: 174px !important;
+  padding: 20px !important;
+  overflow: hidden;
+  isolation: isolate;
+  color: #ffffff !important;
+  background:
+    linear-gradient(90deg, rgba(15, 21, 25, 0.86) 0%, rgba(15, 21, 25, 0.58) 52%, rgba(15, 21, 25, 0.2) 100%),
+    var(--figma-hero-image, url("./assets/actions/incline-pushup.png")) center / cover no-repeat !important;
+  box-shadow: none !important;
+}
+
+.hero-card::after {
+  display: none !important;
+}
+
+.hero-copy {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.hero-card .eyebrow,
+.hero-card .coach-line,
+.hero-card .hero-meta,
+.hero-card h2 {
+  color: #ffffff !important;
+}
+
+.hero-card .eyebrow {
+  margin: 0 0 5px !important;
+  font-size: 11px !important;
+  font-weight: 650 !important;
+  line-height: 15px !important;
+  opacity: 0.78;
+}
+
+.hero-copy h2 {
+  max-width: 200px !important;
+  margin: 0 !important;
+  font-size: 24px !important;
+  font-weight: 800 !important;
+  line-height: 1.14 !important;
+}
+
+.coach-line {
+  display: -webkit-box;
+  max-width: 215px !important;
+  margin: 6px 0 0 !important;
+  overflow: hidden;
+  font-size: 12px !important;
+  line-height: 1.38 !important;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  opacity: 0.84;
+}
+
+.hero-actions {
+  display: flex !important;
+  align-items: center;
+  gap: 7px;
+  margin-top: auto !important;
+}
+
+.primary-cta,
+.primary-button,
+.primary-flow-button {
+  min-height: 34px !important;
+  padding: 0 13px !important;
+  border: 0 !important;
+  border-radius: 10px !important;
+  background: var(--figma-action) !important;
+  box-shadow: none !important;
+  color: var(--figma-ink) !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+}
+
+.hero-meta {
+  max-width: 90px;
+  overflow: hidden;
+  font-size: 10px !important;
+  font-weight: 650 !important;
+  line-height: 1.2 !important;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  opacity: 0.8;
+}
+
+.hero-card > .ring {
+  z-index: 1;
+  width: 58px !important;
+  height: 58px !important;
+  align-self: start;
+  border: 0 !important;
+  background: conic-gradient(var(--figma-action) var(--progress), rgba(255,255,255,0.24) 0) !important;
+  box-shadow: none !important;
+}
+
+.hero-card > .ring::after {
+  inset: 5px !important;
+  background: rgba(16, 21, 25, 0.75) !important;
+}
+
+.hero-card > .ring span,
+.hero-card > .ring small {
+  position: relative;
+  z-index: 1;
+  color: #ffffff !important;
+}
+
+.hero-card > .ring span {
+  font-size: 15px !important;
+  font-weight: 800 !important;
+}
+
+.hero-card > .ring small {
+  font-size: 9px !important;
+}
+
+.recent-strip {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: none !important;
+}
+
+/* One compact state card replaces the earlier repeated dashboard surfaces. */
+.daily-dashboard {
+  padding: 14px !important;
+}
+
+.daily-dashboard .section-heading {
+  align-items: center;
+  margin-bottom: 10px !important;
+}
+
+.daily-dashboard .section-heading .eyebrow {
+  display: none !important;
+}
+
+.daily-dashboard h3 {
+  color: var(--figma-ink) !important;
+  font-size: 16px !important;
+  line-height: 22px !important;
+}
+
+#dailyReadinessScore {
+  padding: 5px 8px !important;
+  border-radius: 999px;
+  background: #edf7d4 !important;
+  color: #5d7d1c !important;
+  font-size: 10px !important;
+  font-weight: 750 !important;
+}
+
+.today-control-row {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px !important;
+  margin: 0 !important;
+}
+
+.visual-control {
+  min-height: 54px !important;
+  padding: 9px 10px !important;
+  border: 1px solid var(--figma-line) !important;
+  border-radius: var(--figma-radius-control) !important;
+  background: #fbfbfc !important;
+  box-shadow: none !important;
+  text-align: left !important;
+}
+
+.visual-control span,
+.visual-control strong {
+  overflow: hidden;
+  color: var(--figma-muted) !important;
+  font-size: 10px !important;
+  line-height: 14px !important;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.visual-control strong {
+  display: block;
+  margin-top: 2px;
+  color: var(--figma-ink) !important;
+  font-size: 13px !important;
+  font-weight: 750 !important;
+}
+
+.mini-insight {
+  display: none !important;
+}
+
+.week-strip {
+  padding: 8px !important;
+  overflow: hidden;
+}
+
+.week-strip .icon-button {
+  width: 30px !important;
+  min-width: 30px !important;
+  height: 30px !important;
+  color: var(--figma-ink) !important;
+}
+
+.week-days {
+  gap: 3px !important;
+}
+
+.day-pill {
+  min-width: 36px !important;
+  min-height: 50px !important;
+  padding: 5px 2px !important;
+  border: 0 !important;
+  border-radius: 12px !important;
+  background: transparent !important;
+  color: var(--figma-muted) !important;
+}
+
+.day-pill.active {
+  background: var(--figma-dark) !important;
+  color: #ffffff !important;
+}
+
+.day-pill span,
+.day-pill strong,
+.day-pill small {
+  color: inherit !important;
+}
+
+.day-pill strong {
+  font-size: 15px !important;
+}
+
+.day-pill small,
+.dot-row {
+  display: none !important;
+}
+
+/* The nav reproduces the reference's dark pill without a second card around each icon. */
+.tab-switch {
+  position: fixed !important;
+  z-index: 20;
+  right: max(20px, calc((100vw - 430px) / 2 + 20px)) !important;
+  bottom: max(14px, env(safe-area-inset-bottom)) !important;
+  left: max(20px, calc((100vw - 430px) / 2 + 20px)) !important;
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr);
+  width: auto !important;
+  min-height: 64px !important;
+  padding: 6px !important;
+  border: 0 !important;
+  border-radius: 32px !important;
+  background: var(--figma-dark) !important;
+  box-shadow: 0 12px 30px rgba(25, 33, 38, 0.2) !important;
+}
+
+.view-tab {
+  display: flex !important;
+  min-height: 52px !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 5px;
+  padding: 0 6px !important;
+  border: 0 !important;
+  border-radius: 26px !important;
+  background: transparent !important;
+  color: rgba(255,255,255,0.72) !important;
+  box-shadow: none !important;
+}
+
+.view-tab::before {
+  display: none !important;
+}
+
+.view-tab .nav-glyph {
+  width: 21px !important;
+  height: 21px !important;
+  filter: brightness(0) invert(1) opacity(0.78) !important;
+}
+
+.view-tab span {
+  display: none !important;
+  font-size: 12px !important;
+  font-weight: 750 !important;
+}
+
+.view-tab.active {
+  padding: 0 14px !important;
+  background: var(--figma-action) !important;
+  color: var(--figma-ink) !important;
+}
+
+.view-tab.active .nav-glyph {
+  filter: none !important;
+}
+
+.view-tab.active span {
+  display: inline !important;
+}
+
+/* Today is an information feed: one title and compact expandable records. */
+.view-panel {
+  color: var(--figma-ink) !important;
+}
+
+/* Each destination owns its first screen. The shared Today summary is not
+   repeated above Workout or Activity. */
+body[data-view="special"] .hero-card,
+body[data-view="special"] .daily-dashboard,
+body[data-view="special"] .week-strip,
+body[data-view="overview"] .hero-card,
+body[data-view="overview"] .daily-dashboard,
+body[data-view="overview"] .week-strip {
+  display: none !important;
+}
+
+.screen-title {
+  margin: 0 0 2px !important;
+}
+
+.screen-title h2 {
+  color: var(--figma-ink) !important;
+  font-size: 20px !important;
+  font-weight: 800 !important;
+}
+
+.screen-title p,
+.screen-title span {
+  color: var(--figma-muted) !important;
+}
+
+#todayView .screen-title {
+  display: none !important;
+}
+
+#todayView .quick-log {
+  padding: 0 !important;
+  overflow: hidden;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.log-form {
+  gap: 10px !important;
+}
+
+.log-section {
+  border: 0 !important;
+  border-radius: var(--figma-radius-card) !important;
+  background: var(--figma-card) !important;
+  box-shadow: var(--figma-shadow) !important;
+}
+
+.log-section summary {
+  min-height: 58px !important;
+  padding: 0 16px !important;
+  color: var(--figma-ink) !important;
+  font-weight: 750 !important;
+}
+
+.log-section summary > span,
+.log-section summary > b {
+  color: var(--figma-ink) !important;
+}
+
+.log-section summary > b {
+  color: #5d7d1c !important;
+}
+
+.log-section summary b {
+  padding: 5px 8px;
+  border-radius: 999px;
+  background: #edf7d4 !important;
+  color: #5d7d1c !important;
+  font-size: 10px !important;
+}
+
+.log-section-body {
+  padding: 0 16px 16px !important;
+  border-top: 1px solid var(--figma-line) !important;
+}
+
+.field,
+.field span,
+.field b,
+.checkline,
+.choice-sheet {
+  color: var(--figma-ink) !important;
+}
+
+.plain-input,
+.field input,
+.field textarea,
+.input-row {
+  border-color: var(--figma-line) !important;
+  background: #fbfbfc !important;
+  color: var(--figma-ink) !important;
+}
+
+.segmented button {
+  border-color: var(--figma-line) !important;
+  background: #fbfbfc !important;
+  color: var(--figma-ink) !important;
+}
+
+.segmented button.active {
+  border-color: var(--figma-action) !important;
+  background: var(--figma-action) !important;
+}
+
+.nutrition-inspiration {
+  border-color: #dce8bf !important;
+  background: #f4fae8 !important;
+}
+
+.nutrition-inspiration strong {
+  color: var(--figma-ink) !important;
+}
+
+.nutrition-inspiration span,
+.nutrition-inspiration small {
+  color: var(--figma-muted) !important;
+}
+
+.nutrition-inspiration button {
+  border: 0 !important;
+  background: var(--figma-action) !important;
+  color: var(--figma-ink) !important;
+}
+
+/* Non-today views keep their logic but lose the old neon / glass vocabulary. */
+.coach-insight {
+  min-height: 96px !important;
+  padding: 16px !important;
+  color: var(--figma-ink) !important;
+}
+
+#specialView .coach-insight {
+  background: var(--figma-dark) !important;
+  color: #ffffff !important;
+  box-shadow: none !important;
+}
+
+.coach-insight::before,
+.coach-insight::after {
+  display: none !important;
+}
+
+.coach-insight .insight-glyph {
+  color: #6e9822 !important;
+  fill: #eaf7c9 !important;
+}
+
+.coach-insight .eyebrow,
+.coach-insight h3,
+.coach-insight span {
+  color: var(--figma-ink) !important;
+}
+
+#specialView .coach-insight .eyebrow {
+  color: var(--figma-action) !important;
+}
+
+#specialView .coach-insight h3 {
+  color: #ffffff !important;
+}
+
+#specialView .coach-insight span {
+  color: rgba(255, 255, 255, 0.72) !important;
+}
+
+.coach-insight .eyebrow {
+  color: #6e9822 !important;
+}
+
+.coach-insight span {
+  color: var(--figma-muted) !important;
+}
+
+.today-hub,
+.training-card,
+.special-hero,
+.overview-card,
+.overview-focus {
+  color: var(--figma-ink) !important;
+}
+
+.today-hub {
+  padding: 14px !important;
+}
+
+.flow-stage-strip span,
+.flow-stage-strip strong,
+.flow-step-pill,
+.flow-focus-card,
+.flow-preview-row {
+  border-color: var(--figma-line) !important;
+  background: #fbfbfc !important;
+  box-shadow: none !important;
+  color: var(--figma-ink) !important;
+}
+
+.flow-stage-strip strong,
+.flow-step-pill.active {
+  border-color: var(--figma-action) !important;
+  background: var(--figma-action) !important;
+  color: var(--figma-ink) !important;
+}
+
+.flow-step-pill img,
+.flow-preview-row img {
+  filter: none !important;
+}
+
+.flow-focus-card {
+  min-height: 160px !important;
+}
+
+.flow-focus-main h4,
+.flow-focus-main p,
+.flow-focus-main small,
+.flow-preview-row strong,
+.flow-preview-row em,
+.flow-cue-list span {
+  color: var(--figma-ink) !important;
+}
+
+.flow-focus-main p,
+.flow-focus-main small,
+.flow-preview-row em,
+.flow-cue-list span {
+  color: var(--figma-muted) !important;
+}
+
+.flow-state-orb {
+  border: 0 !important;
+  background: #edf7d4 !important;
+  color: #5d7d1c !important;
+}
+
+.flow-state-orb strong,
+.flow-state-orb span {
+  color: #5d7d1c !important;
+}
+
+.training-card {
+  padding: 14px !important;
+}
+
+.complete-toggle,
+.mini-button,
+.tool-button {
+  border-color: var(--figma-line) !important;
+  background: #fbfbfc !important;
+  color: var(--figma-ink) !important;
+  box-shadow: none !important;
+}
+
+.media-frame {
+  border-radius: var(--figma-radius-card) !important;
+  background: #ecebf0 !important;
+}
+
+.action-item {
+  border-color: var(--figma-line) !important;
+  border-radius: var(--figma-radius-control) !important;
+  background: #ffffff !important;
+  box-shadow: none !important;
+}
+
+.action-item.done {
+  background: #f4fae8 !important;
+}
+
+.action-name,
+.action-detail,
+.action-guidance b,
+.cue-chip {
+  color: var(--figma-ink) !important;
+}
+
+.action-detail,
+.action-guidance b {
+  color: var(--figma-muted) !important;
+}
+
+.cue-chip {
+  background: #f1f0f3 !important;
+}
+
+.special-hero,
+.overview-focus {
+  background: var(--figma-dark) !important;
+  color: #ffffff !important;
+}
+
+.special-hero *,
+.overview-focus * {
+  color: inherit !important;
+}
+
+.overview-card,
+.overview-focus {
+  padding: 16px !important;
+}
+
+.overview-card .section-heading h3,
+.overview-card .section-heading span {
+  color: var(--figma-ink) !important;
+}
+
+.overview-card .section-heading span {
+  color: var(--figma-muted) !important;
+}
+
+.progress-track,
+.focus-score,
+.status-cell {
+  background: #ecebf0 !important;
+}
+
+.progress-fill {
+  background: var(--figma-action) !important;
+}
+
+.profile-drawer,
+.choice-sheet {
+  background: var(--figma-page) !important;
+  color: var(--figma-ink) !important;
+}
+
+.drawer-stage-card,
+.storage-card,
+.avatar-upload-card {
+  border-color: var(--figma-line) !important;
+  background: #ffffff !important;
+}
+
+@media (max-width: 360px) {
+  .app-header {
+    grid-template-columns: 40px minmax(0, 1fr) 86px;
+    gap: 8px;
+    padding-right: 16px !important;
+    padding-left: 16px !important;
+  }
+
+  .avatar-button {
+    width: 40px !important;
+    height: 40px !important;
+  }
+
+  .header-focus {
+    min-width: 80px;
+    padding-left: 7px !important;
+  }
+
+  .app-main {
+    padding-right: 16px !important;
+    padding-left: 16px !important;
+  }
+
+  .tab-switch {
+    right: 16px !important;
+    left: 16px !important;
+  }
+
+  .hero-copy h2 {
+    font-size: 22px !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Figma consistency pass
+
+   The app keeps its existing data and interaction model. These rules only
+   settle the visual hierarchy so every destination shares the same surface,
+   spacing, type and state language.
+   -------------------------------------------------------------------------- */
+
+:root {
+  --figma-page: #f6f6f4;
+  --figma-card: #ffffff;
+  --figma-ink: #192126;
+  --figma-muted: #737b7f;
+  --figma-subtle: #f0f1ee;
+  --figma-line: #e3e5e0;
+  --figma-action: #bbf246;
+  --figma-action-strong: #a3dc38;
+  --figma-dark: #192126;
+  --figma-radius-card: 20px;
+  --figma-radius-control: 12px;
+  --figma-shadow: 0 8px 24px rgba(25, 33, 38, 0.055);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  letter-spacing: 0 !important;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.app-shell {
+  background: var(--figma-page) !important;
+}
+
+.app-header {
+  min-height: 86px;
+  padding-top: calc(16px + env(safe-area-inset-top)) !important;
+  padding-bottom: 12px !important;
+}
+
+.avatar-button {
+  border-radius: 50% !important;
+}
+
+.app-title h1,
+#headerName {
+  font-size: 22px !important;
+  line-height: 27px !important;
+  font-weight: 780 !important;
+}
+
+.header-focus {
+  min-width: 96px;
+  border-color: transparent !important;
+  background: var(--figma-dark) !important;
+}
+
+.header-focus span {
+  color: rgba(255, 255, 255, 0.64) !important;
+}
+
+.header-focus strong {
+  color: #ffffff !important;
+}
+
+.header-ring {
+  background: conic-gradient(var(--figma-action) var(--progress), rgba(255, 255, 255, 0.18) 0) !important;
+}
+
+.header-ring::after {
+  background: var(--figma-dark) !important;
+}
+
+.header-ring span {
+  color: #ffffff !important;
+}
+
+.app-main {
+  gap: 14px !important;
+}
+
+.hero-card {
+  min-height: 184px !important;
+  border-radius: var(--figma-radius-card) !important;
+  background-position: 62% center !important;
+}
+
+.hero-card::before {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  display: block !important;
+  background: linear-gradient(180deg, transparent 36%, rgba(15, 21, 25, 0.52));
+  content: "";
+}
+
+.hero-copy h2 {
+  max-width: 225px !important;
+  font-size: 26px !important;
+  line-height: 1.08 !important;
+}
+
+.primary-cta,
+.primary-button,
+.primary-flow-button {
+  min-height: 36px !important;
+  padding: 0 14px !important;
+  border-radius: 999px !important;
+  background: var(--figma-action) !important;
+  color: var(--figma-ink) !important;
+  font-weight: 780 !important;
+}
+
+.daily-dashboard,
+.week-strip,
+.today-hub,
+.training-card,
+.special-hero,
+.overview-card,
+.overview-focus,
+.coach-insight,
+.log-section {
+  border: 1px solid var(--figma-line) !important;
+  box-shadow: none !important;
+}
+
+.daily-dashboard {
+  min-height: 0 !important;
+  padding: 16px !important;
+}
+
+.daily-dashboard .section-heading {
+  display: none !important;
+}
+
+.daily-dashboard h3 {
+  font-size: 17px !important;
+}
+
+.today-control-row {
+  gap: 10px !important;
+}
+
+.visual-control {
+  position: relative;
+  min-height: 62px !important;
+  padding: 11px 12px !important;
+  overflow: hidden;
+  border-color: var(--figma-line) !important;
+  background: #fafbf8 !important;
+}
+
+.visual-control::after {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--figma-action-strong);
+  content: "";
+}
+
+.week-strip {
+  display: grid !important;
+  grid-template-columns: 30px minmax(0, 1fr) 30px;
+  align-items: center;
+  gap: 5px;
+  padding: 7px !important;
+  border-radius: 18px !important;
+}
+
+.week-days {
+  display: grid !important;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  min-width: 0;
+  gap: 2px !important;
+}
+
+.day-pill {
+  width: 100% !important;
+  min-width: 0 !important;
+  min-height: 52px !important;
+  border-radius: 11px !important;
+}
+
+.day-pill.active {
+  background: var(--figma-dark) !important;
+}
+
+.tab-switch {
+  min-height: 62px !important;
+  padding: 5px !important;
+  border-radius: 31px !important;
+}
+
+.view-tab {
+  min-height: 50px !important;
+  border-radius: 25px !important;
+}
+
+.view-tab.active {
+  padding: 0 12px !important;
+}
+
+.screen-title {
+  display: flex !important;
+  align-items: end;
+  justify-content: space-between;
+  min-height: 38px;
+  margin: 4px 0 0 !important;
+}
+
+.screen-title h2 {
+  font-size: 22px !important;
+  line-height: 26px !important;
+}
+
+.view-panel {
+  display: none !important;
+}
+
+.view-panel.active {
+  display: grid !important;
+}
+
+/* Dense, optional records remain available without competing with the workout. */
+#todayView .quick-log {
+  display: grid;
+  gap: 10px;
+}
+
+.log-section {
+  border-radius: 16px !important;
+}
+
+.log-section summary {
+  min-height: 54px !important;
+}
+
+/* Workout: instruction, current step and the action list have distinct jobs. */
+#specialView {
+  display: grid;
+  gap: 14px;
+}
+
+#specialView .screen-title {
+  display: none !important;
+}
+
+#specialView .coach-insight {
+  position: relative;
+  display: block !important;
+  grid-template-columns: none !important;
+  min-height: 118px !important;
+  padding: 18px 132px 18px 18px !important;
+  overflow: hidden;
+  border: 0 !important;
+  border-radius: var(--figma-radius-card) !important;
+  background:
+    linear-gradient(90deg, rgba(25, 33, 38, 1) 0%, rgba(25, 33, 38, 0.95) 53%, rgba(25, 33, 38, 0.58) 100%),
+    url("./assets/training-guidance-banner.png") right center / auto 100% no-repeat,
+    var(--figma-dark) !important;
+}
+
+#specialView .coach-insight .insight-glyph {
+  display: none !important;
+}
+
+#specialView .coach-insight .eyebrow {
+  margin-bottom: 5px !important;
+  color: var(--figma-action) !important;
+  font-size: 11px !important;
+}
+
+#specialView .coach-insight h3 {
+  margin: 0 !important;
+  font-size: 19px !important;
+  line-height: 24px !important;
+}
+
+#specialView .coach-insight span {
+  display: block;
+  margin-top: 5px;
+  font-size: 12px !important;
+  line-height: 17px !important;
+}
+
+.today-hub {
+  padding: 14px !important;
+  border-radius: var(--figma-radius-card) !important;
+}
+
+.training-heading {
+  display: none !important;
+}
+
+.flow-stage-strip {
+  min-height: 34px !important;
+  margin: 0 0 12px !important;
+}
+
+.flow-stage-strip span,
+.flow-stage-strip strong {
+  min-height: 30px !important;
+  padding: 0 10px !important;
+  border-radius: 999px !important;
+  font-size: 11px !important;
+}
+
+.flow-stage-strip strong {
+  background: #eaf7c9 !important;
+  color: #547019 !important;
+}
+
+.flow-step-tabs {
+  gap: 7px !important;
+  margin: 0 !important;
+}
+
+.flow-step-pill {
+  min-height: 70px !important;
+  padding: 8px 3px !important;
+  border: 1px solid var(--figma-line) !important;
+  border-radius: 14px !important;
+  background: #fafbf8 !important;
+}
+
+.flow-step-pill.active {
+  border-color: var(--figma-dark) !important;
+  background: var(--figma-dark) !important;
+  color: #ffffff !important;
+}
+
+.flow-step-pill.active img {
+  filter: brightness(0) invert(1) !important;
+}
+
+.flow-step-pill span {
+  color: inherit !important;
+  opacity: 0.54;
+}
+
+.flow-step-pill strong {
+  color: inherit !important;
+  font-size: 11px !important;
+}
+
+.flow-focus-card {
+  position: relative;
+  display: block !important;
+  min-height: 174px !important;
+  margin-top: 12px !important;
+  padding: 17px 16px 16px !important;
+  overflow: hidden;
+  border: 1px solid var(--figma-line) !important;
+  border-radius: 18px !important;
+  background: #ffffff !important;
+}
+
+.flow-focus-card::before,
+.flow-focus-card::after {
+  display: none !important;
+}
+
+.flow-focus-card.done {
+  border-color: #bddf79 !important;
+  background: #f6fbe9 !important;
+}
+
+.flow-focus-main {
+  min-width: 0;
+  padding-right: 74px;
+}
+
+.flow-card-head {
+  display: flex !important;
+  align-items: center;
+  gap: 7px;
+}
+
+.step-index {
+  min-width: 28px;
+  min-height: 20px;
+  padding: 0 7px;
+  border-radius: 999px;
+  background: var(--figma-subtle) !important;
+  color: var(--figma-muted) !important;
+  font-size: 10px !important;
+  font-weight: 800 !important;
+  line-height: 20px;
+  text-align: center;
+}
+
+.flow-stage-label {
+  color: var(--figma-muted) !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+}
+
+.flow-focus-main h4 {
+  margin: 8px 0 4px !important;
+  color: var(--figma-ink) !important;
+  font-size: 21px !important;
+  line-height: 25px !important;
+}
+
+.flow-focus-main p {
+  min-height: 32px;
+  margin: 0 !important;
+  color: var(--figma-muted) !important;
+  font-size: 12px !important;
+  line-height: 16px !important;
+}
+
+.flow-focus-main small {
+  display: block;
+  margin-top: 8px;
+  font-size: 11px !important;
+}
+
+.flow-cue-list {
+  gap: 5px !important;
+  margin-top: 8px !important;
+}
+
+.flow-cue-list span,
+.cue-chip {
+  min-height: 21px;
+  padding: 0 8px !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  background: var(--figma-subtle) !important;
+  color: #626a6d !important;
+  font-size: 10px !important;
+  line-height: 21px;
+}
+
+.flow-focus-actions {
+  position: absolute;
+  top: 17px;
+  right: 16px;
+  bottom: 16px;
+  display: flex !important;
+  flex-direction: column;
+  align-items: end;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 0 !important;
+  height: auto !important;
+}
+
+.flow-state-orb {
+  width: 48px !important;
+  height: 48px !important;
+  border-radius: 50% !important;
+  background: #edf5dc !important;
+}
+
+.flow-state-orb strong {
+  font-size: 14px !important;
+}
+
+.flow-state-orb span {
+  font-size: 9px !important;
+}
+
+.primary-flow-button {
+  min-height: 36px !important;
+  max-width: 94px;
+  padding: 0 12px !important;
+  white-space: nowrap;
+}
+
+.flow-focus-actions .primary-flow-button {
+  min-height: 36px !important;
+  padding: 0 12px !important;
+  border-radius: 999px !important;
+}
+
+.flow-preview-list {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 7px !important;
+  margin-top: 10px !important;
+}
+
+.flow-preview-row {
+  min-height: 62px !important;
+  padding: 8px !important;
+  border: 1px solid var(--figma-line) !important;
+  border-radius: 14px !important;
+  background: #fafbf8 !important;
+}
+
+.flow-preview-row img {
+  width: 18px !important;
+  height: 18px !important;
+}
+
+.flow-preview-row span,
+.flow-preview-row em {
+  display: none !important;
+}
+
+.flow-preview-row strong {
+  display: -webkit-box;
+  overflow: hidden;
+  color: var(--figma-ink) !important;
+  font-size: 11px !important;
+  line-height: 14px !important;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.training-card {
+  padding: 14px !important;
+  border-radius: var(--figma-radius-card) !important;
+}
+
+.training-toolbar {
+  gap: 8px !important;
+}
+
+.media-frame {
+  border: 1px solid var(--figma-line) !important;
+  border-radius: 16px !important;
+  background: #f0f1ee !important;
+}
+
+.media-frame img {
+  max-height: none !important;
+  aspect-ratio: 1.32 / 1;
+  object-fit: contain !important;
+  background: #f0f1ee;
+}
+
+.action-list,
+.special-list {
+  gap: 8px !important;
+}
+
+.action-item {
+  grid-template-columns: 20px 56px minmax(0, 1fr) !important;
+  gap: 10px !important;
+  min-height: 76px !important;
+  padding: 10px !important;
+  border: 1px solid var(--figma-line) !important;
+  border-radius: 15px !important;
+}
+
+.action-item input[type="checkbox"],
+.complete-toggle input[type="checkbox"],
+.special-card input[type="checkbox"] {
+  width: 19px !important;
+  height: 19px !important;
+  margin: 0 !important;
+  border: 1.5px solid #cfd4cd !important;
+  border-radius: 6px !important;
+  background: #ffffff !important;
+  accent-color: var(--figma-action-strong) !important;
+  color-scheme: light;
+}
+
+.action-item input[type="checkbox"]:checked,
+.complete-toggle input[type="checkbox"]:checked,
+.special-card input[type="checkbox"]:checked {
+  border-color: var(--figma-action-strong) !important;
+  background: var(--figma-action-strong) !important;
+}
+
+.action-thumb {
+  display: block;
+  width: 56px !important;
+  height: 56px !important;
+  border-radius: 10px !important;
+  object-fit: cover !important;
+  background: #f0f1ee;
+}
+
+.action-content,
+.action-line {
+  min-width: 0;
+}
+
+.action-line {
+  display: block !important;
+}
+
+.action-name {
+  overflow: hidden;
+  font-size: 14px !important;
+  line-height: 18px !important;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.action-detail {
+  margin-top: 1px;
+  font-size: 11px !important;
+}
+
+.action-guidance {
+  display: block !important;
+  margin-top: 4px;
+}
+
+.action-guidance b {
+  display: none !important;
+}
+
+.cue-row {
+  gap: 4px !important;
+  margin-top: 0 !important;
+}
+
+.action-item.done {
+  border-color: #c9e697 !important;
+  background: #f7fbed !important;
+  box-shadow: inset 3px 0 0 #bbf246 !important;
+}
+
+.special-hero {
+  min-height: 138px !important;
+  padding: 18px !important;
+  border: 0 !important;
+  border-radius: var(--figma-radius-card) !important;
+  background:
+    linear-gradient(130deg, rgba(25, 33, 38, 0.98), rgba(25, 33, 38, 0.78)),
+    url("./assets/training-phase-orb.png") right center / 42% auto no-repeat,
+    var(--figma-dark) !important;
+}
+
+.special-card {
+  padding: 14px !important;
+  border: 1px solid var(--figma-line) !important;
+  border-radius: 16px !important;
+  background: #ffffff !important;
+}
+
+.special-card.done {
+  border-color: #c9e697 !important;
+  background: #f6fbe9 !important;
+  box-shadow: inset 3px 0 0 var(--figma-action) !important;
+}
+
+.special-steps {
+  margin: 10px 0 0 34px !important;
+}
+
+.special-steps li {
+  color: var(--figma-muted) !important;
+  font-size: 12px !important;
+}
+
+.special-tag {
+  background: #edf5dc !important;
+  color: #547019 !important;
+}
+
+/* Overview keeps the original metrics but gives the weekly focus one dominant surface. */
+#overviewView {
+  display: grid;
+  gap: 14px;
+}
+
+#overviewView .screen-title {
+  margin-top: 4px !important;
+}
+
+.overview-focus {
+  min-height: 174px !important;
+  padding: 18px !important;
+  border: 0 !important;
+  border-radius: var(--figma-radius-card) !important;
+  background: var(--figma-dark) !important;
+}
+
+.focus-copy h2 {
+  max-width: 205px;
+  font-size: 24px !important;
+  line-height: 29px !important;
+}
+
+.focus-score {
+  width: 82px !important;
+  height: 82px !important;
+  background:
+    radial-gradient(circle, var(--figma-dark) 0 58%, transparent 60%),
+    conic-gradient(var(--figma-action) var(--score), rgba(255, 255, 255, 0.16) 0) !important;
+}
+
+.focus-stats {
+  gap: 7px !important;
+}
+
+.focus-stats div {
+  min-height: 56px !important;
+  padding: 8px !important;
+  border: 0 !important;
+  border-radius: 12px !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+}
+
+.overview-card {
+  padding: 16px !important;
+  border-radius: var(--figma-radius-card) !important;
+}
+
+.overview-card .section-heading h3 {
+  font-size: 16px !important;
+}
+
+.summary-grid {
+  gap: 8px !important;
+}
+
+.summary-card {
+  min-height: 104px !important;
+  padding: 12px !important;
+  border: 1px solid var(--figma-line) !important;
+  border-radius: 14px !important;
+  background: #fafbf8 !important;
+}
+
+.summary-card strong {
+  font-size: 27px !important;
+}
+
+.matrix-cell,
+.compact-list li,
+.review-item {
+  border-color: var(--figma-line) !important;
+  background: #fafbf8 !important;
+  color: var(--figma-muted) !important;
+}
+
+.matrix-cell.done {
+  background: #eaf7c9 !important;
+  color: #547019 !important;
+}
+
+.progress-track,
+.trend-track {
+  background: #edf0ea !important;
+}
+
+.progress-fill,
+.trend-fill {
+  background: var(--figma-action) !important;
+}
+
+/* My drawer follows the same quiet editing surface instead of a separate theme. */
+.profile-drawer {
+  width: min(100vw - 24px, 380px) !important;
+  padding: calc(20px + env(safe-area-inset-top)) 18px calc(30px + env(safe-area-inset-bottom)) !important;
+}
+
+.drawer-head {
+  padding-bottom: 16px !important;
+  border-bottom: 1px solid var(--figma-line) !important;
+}
+
+.drawer-head h2 {
+  color: var(--figma-ink) !important;
+  font-size: 22px !important;
+}
+
+.drawer-stage-card,
+.storage-card,
+.avatar-upload-card {
+  border: 1px solid var(--figma-line) !important;
+  border-radius: 16px !important;
+  background: #ffffff !important;
+  box-shadow: none !important;
+}
+
+.drawer-stage-card span,
+.storage-card span,
+.avatar-upload-card span,
+.drawer-stage-card small,
+.storage-card small,
+.avatar-upload-card small {
+  color: var(--figma-muted) !important;
+}
+
+.drawer-stage-card strong,
+.storage-card strong,
+.avatar-upload-card strong {
+  color: var(--figma-ink) !important;
+}
+
+.storage-card .drawer-tools {
+  gap: 8px !important;
+}
+
+.tool-button {
+  min-height: 52px !important;
+  border-radius: 12px !important;
+}
+
+.storage-card .tool-button,
+.avatar-upload-card .mini-button,
+.drawer-stage-card .mini-button {
+  border: 1px solid var(--figma-line) !important;
+  background: #fafbf8 !important;
+  color: var(--figma-ink) !important;
+}
+
+.storage-card .tool-button span,
+.storage-card .tool-button small {
+  color: inherit !important;
+}
+
+.storage-card .tool-button small {
+  opacity: 0.66;
+}
+
+.storage-card .tool-button.danger {
+  border-color: #f1d6d0 !important;
+  background: #fff8f6 !important;
+  color: #9d473b !important;
+}
+
+.choice-sheet {
+  border-top: 1px solid var(--figma-line) !important;
+  border-radius: 24px 24px 0 0 !important;
+}
+
+.choice-option,
+.stage-option {
+  border-color: var(--figma-line) !important;
+  background: #ffffff !important;
+  color: var(--figma-ink) !important;
+}
+
+.choice-option.active,
+.stage-option.active {
+  border-color: var(--figma-action-strong) !important;
+  background: #f3fadf !important;
+}
+
+@media (max-width: 360px) {
+  .header-focus {
+    min-width: 78px;
+  }
+
+  .header-focus > div:first-child {
+    display: none;
+  }
+
+  .hero-card {
+    min-height: 174px !important;
+  }
+
+  .hero-copy h2 {
+    max-width: 190px !important;
+    font-size: 23px !important;
+  }
+
+  .flow-focus-main {
+    padding-right: 66px;
+  }
+
+  .flow-preview-row {
+    padding: 7px !important;
+  }
+
+  .flow-preview-row strong {
+    font-size: 10px !important;
+  }
+
+  .action-item {
+    grid-template-columns: 18px 52px minmax(0, 1fr) !important;
+    gap: 8px !important;
+  }
+
+  .action-thumb {
+    width: 52px !important;
+    height: 52px !important;
+  }
+}

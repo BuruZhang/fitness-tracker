@@ -1,4 +1,4 @@
-/* 20260723 polish: one compact, phone-first language for the live app. */
+/* HALLMARK: dark fitness utility; sparse coral action, violet progress, no decorative gradients on controls. */
 :root {
   --yq-surface: rgba(255, 255, 255, 0.055);
   --yq-surface-raised: rgba(255, 255, 255, 0.082);
@@ -7,6 +7,12 @@
   --yq-radius-card: 20px;
   --yq-radius-control: 15px;
   --yq-radius-pill: 999px;
+  --yq-space-1: 4px;
+  --yq-space-2: 8px;
+  --yq-space-3: 12px;
+  --yq-space-4: 16px;
+  --yq-action: #ff5b6f;
+  --yq-action-pressed: #dc3f59;
 }
 
 /* Keep card corners and shadows quiet so hierarchy comes from layout. */
@@ -20,6 +26,176 @@
 .overview-focus,
 .week-strip {
   border-radius: var(--yq-radius-card) !important;
+}
+
+/* 20260729 refinement: one reading path, clear actions, and a safe mobile footer. */
+.nutrition-inspiration {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--yq-space-3);
+  margin-top: var(--yq-space-3);
+  padding: var(--yq-space-3);
+  border: 1px solid var(--yq-divider);
+  border-radius: var(--yq-radius-control);
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.nutrition-inspiration span,
+.nutrition-inspiration small {
+  display: block;
+  color: var(--yq-muted);
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.nutrition-inspiration strong {
+  display: block;
+  margin: 2px 0;
+  color: #fff;
+  font-size: 14px;
+}
+
+.nutrition-inspiration button {
+  min-width: 52px;
+  min-height: 36px;
+  padding: 0 10px;
+  border: 1px solid rgba(255, 91, 111, 0.42);
+  border-radius: var(--yq-radius-pill);
+  background: transparent;
+  color: #ffd8de;
+  font-size: 12px;
+  font-weight: 720;
+}
+
+.nutrition-inspiration button:disabled {
+  opacity: 0.5;
+}
+
+.primary-cta,
+.primary-button,
+.primary-flow-button {
+  background: var(--yq-action) !important;
+  box-shadow: 0 8px 18px rgba(255, 91, 111, 0.18) !important;
+}
+
+.primary-cta:active,
+.primary-button:active,
+.primary-flow-button:active {
+  background: var(--yq-action-pressed) !important;
+  transform: translateY(1px);
+}
+
+@media (max-width: 430px) {
+  html,
+  body {
+    overflow-x: clip;
+  }
+
+  .app-shell {
+    padding-bottom: calc(108px + env(safe-area-inset-bottom));
+  }
+
+  .app-main {
+    gap: var(--yq-space-3);
+    padding: 8px 14px calc(112px + env(safe-area-inset-bottom));
+  }
+
+  .app-header {
+    padding-bottom: 10px;
+  }
+
+  .hero-card {
+    min-height: 0 !important;
+    gap: var(--yq-space-2) !important;
+    padding: var(--yq-space-4) !important;
+    background: rgba(19, 20, 25, 0.96) !important;
+  }
+
+  .hero-card::after {
+    display: none !important;
+  }
+
+  .hero-copy h2,
+  .coach-line {
+    max-width: 100% !important;
+  }
+
+  .hero-copy h2 {
+    margin-bottom: var(--yq-space-1) !important;
+    font-size: 25px !important;
+    line-height: 1.14 !important;
+  }
+
+  .coach-line {
+    margin-bottom: 10px !important;
+    font-size: 13px !important;
+  }
+
+  .recent-strip {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: var(--yq-space-1) !important;
+  }
+
+  .recent-strip div {
+    min-height: 50px !important;
+    padding: 7px 6px !important;
+    border-color: transparent !important;
+    border-radius: 12px !important;
+    background: rgba(255, 255, 255, 0.035) !important;
+  }
+
+  .recent-strip span {
+    margin-bottom: 4px !important;
+    font-size: 10px !important;
+  }
+
+  .recent-strip strong {
+    font-size: 15px !important;
+  }
+
+  .daily-dashboard {
+    padding: var(--yq-space-3) !important;
+    background: rgba(19, 20, 25, 0.96) !important;
+  }
+
+  .daily-dashboard .section-heading,
+  .today-control-row {
+    margin-bottom: var(--yq-space-2) !important;
+  }
+
+  .visual-control {
+    min-height: 62px !important;
+    padding: 9px 10px !important;
+    border-radius: var(--yq-radius-control) !important;
+    background: rgba(255, 255, 255, 0.045) !important;
+  }
+
+  .mini-insight {
+    display: none !important;
+  }
+
+  .week-strip {
+    padding: var(--yq-space-2) !important;
+    background: rgba(19, 20, 25, 0.96) !important;
+  }
+
+  .tab-switch {
+    bottom: max(10px, env(safe-area-inset-bottom)) !important;
+    padding: 6px !important;
+    border-radius: var(--yq-radius-card) !important;
+    background: rgba(18, 19, 24, 0.96) !important;
+  }
+
+  .view-tab {
+    min-height: 52px !important;
+    border-radius: var(--yq-radius-control) !important;
+  }
+
+  .view-tab.active {
+    background: rgba(98, 72, 255, 0.18) !important;
+    box-shadow: inset 0 0 0 1px rgba(98, 72, 255, 0.3) !important;
+  }
 }
 
 .coach-insight {

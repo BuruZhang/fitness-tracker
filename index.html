@@ -12,11 +12,12 @@
     <title>元气小练</title>
     <link rel="manifest" href="./manifest.webmanifest" />
     <link rel="apple-touch-icon" sizes="180x180" href="./assets/apple-touch-icon.png" />
-    <link rel="stylesheet" href="./styles.css?v=20260723-polish-v1" />
-    <link rel="stylesheet" href="./remix-fixes.css?v=20260723-polish-v1" />
-    <link rel="stylesheet" href="./visual-system.css?v=20260723-polish-v1" />
-    <link rel="stylesheet" href="./flow-final.css?v=20260723-polish-v1" />
-    <link rel="stylesheet" href="./polish-v1.css?v=20260723-polish-v1" />
+    <link rel="stylesheet" href="./styles.css?v=20260729-refine-v1" />
+    <link rel="stylesheet" href="./remix-fixes.css?v=20260729-refine-v1" />
+    <link rel="stylesheet" href="./visual-system.css?v=20260729-refine-v1" />
+    <link rel="stylesheet" href="./flow-final.css?v=20260729-refine-v1" />
+    <link rel="stylesheet" href="./polish-v1.css?v=20260730-figma-mvp-v3" />
+    <link rel="stylesheet" href="./figma-mvp.css?v=20260730-figma-mvp-v3" />
   </head>
   <body>
     <div class="app-shell">
@@ -110,15 +111,15 @@
         </section>
 
         <nav class="tab-switch glass" aria-label="页面切换">
-          <button class="view-tab active" type="button" data-view="today">
+          <button class="view-tab active" type="button" data-view="today" aria-label="今日" aria-controls="todayView" aria-current="page">
             <img class="nav-glyph" src="./assets/ri-nav-today.svg" alt="" aria-hidden="true" />
             <span>今日</span>
           </button>
-          <button class="view-tab" type="button" data-view="special">
+          <button class="view-tab" type="button" data-view="special" aria-label="训练" aria-controls="specialView">
             <img class="nav-glyph" src="./assets/ri-nav-train.svg" alt="" aria-hidden="true" />
             <span>训练</span>
           </button>
-          <button class="view-tab" type="button" data-view="overview">
+          <button class="view-tab" type="button" data-view="overview" aria-label="概述" aria-controls="overviewView">
             <img class="nav-glyph" src="./assets/ri-nav-overview.svg" alt="" aria-hidden="true" />
             <span>概述</span>
           </button>
@@ -203,6 +204,14 @@
                       <span>零食已控</span>
                     </label>
                   </div>
+                  <aside class="nutrition-inspiration" aria-live="polite">
+                    <div>
+                      <span>今日蛋白灵感</span>
+                      <strong id="nutritionIdeaTitle">鸡蛋 + 主食 + 蔬菜</strong>
+                      <small id="nutritionIdeaCopy">饮食不必打卡；想补蛋白时，从一餐开始就够了。</small>
+                    </div>
+                    <button id="refreshNutritionIdea" type="button">换一个</button>
+                  </aside>
                 </div>
               </details>
 
@@ -465,6 +474,6 @@
       </form>
     </aside>
 
-    <script src="./app.js?v=20260723-polish-v1"></script>
+    <script src="./app.js?v=20260730-figma-mvp-v3"></script>
   </body>
 </html>

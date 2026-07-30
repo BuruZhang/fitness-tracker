@@ -2,6 +2,7 @@ const recordKey = "fitness-tracker-v2-records";
 const legacyRecordKey = "fitness-tracker-v1";
 const profileKey = "fitness-tracker-profile";
 const lastSaveKey = "fitness-tracker-last-save";
+const nutritionIdeaCacheKey = "fitness-tracker-nutrition-ideas";
 const dbName = "fitness-tracker-db";
 const dbStore = "kv";
 const imageBase = "./assets/";
@@ -373,6 +374,9 @@ const els = {
   pushups: document.querySelector("#pushups"),
   plank: document.querySelector("#plank"),
   dietSummary: document.querySelector("#dietSummary"),
+  nutritionIdeaTitle: document.querySelector("#nutritionIdeaTitle"),
+  nutritionIdeaCopy: document.querySelector("#nutritionIdeaCopy"),
+  refreshNutritionIdea: document.querySelector("#refreshNutritionIdea"),
   specialList: document.querySelector("#specialList"),
   specialHero: document.querySelector("#specialHero"),
   trainingDays: document.querySelector("#trainingDays"),
@@ -653,6 +657,7 @@ function defaultRecord(date) {
     energy: "正常",
     sleepStatus: "一般",
     sorenessStatus: "轻微",
+    readinessLogged: false,
     sleep: "",
     soreness: 0,
     notes: "",
@@ -734,6 +739,7 @@ function getWarmup(date) {
 }
 
 function getStatusSummary(record) {
+  if (!hasReadinessInput(record)) return "还没有记录今天的状态";
   const parts = [
     `精神${record.energy || "正常"}`,
     `睡眠${record.sleepStatus || "一般"}`,
@@ -742,7 +748,22 @@ function getStatusSummary(record) {
   return parts.join(" · ");
 }
 
+function hasReadinessInput(record) {
+  return Boolean(
+    record.readinessLogged ||
+      Number(record.sleep) > 0 ||
+      Number(record.soreness) > 0 ||
+      record.energy === "低" ||
+      record.energy === "好" ||
+      record.sleepStatus === "不足" ||
+      record.sleepStatus === "充足" ||
+      record.sorenessStatus === "中等" ||
+      record.sorenessStatus === "明显",
+  );
+}
+
 function getReadinessScore(record) {
+  if (!hasReadinessInput(record)) return null;
   const readiness = getReadiness(record);
   if (readiness === "状态很好") return 90;
   if (readiness === "建议降强度") return 68;
@@ -920,6 +941,10 @@ function renderHero() {
   const planIndex = getPlanIndex(selectedDate);
   const plan = plans[planIndex];
   const record = getRecord(selectedDate);
+  const heroCard = document.querySelector(".hero-card");
+  if (heroCard && plan.actions[0]) {
+    heroCard.style.setProperty("--figma-hero-image", `url("${getActionImage(plan.actions[0][0], plan)}")`);
+  }
   const progress = getActionProgress(selectedDate);
   const stats = getRecentStats();
   const readiness = getReadiness(record);
@@ -927,7 +952,10 @@ function renderHero() {
   els.heroDate.textContent = `北京时间 · ${weekdayNames[planIndex]} · ${formatDate(selectedDate)}`;
   els.heroTitle.textContent = record.complete ? "今日完成，恢复收尾" : plan.title;
   els.encouragementText.textContent = getEncouragement(selectedDate);
-  els.todayProgressText.textContent = `正训 ${progress.done}/${progress.total} · ${readiness} · ${stage.name}`;
+  els.todayProgressText.textContent =
+    readiness === "待评估"
+      ? `正训 ${progress.done}/${progress.total} · ${stage.name}`
+      : `正训 ${progress.done}/${progress.total} · ${readiness} · ${stage.name}`;
   if (els.startTrainingBtn) {
     els.startTrainingBtn.textContent = progress.percent >= 100 ? "查看今日成果" : progress.done > 0 ? "继续今日训练" : "开始今日训练";
   }
@@ -996,14 +1024,14 @@ function renderTrainingFlow(record, plan, planIndex) {
   const stretchDone = Boolean(record.stretchComplete);
   els.trainingFlowTitle.textContent = plan.title;
   els.actionCount.textContent = `${progress.done}/${progress.total} 正训`;
-  if (els.statusButtonText) els.statusButtonText.textContent = readiness;
+  if (els.statusButtonText) els.statusButtonText.textContent = readiness === "待评估" ? "记录状态" : readiness;
   if (els.stageButtonText) els.stageButtonText.textContent = stage.name;
   if (els.trainingScreenStage) els.trainingScreenStage.textContent = `${stage.title} · ${stage.name}`;
   if (els.dailyReadinessTitle) {
     els.dailyReadinessTitle.textContent =
-      readiness === "状态很好" ? "状态很好" : readiness === "建议降强度" ? "适合轻练" : "状态良好";
+      readiness === "待评估" ? "今天感觉如何？" : readiness === "状态很好" ? "状态很好" : readiness === "建议降强度" ? "适合轻练" : "状态良好";
   }
-  if (els.dailyReadinessScore) els.dailyReadinessScore.textContent = `${readinessScore} 综合评分`;
+  if (els.dailyReadinessScore) els.dailyReadinessScore.textContent = readinessScore === null ? "轻点记录" : `${readinessScore} 综合评分`;
   const formatProgressLabel = (done, total) => `${done}/${Math.max(total, 1)}`;
   const flowSteps = [
     {
@@ -1105,8 +1133,10 @@ function renderTrainingFlow(record, plan, planIndex) {
   if (els.trainingInsightTitle && els.trainingInsightText) {
     const stepInsight = {
       warmup: [
-        readiness === "建议降强度" ? "先轻热身，观察状态" : "先热身，再进正训",
-        readiness === "建议降强度"
+        readiness === "待评估" ? "先记录状态，再开始" : readiness === "建议降强度" ? "先轻热身，观察状态" : "先热身，再进正训",
+        readiness === "待评估"
+          ? "花 10 秒记录精神、睡眠和酸痛；今天的训练建议会更贴合你。"
+          : readiness === "建议降强度"
           ? "今天身体反馈优先，热身后如果仍疲劳，就把正训降到轻量。"
           : "把肩背和核心先唤醒，能减少俯卧撑和推举时的代偿。",
       ],
@@ -1139,7 +1169,7 @@ function renderTrainingFlow(record, plan, planIndex) {
       ${flowSteps
         .map(
           (step) => `
-            <button class="flow-step-pill ${step.id === activeStep.id ? "active" : ""} ${step.done ? "done" : ""}" type="button" data-step="${step.id}">
+            <button class="flow-step-pill ${step.id === activeStep.id ? "active" : ""} ${step.done ? "done" : ""}" type="button" data-step="${step.id}" aria-pressed="${step.id === activeStep.id}">
               <img src="${step.icon}" alt="" loading="lazy" decoding="async" />
               <span>${step.index}</span>
               <strong>${step.short}</strong>
@@ -1288,7 +1318,7 @@ function renderStatusSheet() {
   });
   els.statusSheet.querySelectorAll(".choice-option").forEach((button) => {
     button.addEventListener("click", () => {
-      setRecord(selectedDate, { [button.dataset.field]: button.dataset.value });
+      setRecord(selectedDate, { [button.dataset.field]: button.dataset.value, readinessLogged: true });
       renderAll();
       renderStatusSheet();
     });
@@ -1425,6 +1455,7 @@ function setForm(record) {
 }
 
 function getReadiness(record) {
+  if (!hasReadinessInput(record)) return "待评估";
   const sleep = Number(record.sleep);
   const soreness = Number(record.soreness);
   const sleepLow = record.sleepStatus === "不足" || (sleep > 0 && sleep < 6);
@@ -1452,6 +1483,63 @@ function getDietSummary(record) {
   if (Number(record.protein) > 0) parts.push(`${record.protein}g`);
   if (Number(record.water) > 0) parts.push(`${record.water}L`);
   return parts.length ? parts.join(" · ") : "已记录";
+}
+
+const localNutritionIdeas = [
+  ["鸡蛋 + 主食 + 蔬菜", "早餐或训练后补一餐：蛋白、碳水和蔬菜都留一点位置。"],
+  ["鸡胸肉 + 米饭 + 深色蔬菜", "不需要吃得极端；先让每一餐都有一份看得见的蛋白质。"],
+  ["无糖酸奶 + 水果 + 坚果", "适合时间紧时加餐，优先补足日常饮食，不替代正餐。"],
+  ["豆腐 + 鸡蛋 + 杂粮", "没有肉类也能把一餐的蛋白质做得更扎实。"],
+];
+
+function setNutritionIdea(title, copy) {
+  if (els.nutritionIdeaTitle) els.nutritionIdeaTitle.textContent = title;
+  if (els.nutritionIdeaCopy) els.nutritionIdeaCopy.textContent = copy;
+}
+
+function pickLocalNutritionIdea() {
+  return localNutritionIdeas[Math.floor(Math.random() * localNutritionIdeas.length)];
+}
+
+function getCachedNutritionIdeas() {
+  try {
+    const cached = JSON.parse(localStorage.getItem(nutritionIdeaCacheKey) || "null");
+    if (!cached || !Array.isArray(cached.meals) || Date.now() - cached.savedAt > 7 * 24 * 60 * 60 * 1000) return [];
+    return cached.meals;
+  } catch {
+    return [];
+  }
+}
+
+async function refreshNutritionIdea() {
+  if (!els.refreshNutritionIdea) return;
+  const fallback = pickLocalNutritionIdea();
+  els.refreshNutritionIdea.disabled = true;
+  els.refreshNutritionIdea.textContent = "加载中";
+  try {
+    let meals = getCachedNutritionIdeas();
+    if (!meals.length) {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 4500);
+      const response = await fetch("https://www.themealdb.com/api/json/v1/1/filter.php?i=chicken_breast", {
+        signal: controller.signal,
+        credentials: "omit",
+      });
+      clearTimeout(timeout);
+      if (!response.ok) throw new Error("nutrition api unavailable");
+      const payload = await response.json();
+      meals = Array.isArray(payload.meals) ? payload.meals.map((meal) => meal.strMeal).filter(Boolean) : [];
+      if (!meals.length) throw new Error("nutrition api returned no meals");
+      localStorage.setItem(nutritionIdeaCacheKey, JSON.stringify({ savedAt: Date.now(), meals }));
+    }
+    const meal = meals[Math.floor(Math.random() * meals.length)];
+    setNutritionIdea(meal, "鸡胸肉主菜灵感来自公开食谱库；按自己的口味搭配主食和蔬菜即可。");
+  } catch {
+    setNutritionIdea(fallback[0], `${fallback[1]} 当前网络不可用，已切换为本地灵感。`);
+  } finally {
+    els.refreshNutritionIdea.disabled = false;
+    els.refreshNutritionIdea.textContent = "换一个";
+  }
 }
 
 function renderSpecials() {
@@ -1663,7 +1751,12 @@ function renderAll() {
 
 function activateView(view) {
   document.body.dataset.view = view;
-  document.querySelectorAll(".view-tab").forEach((item) => item.classList.toggle("active", item.dataset.view === view));
+  document.querySelectorAll(".view-tab").forEach((item) => {
+    const active = item.dataset.view === view;
+    item.classList.toggle("active", active);
+    if (active) item.setAttribute("aria-current", "page");
+    else item.removeAttribute("aria-current");
+  });
   document.querySelectorAll(".view-panel").forEach((panel) => panel.classList.toggle("active", panel.id === `${view}View`));
   closeDrawer();
 }
@@ -1671,7 +1764,8 @@ function activateView(view) {
 function updateCurrentRecordFromInput(input) {
   if (!input.id) return;
   const value = input.type === "checkbox" ? input.checked : input.value;
-  setRecord(selectedDate, { [input.id]: value });
+  const readinessField = ["sleep", "soreness"].includes(input.id);
+  setRecord(selectedDate, { [input.id]: value, ...(readinessField ? { readinessLogged: true } : {}) });
   if (input.id === "soreness") els.sorenessValue.textContent = input.value;
   renderHero();
   renderSpecials();
@@ -1733,7 +1827,7 @@ document.querySelectorAll(".view-tab").forEach((tab) => {
 
 document.querySelectorAll(".segmented button").forEach((button) => {
   button.addEventListener("click", () => {
-    setRecord(selectedDate, { energy: button.dataset.value });
+    setRecord(selectedDate, { energy: button.dataset.value, readinessLogged: true });
     renderDay();
     renderHero();
     renderSpecials();
@@ -1745,6 +1839,8 @@ document.querySelectorAll("#logForm input, #logForm textarea").forEach((input) =
   input.addEventListener("input", () => updateCurrentRecordFromInput(input));
   input.addEventListener("change", () => updateCurrentRecordFromInput(input));
 });
+
+els.refreshNutritionIdea?.addEventListener("click", refreshNutritionIdea);
 
 document.querySelector("#completeRecommended").addEventListener("click", () => {
   const specials = { ...getRecord(selectedDate).specials };
