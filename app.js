@@ -296,6 +296,7 @@ let profile = loadProfile();
 let selectedDate = getBeijingToday();
 let currentWeekStart = getMonday(selectedDate);
 let selectedFlowStepId = "";
+let continueTrainingAfterStatus = false;
 
 const els = {
   profileButton: document.querySelector("#profileButton"),
@@ -1269,6 +1270,7 @@ function closeChoiceSheets() {
   if (els.stageSheet) els.stageSheet.hidden = true;
   if (els.sheetBackdrop) els.sheetBackdrop.hidden = true;
   document.body.classList.remove("modal-open");
+  continueTrainingAfterStatus = false;
 }
 
 function renderStatusSheet() {
@@ -1311,7 +1313,7 @@ function renderStatusSheet() {
         )
         .join("")}
     </div>
-    <button class="primary-button full-width" type="button" data-action="close">保存状态</button>
+    <button class="primary-button full-width" type="button" data-action="status-finish">${continueTrainingAfterStatus ? "开始今日训练" : "保存状态"}</button>
   `;
   els.statusSheet.querySelectorAll("[data-action='close']").forEach((button) => {
     button.addEventListener("click", closeChoiceSheets);
@@ -1322,6 +1324,11 @@ function renderStatusSheet() {
       renderAll();
       renderStatusSheet();
     });
+  });
+  els.statusSheet.querySelector("[data-action='status-finish']")?.addEventListener("click", () => {
+    const shouldContinue = continueTrainingAfterStatus;
+    closeChoiceSheets();
+    if (shouldContinue) openTrainingView();
   });
 }
 
@@ -1699,7 +1706,7 @@ function renderMatrix(days) {
       record.complete,
       isSpecialDone(record),
       hasDietRecord(record),
-      getReadiness(record) !== "建议降强度",
+      hasReadinessInput(record),
     ];
     const hasValues = [
       true,
@@ -1785,14 +1792,25 @@ document.querySelector("#nextWeek").addEventListener("click", () => {
   renderAll();
 });
 
+function openTrainingView() {
+  activateView("special");
+  els.trainingFlow?.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
 if (els.startTrainingBtn) {
   els.startTrainingBtn.addEventListener("click", () => {
-    activateView("special");
-    els.trainingFlow?.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (!hasReadinessInput(getRecord(selectedDate))) {
+      continueTrainingAfterStatus = true;
+      renderStatusSheet();
+      openChoiceSheet(els.statusSheet);
+      return;
+    }
+    openTrainingView();
   });
 }
 
 els.statusButton?.addEventListener("click", () => {
+  continueTrainingAfterStatus = false;
   renderStatusSheet();
   openChoiceSheet(els.statusSheet);
 });
