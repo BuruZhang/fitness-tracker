@@ -935,6 +935,421 @@ body[data-view="overview"] .week-strip {
   }
 }
 
+/* Hallmark pre-emit critique: P4 H4 E4 S4 R4 V3
+ * Final visual consolidation: one light editing system layered over legacy screens.
+ */
+:root {
+  --figma-page: #f6f6f4;
+  --figma-card: #ffffff;
+  --figma-ink: #192126;
+  --figma-muted: #667178;
+  --figma-muted-strong: #566168;
+  --figma-line: #e3e5e0;
+  --figma-surface-soft: #f1f2ee;
+  --figma-surface-selected: #edf7d7;
+  --figma-action: #bbf246;
+  --figma-action-strong: #a3dc38;
+  --figma-accent-ink: #40580f;
+  --figma-radius-surface: 20px;
+  --figma-radius-inner: 14px;
+  --figma-radius-media: 12px;
+  --figma-shadow: 0 8px 24px rgba(25, 33, 38, 0.055);
+}
+
+html,
+body {
+  overflow-x: clip !important;
+}
+
+.app-shell,
+.app-main,
+.view-panel,
+.today-hub,
+.training-card,
+.profile-drawer,
+.choice-sheet,
+.flow-focus-card,
+.action-item,
+.special-card,
+.overview-card {
+  min-width: 0;
+}
+
+/* A page surface never inherits the legacy dark-card treatment. */
+.daily-dashboard,
+.week-strip,
+.quick-log,
+.today-hub,
+.training-card,
+.overview-card,
+.special-card,
+.drawer-stage-card,
+.storage-card,
+.avatar-upload-card,
+.choice-option,
+.stage-option,
+.custom-stage {
+  border: 1px solid var(--figma-line) !important;
+  background: var(--figma-card) !important;
+  box-shadow: var(--figma-shadow) !important;
+}
+
+.daily-dashboard,
+.week-strip,
+.quick-log,
+.today-hub,
+.training-card,
+.overview-card,
+.special-card {
+  border-radius: var(--figma-radius-surface) !important;
+}
+
+.drawer-stage-card,
+.storage-card,
+.avatar-upload-card,
+.choice-option,
+.stage-option,
+.custom-stage,
+.action-item,
+.review-item,
+.compact-list li {
+  border-radius: var(--figma-radius-inner) !important;
+}
+
+/* Training has a single reading order: recommendation, flow, current task, checklist. */
+body[data-view="special"] .app-main {
+  gap: 16px !important;
+  padding-bottom: 116px !important;
+}
+
+body[data-view="special"] .coach-insight {
+  min-height: 102px !important;
+  padding: 16px 118px 16px 16px !important;
+  border-radius: var(--figma-radius-surface) !important;
+  background-position: right 14px center !important;
+  background-size: auto 82% !important;
+}
+
+body[data-view="special"] .coach-insight .eyebrow {
+  color: var(--figma-action) !important;
+}
+
+body[data-view="special"] .coach-insight h3 {
+  color: #ffffff !important;
+  font-size: 20px !important;
+  line-height: 1.15 !important;
+}
+
+body[data-view="special"] .coach-insight span:not(.insight-mark) {
+  display: -webkit-box !important;
+  color: rgba(255, 255, 255, 0.72) !important;
+  font-size: 12px !important;
+  line-height: 1.45 !important;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.today-hub {
+  padding: 14px !important;
+}
+
+.today-hub .section-heading {
+  margin-bottom: 10px !important;
+}
+
+.flow-stage-strip {
+  margin-bottom: 8px !important;
+}
+
+.flow-step-tabs {
+  gap: 8px !important;
+  margin-bottom: 10px !important;
+}
+
+.flow-step-pill {
+  min-height: 64px !important;
+  border: 1px solid var(--figma-line) !important;
+  border-radius: 13px !important;
+  background: var(--figma-surface-soft) !important;
+  box-shadow: none !important;
+}
+
+.flow-step-pill img {
+  width: 28px !important;
+  height: 28px !important;
+  padding: 6px !important;
+  border: 0 !important;
+  border-radius: 10px !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  filter: none !important;
+}
+
+.flow-step-pill span,
+.flow-step-pill strong {
+  color: var(--figma-muted-strong) !important;
+}
+
+.flow-step-pill.active {
+  border-color: var(--figma-ink) !important;
+  background: var(--figma-ink) !important;
+  box-shadow: inset 0 0 0 1px rgba(187, 242, 70, 0.18) !important;
+}
+
+.flow-step-pill.active strong,
+.flow-step-pill.active span {
+  color: #ffffff !important;
+}
+
+.flow-focus-card {
+  min-height: 160px !important;
+  border: 1px solid var(--figma-line) !important;
+  border-radius: var(--figma-radius-inner) !important;
+  background: var(--figma-card) !important;
+  box-shadow: none !important;
+}
+
+.flow-focus-main h4,
+.flow-focus-main p,
+.flow-focus-main small,
+.flow-card-head span,
+.flow-card-head strong {
+  color: var(--figma-ink) !important;
+}
+
+.flow-focus-main p,
+.flow-focus-main small {
+  color: var(--figma-muted-strong) !important;
+}
+
+.flow-cue-list span {
+  background: var(--figma-surface-soft) !important;
+  color: var(--figma-muted-strong) !important;
+}
+
+.flow-focus-actions {
+  border-color: var(--figma-line) !important;
+}
+
+.primary-flow-button {
+  background: var(--figma-action) !important;
+  color: var(--figma-ink) !important;
+  box-shadow: none !important;
+}
+
+.flow-preview-list {
+  gap: 8px !important;
+}
+
+.flow-preview-row {
+  min-height: 48px !important;
+  border: 1px solid var(--figma-line) !important;
+  border-radius: 12px !important;
+  background: var(--figma-surface-soft) !important;
+}
+
+.flow-preview-row strong,
+.flow-preview-row span,
+.flow-preview-row em {
+  color: var(--figma-ink) !important;
+}
+
+.training-toolbar {
+  gap: 8px !important;
+  padding-bottom: 12px !important;
+}
+
+.complete-toggle,
+.training-toolbar .mini-button {
+  min-height: 42px !important;
+  border: 1px solid var(--figma-line) !important;
+  border-radius: 12px !important;
+  background: var(--figma-card) !important;
+  color: var(--figma-ink) !important;
+}
+
+.action-list {
+  gap: 8px !important;
+}
+
+.action-item {
+  min-height: 78px !important;
+  padding: 10px !important;
+  border: 1px solid var(--figma-line) !important;
+  background: var(--figma-card) !important;
+  box-shadow: none !important;
+}
+
+.action-item.done {
+  border-color: #cbdca5 !important;
+  background: var(--figma-surface-selected) !important;
+  box-shadow: inset 3px 0 0 var(--figma-action-strong) !important;
+}
+
+.action-name {
+  color: var(--figma-ink) !important;
+}
+
+.action-detail,
+.action-cues,
+.cue-chip {
+  color: var(--figma-muted-strong) !important;
+}
+
+/* Drawer is an editing surface, not a dark form placed on a light sheet. */
+.profile-drawer {
+  background: var(--figma-page) !important;
+  color: var(--figma-ink) !important;
+  border-color: var(--figma-line) !important;
+  box-shadow: -12px 0 36px rgba(25, 33, 38, 0.12) !important;
+}
+
+.drawer-head .eyebrow,
+.choice-sheet .eyebrow {
+  color: var(--figma-muted-strong) !important;
+}
+
+.profile-form {
+  gap: 12px !important;
+}
+
+.profile-drawer .field {
+  min-height: 0 !important;
+  padding: 11px 12px 12px !important;
+  border: 1px solid var(--figma-line) !important;
+  border-radius: var(--figma-radius-inner) !important;
+  background: var(--figma-card) !important;
+  box-shadow: none !important;
+}
+
+.profile-drawer .field > span,
+.choice-sheet .field > span {
+  color: var(--figma-muted-strong) !important;
+  font-size: 12px !important;
+  font-weight: 720 !important;
+}
+
+.profile-drawer .plain-input,
+.profile-drawer textarea,
+.choice-sheet .plain-input,
+.choice-sheet textarea {
+  border: 1px solid var(--figma-line) !important;
+  border-radius: 10px !important;
+  background: #fbfbfa !important;
+  color: var(--figma-ink) !important;
+  box-shadow: none !important;
+}
+
+.storage-card .tool-button,
+.avatar-upload-card .mini-button,
+.drawer-stage-card .mini-button {
+  border: 1px solid var(--figma-line) !important;
+  border-radius: 12px !important;
+  background: var(--figma-surface-soft) !important;
+  color: var(--figma-ink) !important;
+  box-shadow: none !important;
+}
+
+.storage-card .drawer-tools,
+.avatar-upload-card .storage-actions {
+  border: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+.storage-card .drawer-tools {
+  padding: 0 !important;
+}
+
+.storage-card .tool-button.danger {
+  border-color: #efcbc4 !important;
+  background: #fff8f6 !important;
+  color: #9d473b !important;
+}
+
+.choice-sheet {
+  background: var(--figma-page) !important;
+  color: var(--figma-ink) !important;
+  border-color: var(--figma-line) !important;
+  box-shadow: 0 -16px 48px rgba(25, 33, 38, 0.16) !important;
+}
+
+.choice-sheet .sheet-handle {
+  background: #cdd2cc !important;
+}
+
+.choice-sheet .sheet-copy,
+.choice-sheet .choice-group > strong,
+.choice-sheet .choice-option small,
+.choice-sheet .stage-option span,
+.choice-sheet .stage-option small,
+.choice-sheet .stage-option em,
+.choice-sheet .custom-stage > div > span,
+.choice-sheet .custom-stage .field > span {
+  color: var(--figma-muted-strong) !important;
+}
+
+.choice-sheet .choice-option span,
+.choice-sheet .stage-option strong,
+.choice-sheet .custom-stage > div > strong {
+  color: var(--figma-ink) !important;
+}
+
+.choice-sheet .choice-option.active,
+.choice-sheet .stage-option.active,
+.choice-sheet .custom-stage.active {
+  border-color: var(--figma-action-strong) !important;
+  background: var(--figma-surface-selected) !important;
+}
+
+.choice-sheet .choice-option.active span,
+.choice-sheet .choice-option.active small,
+.choice-sheet .stage-option.active span,
+.choice-sheet .stage-option.active strong,
+.choice-sheet .stage-option.active small,
+.choice-sheet .stage-option.active em,
+.choice-sheet .custom-stage.active > div > span,
+.choice-sheet .custom-stage.active > div > strong {
+  color: var(--figma-accent-ink) !important;
+}
+
+/* All tap targets expose one focused state and never rely on legacy glow. */
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+.choice-option:focus-visible,
+.stage-option:focus-visible,
+.action-item:focus-within {
+  outline: 2px solid var(--figma-action-strong) !important;
+  outline-offset: 2px !important;
+}
+
+@media (max-width: 360px) {
+  .app-header {
+    grid-template-columns: 40px minmax(0, 1fr) !important;
+    gap: 10px !important;
+  }
+
+  .header-focus {
+    display: none !important;
+  }
+
+  body[data-view="special"] .coach-insight {
+    min-height: 98px !important;
+    padding-right: 96px !important;
+  }
+
+  .flow-focus-card {
+    min-height: 156px !important;
+  }
+
+  .flow-preview-row strong {
+    font-size: 11px !important;
+  }
+}
+
 /* Final light-overlay foreground contract. No retired dark-theme text may bleed into sheets. */
 .choice-sheet .sheet-copy,
 .choice-sheet .choice-group > strong,
@@ -979,6 +1394,22 @@ body[data-view="overview"] .week-strip {
 .choice-sheet .stage-option:focus-visible {
   outline: 2px solid var(--figma-accent-ink) !important;
   outline-offset: 2px !important;
+}
+
+/* Light record cards and neutral header tools use the same foreground contract. */
+#quickLog .checkline span {
+  color: var(--figma-ink) !important;
+}
+
+.screen-tool {
+  border: 1px solid var(--figma-line) !important;
+  background: var(--figma-card) !important;
+  color: var(--figma-ink) !important;
+}
+
+.log-section summary > b,
+.log-section summary b {
+  color: var(--figma-accent-ink) !important;
 }
 
 /* --------------------------------------------------------------------------
