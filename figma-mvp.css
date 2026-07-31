@@ -935,6 +935,312 @@ body[data-view="overview"] .week-strip {
   }
 }
 
+/* Figma-derived navigation and training-session consolidation.
+ * The light shell keeps everyday records calm; training becomes one focused dark session.
+ */
+:root {
+  --figma-training-panel: #192126;
+  --figma-training-surface: #253036;
+  --figma-training-surface-strong: #2d393f;
+  --figma-training-line: #3a474d;
+  --figma-training-muted: #b9c3c7;
+  --figma-nav-shadow: 0 10px 24px rgba(25, 33, 38, 0.16);
+}
+
+/* Reference navigation: a quiet bar, one compact horizontal active destination. */
+.tab-switch {
+  position: fixed !important;
+  z-index: 40 !important;
+  left: 50% !important;
+  bottom: max(12px, env(safe-area-inset-bottom)) !important;
+  width: min(calc(100% - 40px), 360px) !important;
+  min-height: 64px !important;
+  height: 64px !important;
+  padding: 8px !important;
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 4px !important;
+  border: 1px solid var(--figma-line) !important;
+  border-radius: var(--figma-radius-surface) !important;
+  background: var(--figma-card) !important;
+  box-shadow: var(--figma-nav-shadow) !important;
+  transform: translateX(-50%) !important;
+}
+
+.view-tab,
+.view-tab.active {
+  min-width: 0 !important;
+  min-height: 48px !important;
+  height: 48px !important;
+  margin: 0 !important;
+  padding: 0 10px !important;
+  border: 0 !important;
+  border-radius: var(--figma-radius-inner) !important;
+  background: transparent !important;
+  color: var(--figma-muted-strong) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-direction: row !important;
+  gap: 0 !important;
+}
+
+.view-tab:hover,
+.view-tab:focus-visible {
+  background: var(--figma-surface-soft) !important;
+}
+
+.view-tab:not(.active) span {
+  display: none !important;
+}
+
+.view-tab .nav-glyph,
+.view-tab.active .nav-glyph {
+  width: 22px !important;
+  height: 22px !important;
+  flex: 0 0 22px;
+}
+
+.view-tab.active {
+  padding: 0 12px !important;
+  gap: 7px !important;
+  background: var(--figma-action) !important;
+  color: var(--figma-ink) !important;
+}
+
+.view-tab.active span {
+  display: block !important;
+  min-width: 0;
+  color: inherit !important;
+  font-size: 12px !important;
+  font-weight: 760 !important;
+  line-height: 16px !important;
+  white-space: nowrap !important;
+}
+
+.app-main {
+  padding-bottom: calc(100px + env(safe-area-inset-bottom)) !important;
+}
+
+/* Training has one strong visual zone instead of several equally-weighted white cards. */
+#specialView .coach-insight {
+  min-height: 106px !important;
+  padding: 16px 96px 16px 18px !important;
+  border: 1px solid #263137 !important;
+  border-radius: var(--figma-radius-surface) !important;
+  background-color: var(--figma-training-panel) !important;
+  background-position: right 12px center !important;
+  background-size: auto 82% !important;
+}
+
+#specialView .coach-insight h3 {
+  margin-top: 4px !important;
+  font-size: 18px !important;
+  line-height: 24px !important;
+}
+
+#specialView .coach-insight span {
+  display: -webkit-box !important;
+  overflow: hidden !important;
+  color: var(--figma-training-muted) !important;
+  font-size: 13px !important;
+  line-height: 18px !important;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+#specialView .today-hub {
+  padding: 12px !important;
+  border: 1px solid var(--figma-training-panel) !important;
+  border-radius: var(--figma-radius-surface) !important;
+  background: var(--figma-training-panel) !important;
+  box-shadow: none !important;
+  color: #ffffff !important;
+}
+
+#specialView .flow-stage-strip {
+  min-height: 38px !important;
+  margin-bottom: 10px !important;
+  padding: 5px 10px !important;
+  border: 1px solid var(--figma-training-line) !important;
+  border-radius: var(--figma-radius-inner) !important;
+  background: var(--figma-training-surface) !important;
+  color: var(--figma-training-muted) !important;
+}
+
+#specialView .flow-stage-strip strong {
+  padding: 4px 8px !important;
+  border: 0 !important;
+  border-radius: var(--radius-pill) !important;
+  background: var(--figma-action) !important;
+  color: var(--figma-ink) !important;
+  font-size: 11px !important;
+  line-height: 15px !important;
+}
+
+#specialView .flow-step-tabs {
+  gap: 7px !important;
+  margin-bottom: 10px !important;
+}
+
+#specialView .flow-step-pill,
+#specialView .flow-step-pill.active,
+#specialView .flow-step-pill.done:not(.active) {
+  min-height: 64px !important;
+  padding: 7px 3px !important;
+  border: 1px solid var(--figma-training-line) !important;
+  border-radius: var(--figma-radius-inner) !important;
+  background: var(--figma-training-surface) !important;
+  color: var(--figma-training-muted) !important;
+  box-shadow: none !important;
+}
+
+#specialView .flow-step-pill.active {
+  border-color: var(--figma-action) !important;
+  background: var(--figma-training-surface-strong) !important;
+  color: #ffffff !important;
+  box-shadow: inset 0 -2px 0 var(--figma-action) !important;
+}
+
+#specialView .flow-step-pill.done:not(.active) {
+  border-color: #58732b !important;
+  color: #dcecc0 !important;
+}
+
+#specialView .flow-step-pill span,
+#specialView .flow-step-pill strong {
+  color: inherit !important;
+}
+
+#specialView .flow-focus-card,
+#specialView .flow-focus-card.is-progress,
+#specialView .flow-focus-card.done {
+  min-height: 166px !important;
+  padding: 16px !important;
+  border: 1px solid var(--figma-training-line) !important;
+  border-radius: var(--figma-radius-inner) !important;
+  background: var(--figma-training-surface-strong) !important;
+  color: #ffffff !important;
+  box-shadow: none !important;
+}
+
+#specialView .flow-focus-card.done {
+  border-color: #92ba47 !important;
+  background: #2d3a2a !important;
+  box-shadow: inset 3px 0 0 var(--figma-action) !important;
+}
+
+#specialView .flow-focus-main h4,
+#specialView .flow-focus-main p,
+#specialView .flow-focus-main small,
+#specialView .flow-card-head,
+#specialView .flow-stage-label {
+  color: inherit !important;
+}
+
+#specialView .flow-focus-main p,
+#specialView .flow-focus-main small {
+  color: var(--figma-training-muted) !important;
+}
+
+#specialView .flow-cue-list span {
+  border: 0 !important;
+  background: #3b484e !important;
+  color: #e0e7e9 !important;
+}
+
+#specialView .flow-state-orb,
+#specialView .flow-focus-card.is-progress .flow-state-orb {
+  width: 52px !important;
+  height: 52px !important;
+  border: 1px solid #607176 !important;
+  background: #38464d !important;
+  color: #ffffff !important;
+  box-shadow: none !important;
+}
+
+#specialView .flow-state-orb strong,
+#specialView .flow-state-orb span {
+  color: inherit !important;
+}
+
+#specialView .primary-flow-button {
+  min-height: 40px !important;
+  padding: 0 14px !important;
+  border-radius: var(--radius-pill) !important;
+  background: var(--figma-action) !important;
+  color: var(--figma-ink) !important;
+  font-size: 13px !important;
+  font-weight: 760 !important;
+}
+
+#specialView .flow-preview-list {
+  gap: 7px !important;
+}
+
+#specialView .flow-preview-row,
+#specialView .flow-preview-row.done {
+  min-height: 54px !important;
+  padding: 6px 4px !important;
+  border: 1px solid var(--figma-training-line) !important;
+  border-radius: var(--figma-radius-inner) !important;
+  background: var(--figma-training-surface) !important;
+  color: var(--figma-training-muted) !important;
+}
+
+#specialView .flow-preview-row strong,
+#specialView .flow-preview-row span,
+#specialView .flow-preview-row em {
+  color: inherit !important;
+}
+
+#specialView .flow-preview-row.done {
+  color: #dcecc0 !important;
+}
+
+/* Action detail resumes as a readable light list after the session zone. */
+#specialView .training-card {
+  padding: 14px !important;
+  border-radius: var(--figma-radius-surface) !important;
+}
+
+#specialView .training-toolbar {
+  min-height: 42px !important;
+  gap: 8px !important;
+}
+
+#specialView .media-frame {
+  aspect-ratio: 16 / 9 !important;
+  min-height: 0 !important;
+  margin-top: 10px !important;
+  border-radius: var(--figma-radius-inner) !important;
+  background: var(--figma-surface-soft) !important;
+}
+
+#specialView .media-frame img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+}
+
+@media (max-width: 360px) {
+  .tab-switch {
+    width: calc(100% - 32px) !important;
+  }
+
+  #specialView .coach-insight {
+    padding-right: 86px !important;
+  }
+
+  #specialView .flow-step-tabs {
+    gap: 5px !important;
+  }
+
+  #specialView .flow-step-pill strong {
+    font-size: 10px !important;
+  }
+}
+
 /* Hallmark pre-emit critique: P4 H4 E4 S4 R4 V3
  * Final visual consolidation: one light editing system layered over legacy screens.
  */
@@ -1203,6 +1509,17 @@ body[data-view="special"] .coach-insight span:not(.insight-mark) {
   color: var(--figma-ink) !important;
   border-color: var(--figma-line) !important;
   box-shadow: -12px 0 36px rgba(25, 33, 38, 0.12) !important;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateX(110%) !important;
+  transition: transform 220ms var(--figma-ease-out), visibility 0s linear 220ms !important;
+}
+
+.profile-drawer.open {
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateX(0) !important;
+  transition: transform 220ms var(--figma-ease-out), visibility 0s !important;
 }
 
 .drawer-head .eyebrow,
@@ -2642,4 +2959,16 @@ textarea:focus-visible {
   .view-tab span {
     font-size: 10px !important;
   }
+}
+
+/* Canonical last-write navigation placement. Legacy mobile rules used a fixed right offset. */
+.tab-switch {
+  right: auto !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+}
+
+.view-tab .nav-glyph,
+.view-tab.active .nav-glyph {
+  filter: none !important;
 }
